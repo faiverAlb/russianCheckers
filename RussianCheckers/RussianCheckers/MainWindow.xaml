@@ -30,17 +30,24 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition Height="472"></RowDefinition>
+            <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Row="1" Width="472" Height="472">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="472"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Row="1" Grid.Column="1" BorderBrush="DarkRed" BorderThickness="1">
+        <Grid   >
             <Grid.Background>
                 <ImageBrush ImageSource="gameTableImage.png"></ImageBrush>
             </Grid.Background>
 
         </Grid>
-        
+        </Border>
+
         <!--     <ItemsControl Name="ChessBoard"> -->
     <!--     <ItemsControl.ItemsPanel> -->
     <!--         <ItemsPanelTemplate> -->

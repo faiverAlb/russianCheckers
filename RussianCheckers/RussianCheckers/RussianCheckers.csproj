@@ -100,7 +100,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="gameTableImage.png" />
+    <Resource Include="Images\blackCheker.png" />
+    <Resource Include="Images\black_queen.png" />
+    <Resource Include="Images\gameTableImage.png" />
+    <Resource Include="Images\whiteChecker.png" />
+    <Resource Include="Images\white_queen.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

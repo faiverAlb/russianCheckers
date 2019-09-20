@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RussianCheckers"
         mc:Ignorable="d"
-        Title="Russian checkers" Height="472" Width="472" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Russian checkers" Height="700" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
         <Window.Resources>
             <DrawingBrush x:Key="Checkerboard" Stretch="None" TileMode="Tile" Viewport="0,0,2,2" ViewportUnits="Absolute">
@@ -29,9 +29,17 @@
             </DrawingBrush>
     </Window.Resources>
     <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="gameTableImage.png"></ImageBrush>
-        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Row="1" Width="472" Height="472">
+            <Grid.Background>
+                <ImageBrush ImageSource="gameTableImage.png"></ImageBrush>
+            </Grid.Background>
+
+        </Grid>
         
         <!--     <ItemsControl Name="ChessBoard"> -->
     <!--     <ItemsControl.ItemsPanel> -->

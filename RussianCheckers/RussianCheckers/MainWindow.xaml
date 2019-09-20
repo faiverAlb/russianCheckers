@@ -40,7 +40,7 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Border Grid.Row="1" Grid.Column="1" BorderBrush="DarkRed" BorderThickness="1">
-        <Grid   >
+        <Grid>
             <Grid.Background>
                 <ImageBrush ImageSource="gameTableImage.png"></ImageBrush>
             </Grid.Background>

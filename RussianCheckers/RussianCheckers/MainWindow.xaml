@@ -27,6 +27,47 @@
                     </DrawingGroup>
                 </DrawingBrush.Drawing>
             </DrawingBrush>
+
+        <Style x:Key="ChessPieceStyle" TargetType="{x:Type Image}">
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Type}" Value="{x:Static local:PieceType.Queen}"/>
+                        <Condition Binding="{Binding Side}" Value="{x:Static local:Side.Black}"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Image.Source" Value="Images/black_queen.png" />
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Type}" Value="{x:Static local:PieceType.Queen}"/>
+                        <Condition Binding="{Binding Side}" Value="{x:Static local:Side.White}"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Image.Source" Value="Images/white_queen.png" />
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Type}" Value="{x:Static local:PieceType.Checker}"/>
+                        <Condition Binding="{Binding Side}" Value="{x:Static local:Side.Black}"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Image.Source" Value="Images/blackCheker.png" />
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Type}" Value="{x:Static local:PieceType.Checker}"/>
+                        <Condition Binding="{Binding Side}" Value="{x:Static local:Side.White}"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Image.Source" Value="Images/whiteChecker.png" />
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -40,14 +81,12 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Border Grid.Row="1" Grid.Column="1" BorderBrush="DarkRed" BorderThickness="1">
-        <Grid>
-            <Grid.Background>
-                <ImageBrush ImageSource="Images/gameTableImage.png"></ImageBrush>
-            </Grid.Background>
-
-        </Grid>
+            <Grid>
+                <Grid.Background>
+                    <ImageBrush ImageSource="Images/gameTableImage.png"></ImageBrush>
+                </Grid.Background>
+            </Grid>
         </Border>
-
         <!--     <ItemsControl Name="ChessBoard"> -->
     <!--     <ItemsControl.ItemsPanel> -->
     <!--         <ItemsPanelTemplate> -->

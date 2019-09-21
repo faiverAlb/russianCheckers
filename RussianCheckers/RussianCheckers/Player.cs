@@ -14,6 +14,6 @@
     public enum PieceType
     {
         Checker,
-        King
+        Queen
     }
 }

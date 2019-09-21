@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ChessPiece.cs" />
     <Compile Include="Presenter.cs" />
     <Compile Include="TextConverter.cs" />
     <Page Include="MainWindow.xaml">

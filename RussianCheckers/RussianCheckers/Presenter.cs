@@ -7,30 +7,10 @@ namespace RussianCheckers
     public class Presenter : ObservableObject
     {
         private readonly TextConverter _textConverter = new TextConverter(s => s.ToUpper());
-        private string _someText = "aaaaa";
+        private string _someText;
         private readonly ObservableCollection<string> _history = new ObservableCollection<string>();
 
 
-        private Point _Pos;
-        public Point Pos
-        {
-            get { return this._Pos; }
-            set { this._Pos = value; RaisePropertyChangedEvent(nameof(this.Pos)); }
-        }
-
-        private PieceType _Type;
-        public PieceType Type
-        {
-            get { return this._Type; }
-            set { this._Type = value; RaisePropertyChangedEvent(nameof(this.Type)); }
-        }
-
-        private Side _Side;
-        public Side Side
-        {
-            get { return this._Side; }
-            set { this._Side = value; RaisePropertyChangedEvent(nameof(this.Side)); ; }
-        }
 
 
         public string SomeText
@@ -69,10 +49,10 @@ namespace RussianCheckers
 
     public class Point
     {
-        public Point(int y, int x)
+        public Point(int x, int y)
         {
-            Y = y;
             X = x;
+            Y = y;
         }
 
         public int X { get; set; }

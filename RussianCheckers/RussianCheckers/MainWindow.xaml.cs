@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,11 @@ namespace RussianCheckers
         public MainWindow()
         {
             InitializeComponent();
+            this.ChessBoard.ItemsSource = new ObservableCollection<ChessPiece>()
+            {
+                new ChessPiece{Pos=new Point(0, 6), Type=PieceType.Checker, Side=  Side.Black},
+                new ChessPiece{Pos=new Point(10, 60), Type=PieceType.Checker, Side=  Side.White},
+            };
         }
     }
 }

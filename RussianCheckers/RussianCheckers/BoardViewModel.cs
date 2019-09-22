@@ -95,16 +95,17 @@ namespace RussianCheckers
 
         public ICommand SelectCheckerCommand { get { return new RelayCommand<CheckerElement>(OnSelectChecker); } }
 
+        private CheckerElement _selectedChecker;
         private void OnSelectChecker(object obj)
         {
-            var test = obj as CheckerElement;
-            foreach (CheckerElement checkerElement in _positions)
+            var newSelectedChecker = (CheckerElement)obj;
+            if (_selectedChecker != null)
             {
-                checkerElement.IsSelected = false;
+                _selectedChecker.IsSelected = false;
             }
 
-            test.IsSelected = true;
-            test.Side = (Side)(((int)test.Side + 1) % 3);
+            _selectedChecker = newSelectedChecker;
+            _selectedChecker.IsSelected = true;
         }
 
 //        private void ConvertText()

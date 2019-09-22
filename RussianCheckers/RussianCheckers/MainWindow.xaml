@@ -84,6 +84,15 @@
                                 <Setter TargetName="border" Property="BorderBrush" Value="Transparent" />
                                 <Setter TargetName="border" Property="BorderThickness" Value="2" />
                             </Trigger>
+
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="Aquamarine" />
+                                <Setter TargetName="border" Property="BorderThickness" Value="2" />
+                                <Setter TargetName="border" Property="Opacity" Value="0.9" />
+
+
+                            </DataTrigger>
+
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -113,7 +122,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid >
+                    <Grid>
                         <Button Command="{Binding ElementName=ChessBoard,  Path=DataContext.SelectCheckerCommand}"
                                 CommandParameter="{Binding}"
                                 Style="{StaticResource ClearedButtonStyle}"

@@ -52,6 +52,34 @@
                 </MultiDataTrigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="ClearedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{x:Null}" />
+            <Setter Property="BorderBrush" Value="{x:Null}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                                BorderThickness="0"
+                                BorderBrush="AntiqueWhite" 
+                                CornerRadius="100" 
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="Transparent" />
+                                <Setter TargetName="border" Property="BorderThickness" Value="0" />
+                            </Trigger>
+                            <Trigger Property="Button.IsPressed" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="Transparent" />
+                                <Setter TargetName="border" Property="BorderThickness" Value="2" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -64,7 +92,7 @@
             <ColumnDefinition Width="480"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ItemsControl Grid.Row="1" Grid.Column="1" Name="ChessBoard" ItemsSource="{Binding Positions}">
+        <ItemsControl Grid.Row="1" Grid.Column="1" x:Name="ChessBoard" ItemsSource="{Binding Positions}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas>
@@ -77,11 +105,15 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid >
-                        <Image Width="50" Height="50" Style="{StaticResource ChessPieceStyle}" >
-                            <Image.InputBindings>
-                                <MouseBinding Gesture="LeftClick" Command="{Binding ConvertTextCommand}" />
-                            </Image.InputBindings>
+                        <Button Command="{Binding ElementName=ChessBoard,  Path=DataContext.EditCommand}"
+                                CommandParameter="{Binding}"
+                                Style="{StaticResource ClearedButtonStyle}"
+                                >
+
+                            <Image Width="50" Height="50" Style="{StaticResource ChessPieceStyle}"  >
+                
                         </Image>
+                        </Button>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -92,7 +124,5 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
-
-        <Button Command="{Binding ConvertTextCommand}" Margin="5">Convert</Button>
     </Grid>
 </Window>

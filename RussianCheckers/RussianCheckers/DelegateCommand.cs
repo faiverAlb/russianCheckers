@@ -3,28 +3,57 @@ using System.Windows.Input;
 
 namespace RussianCheckers
 {
-    public class DelegateCommand : ICommand
+//    public class DelegateCommand : ICommand
+//    {
+//        private readonly Action _action;
+//
+//        public DelegateCommand(Action action)
+//        {
+//            _action = action;
+//        }
+//
+//        public void Execute(object parameter)
+//        {
+//            _action();
+//        }
+//
+//        public bool CanExecute(object parameter)
+//        {
+//            return true;
+//        }
+//
+//#pragma warning disable 67
+//        public event EventHandler CanExecuteChanged;
+//#pragma warning restore 67
+//
+//    }
+
+
+     public class RelayCommand<T> : ICommand
     {
-        private readonly Action _action;
-
-        public DelegateCommand(Action action)
+        private Action<object> execute;
+        private Func<object, bool> canExecute;
+ 
+        public event EventHandler CanExecuteChanged
         {
-            _action = action;
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
         }
-
-        public void Execute(object parameter)
+ 
+        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
         {
-            _action();
+            this.execute = execute;
+            this.canExecute = canExecute;
         }
-
+ 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return this.canExecute == null || this.canExecute(parameter);
         }
-
-#pragma warning disable 67
-        public event EventHandler CanExecuteChanged;
-#pragma warning restore 67
-
+ 
+        public void Execute(object parameter)
+        {
+            this.execute(parameter);
+        }
     }
 }

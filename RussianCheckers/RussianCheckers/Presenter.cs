@@ -9,6 +9,7 @@ namespace RussianCheckers
         private readonly TextConverter _textConverter = new TextConverter(s => s.ToUpper());
         private string _someText;
         private readonly ObservableCollection<string> _history = new ObservableCollection<string>();
+        private CheckerElement _checkerElement;
 
         public ObservableCollection<CheckerElement> Positions
         {
@@ -63,24 +64,13 @@ namespace RussianCheckers
         }
 
 
-        //        public string SomeText
-        //        {
-        //            get { return _someText; }
-        //            set
-        //            {
-        //                _someText = value;
-        //                RaisePropertyChangedEvent("SomeText");
-        //            }
-        //        }
 
-        //        public IEnumerable<string> History
-        //        {
-        //            get { return _history; }
-        //        }
+        public ICommand EditCommand { get { return new RelayCommand<CheckerElement>(OnEdit); } }
 
-        public ICommand ConvertTextCommand
+        private void OnEdit(object obj)
         {
-        get { return new DelegateCommand(ConvertText); }
+            var test = obj as CheckerElement;
+            test.Type = test.Type == PieceType.Checker ? PieceType.Queen : PieceType.Checker;
         }
 
         private void ConvertText()

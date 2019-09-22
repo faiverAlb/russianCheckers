@@ -5,6 +5,8 @@
         public CheckerElement(int column, int row, PieceType type, Side side)
         {
             _pos = new Point(row, column);
+            _column = column;
+            _row = row;
             _type = type;
             _side = side;
         }
@@ -15,6 +17,8 @@
             set { this._pos = value; RaisePropertyChangedEvent(nameof(Pos)); }
         }
 
+        private readonly int _column;
+        private readonly int _row;
         private PieceType _type;
         public PieceType Type
         {

@@ -56,22 +56,14 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition ></RowDefinition>
-            <RowDefinition Height="472"></RowDefinition>
+            <RowDefinition Height="480"></RowDefinition>
             <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="472"></ColumnDefinition>
+            <ColumnDefinition Width="480"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <!-- <Border Grid.Row="1" Grid.Column="1" BorderBrush="DarkRed" BorderThickness="1"> -->
-        <!--     <Grid> -->
-        <!--         ~1~ <Grid.Background> @1@ -->
-        <!--         ~1~     <ImageBrush ImageSource="Images/gameTableImage.png"></ImageBrush> @1@ -->
-        <!--         ~1~ </Grid.Background> @1@ -->
-        <!--     </Grid> -->
-        <!--      -->
-        <!-- </Border> -->
         <ItemsControl Grid.Row="1" Grid.Column="1" Name="ChessBoard">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

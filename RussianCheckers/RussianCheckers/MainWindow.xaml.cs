@@ -26,8 +26,9 @@ namespace RussianCheckers
             InitializeComponent();
             this.ChessBoard.ItemsSource = new ObservableCollection<ChessPiece>()
             {
-                new ChessPiece{Pos=new Point(0, 6), Type=PieceType.Checker, Side=  Side.Black},
-                new ChessPiece{Pos=new Point(10, 60), Type=PieceType.Checker, Side=  Side.White},
+                new ChessPiece{Pos=new Point(1, 6), Type=PieceType.Queen, Side=  Side.Black},
+                new ChessPiece{Pos=new Point(1, 7), Type=PieceType.Checker, Side=  Side.White},
+                new ChessPiece{Pos=new Point(8, 8), Type=PieceType.Queen, Side=  Side.White},
             };
         }
     }

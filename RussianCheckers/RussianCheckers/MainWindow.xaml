@@ -77,7 +77,11 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid >
-                        <Image Width="50" Height="50" Style="{StaticResource ChessPieceStyle}" />
+                        <Image Width="50" Height="50" Style="{StaticResource ChessPieceStyle}" >
+                            <Image.InputBindings>
+                                <MouseBinding Gesture="LeftClick" Command="{Binding ConvertTextCommand}" />
+                            </Image.InputBindings>
+                        </Image>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -88,5 +92,7 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
+
+        <Button Command="{Binding ConvertTextCommand}" Margin="5">Convert</Button>
     </Grid>
 </Window>

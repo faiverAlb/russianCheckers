@@ -78,17 +78,18 @@ namespace RussianCheckers
         //            get { return _history; }
         //        }
 
-        //        public ICommand ConvertTextCommand
-        //        {
-        //            get { return new DelegateCommand(ConvertText); }
-        //        }
+        public ICommand ConvertTextCommand
+        {
+        get { return new DelegateCommand(ConvertText); }
+        }
 
-        //        private void ConvertText()
-        //        {
-        //            if (string.IsNullOrWhiteSpace(SomeText)) return;
-        //            AddToHistory(_textConverter.ConvertText(SomeText));
-        //            SomeText = string.Empty;
-        //        }
+        private void ConvertText()
+        {
+//        if (string.IsNullOrWhiteSpace(SomeText)) return;
+//        AddToHistory(_textConverter.ConvertText(SomeText));
+//        SomeText = string.Empty;
+            var test = 123;
+        }
 
         //        private void AddToHistory(string item)
         //        {

@@ -10,64 +10,90 @@ namespace RussianCheckers
         private string _someText;
         private readonly ObservableCollection<string> _history = new ObservableCollection<string>();
 
-        public ObservableCollection<ChessPiece> Positions
+        public ObservableCollection<CheckerElement> Positions
         {
             get
             {
-                return new ObservableCollection<ChessPiece>()
-                {
-                    new ChessPiece
-                    {
-                        Pos = new Point(1, 1), Type = PieceType.Queen, Side = Side.Black
-                    },
-                    new ChessPiece
-                    {
-                        Pos = new Point(1, 7), Type = PieceType.Checker, Side = Side.White
-                    },
-                    new ChessPiece
-                    {
-                        Pos = new Point(8, 8), Type = PieceType.Queen, Side = Side.White
-                    },
-                    new ChessPiece
-                    {
-                        Pos = new Point(4, 4), Type = PieceType.Queen, Side = Side.White
-                    },
-                };
+                List<CheckerElement> positions = GetInitialWhitePositions();
+                positions.AddRange(GetInitialBlackPositions());
+                var result = new ObservableCollection<CheckerElement>(positions);
+                return result;
             }  
         }
 
+        private List<CheckerElement> GetInitialWhitePositions()
+        {
+            var positions = new List<CheckerElement>();
+            for (int col = 1; col <= 8; col++)
+            {
+                for (int row = 1; row <= 3; row++)
+                {
+                    if (row %2 == 1 && col % 2 == 1)
+                    {
+                        positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.White));
+                    }
+                    if (row %2 == 0 && col % 2 == 0)
+                    {
+                        positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.White));
+                    }
+                }
+            }
+            return  positions;
+        }
 
-//        public string SomeText
-//        {
-//            get { return _someText; }
-//            set
-//            {
-//                _someText = value;
-//                RaisePropertyChangedEvent("SomeText");
-//            }
-//        }
+        private List<CheckerElement> GetInitialBlackPositions()
+        {
+            var positions = new List<CheckerElement>();
+            for (int col = 1; col <= 8; col++)
+            {
+                for (int row = 6; row <= 8; row++)
+                {
+                    if (row % 2 == 1 && col % 2 == 1)
+                    {
+                        positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.Black));
+                    }
+                    if (row % 2 == 0 && col % 2 == 0)
+                    {
+                        positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.Black));
+                    }
+                }
+            }
+            return positions;
 
-//        public IEnumerable<string> History
-//        {
-//            get { return _history; }
-//        }
+        }
 
-//        public ICommand ConvertTextCommand
-//        {
-//            get { return new DelegateCommand(ConvertText); }
-//        }
 
-//        private void ConvertText()
-//        {
-//            if (string.IsNullOrWhiteSpace(SomeText)) return;
-//            AddToHistory(_textConverter.ConvertText(SomeText));
-//            SomeText = string.Empty;
-//        }
+        //        public string SomeText
+        //        {
+        //            get { return _someText; }
+        //            set
+        //            {
+        //                _someText = value;
+        //                RaisePropertyChangedEvent("SomeText");
+        //            }
+        //        }
 
-//        private void AddToHistory(string item)
-//        {
-//            if (!_history.Contains(item))
-//                _history.Add(item);
-//        }
+        //        public IEnumerable<string> History
+        //        {
+        //            get { return _history; }
+        //        }
+
+        //        public ICommand ConvertTextCommand
+        //        {
+        //            get { return new DelegateCommand(ConvertText); }
+        //        }
+
+        //        private void ConvertText()
+        //        {
+        //            if (string.IsNullOrWhiteSpace(SomeText)) return;
+        //            AddToHistory(_textConverter.ConvertText(SomeText));
+        //            SomeText = string.Empty;
+        //        }
+
+        //        private void AddToHistory(string item)
+        //        {
+        //            if (!_history.Contains(item))
+        //                _history.Add(item);
+        //        }
     }
 }

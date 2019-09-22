@@ -55,7 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ChessPiece.cs" />
+    <Compile Include="CheckerElement.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Presenter.cs" />
     <Compile Include="TextConverter.cs" />

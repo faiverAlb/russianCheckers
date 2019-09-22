@@ -108,5 +108,8 @@
     <Resource Include="Images\whiteChecker.png" />
     <Resource Include="Images\white_queen.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\empty.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

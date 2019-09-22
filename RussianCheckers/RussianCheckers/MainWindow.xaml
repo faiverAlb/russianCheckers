@@ -50,6 +50,15 @@
                         <Setter Property="Image.Source" Value="Images/whiteChecker.png" />
                     </MultiDataTrigger.Setters>
                 </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Side}" Value="{x:Static local:Side.Empty}"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Image.Source" Value="Images/empty.png" />
+                    </MultiDataTrigger.Setters>
+
+                </MultiDataTrigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="ClearedButtonStyle" TargetType="Button">

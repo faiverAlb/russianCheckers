@@ -17,9 +17,24 @@ namespace RussianCheckers
             {
                 List<CheckerElement> positions = GetInitialWhitePositions();
                 positions.AddRange(GetInitialBlackPositions());
+                positions.AddRange(GetInitialEmptyPositions());
                 var result = new ObservableCollection<CheckerElement>(positions);
                 return result;
             }  
+        }
+
+        private IEnumerable<CheckerElement> GetInitialEmptyPositions()
+        {
+            var positions = new List<CheckerElement>();
+            for (int col = 1; col <= 8; col++)
+            {
+                for (int row = 4; row <= 5; row++)
+                {
+                    positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.Empty));
+                }
+            }
+            return positions;
+
         }
 
         private List<CheckerElement> GetInitialWhitePositions()
@@ -32,11 +47,14 @@ namespace RussianCheckers
                     if (row %2 == 1 && col % 2 == 1)
                     {
                         positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.White));
+                        continue;
                     }
                     if (row %2 == 0 && col % 2 == 0)
                     {
                         positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.White));
+                        continue;
                     }
+                    positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.Empty));
                 }
             }
             return  positions;
@@ -52,11 +70,15 @@ namespace RussianCheckers
                     if (row % 2 == 1 && col % 2 == 1)
                     {
                         positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.Black));
+                        continue;
                     }
                     if (row % 2 == 0 && col % 2 == 0)
                     {
                         positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.Black));
+                        continue;
                     }
+                    positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.Empty));
+
                 }
             }
             return positions;
@@ -70,7 +92,7 @@ namespace RussianCheckers
         private void OnEdit(object obj)
         {
             var test = obj as CheckerElement;
-            test.Type = test.Type == PieceType.Checker ? PieceType.Queen : PieceType.Checker;
+            test.Side = (Side)(((int)test.Side + 1) % 3);
         }
 
         private void ConvertText()

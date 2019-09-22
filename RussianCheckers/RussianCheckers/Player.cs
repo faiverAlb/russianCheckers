@@ -8,7 +8,8 @@
     public enum Side
     {
         White,
-        Black
+        Black,
+        Empty
     }
 
     public enum PieceType

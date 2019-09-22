@@ -8,7 +8,7 @@
         
         Title="Russian checkers" Height="700" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
         <Window.DataContext>
-            <local:Presenter></local:Presenter>
+            <local:BoardViewModel></local:BoardViewModel>
         </Window.DataContext>
         <Window.Resources>
 
@@ -114,7 +114,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid >
-                        <Button Command="{Binding ElementName=ChessBoard,  Path=DataContext.EditCommand}"
+                        <Button Command="{Binding ElementName=ChessBoard,  Path=DataContext.SelectCheckerCommand}"
                                 CommandParameter="{Binding}"
                                 Style="{StaticResource ClearedButtonStyle}"
                                 >

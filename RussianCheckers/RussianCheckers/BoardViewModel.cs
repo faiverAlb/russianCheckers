@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using System.Windows.Input;
 
 namespace RussianCheckers
 {
-    public class Presenter : ObservableObject
+    public class BoardViewModel : ObservableObject
     {
-        private readonly TextConverter _textConverter = new TextConverter(s => s.ToUpper());
-        private string _someText;
-        private readonly ObservableCollection<string> _history = new ObservableCollection<string>();
-        private CheckerElement _checkerElement;
+//        private readonly TextConverter _textConverter = new TextConverter(s => s.ToUpper());
+//        private string _someText;
+//        private readonly ObservableCollection<string> _history = new ObservableCollection<string>();
+        private readonly ObservableCollection<CheckerElement> _positions = new ObservableCollection<CheckerElement>();
+
+
 
         public ObservableCollection<CheckerElement> Positions
         {
@@ -18,8 +21,11 @@ namespace RussianCheckers
                 List<CheckerElement> positions = GetInitialWhitePositions();
                 positions.AddRange(GetInitialBlackPositions());
                 positions.AddRange(GetInitialEmptyPositions());
-                var result = new ObservableCollection<CheckerElement>(positions);
-                return result;
+                foreach (CheckerElement position in positions)
+                {
+                    _positions.Add(position);
+                }
+                return _positions;
             }  
         }
 
@@ -87,21 +93,27 @@ namespace RussianCheckers
 
 
 
-        public ICommand EditCommand { get { return new RelayCommand<CheckerElement>(OnEdit); } }
+        public ICommand SelectCheckerCommand { get { return new RelayCommand<CheckerElement>(OnSelectChecker); } }
 
-        private void OnEdit(object obj)
+        private void OnSelectChecker(object obj)
         {
             var test = obj as CheckerElement;
+            foreach (CheckerElement checkerElement in _positions)
+            {
+                checkerElement.IsSelected = false;
+            }
+
+            test.IsSelected = true;
             test.Side = (Side)(((int)test.Side + 1) % 3);
         }
 
-        private void ConvertText()
-        {
-//        if (string.IsNullOrWhiteSpace(SomeText)) return;
-//        AddToHistory(_textConverter.ConvertText(SomeText));
-//        SomeText = string.Empty;
-            var test = 123;
-        }
+//        private void ConvertText()
+//        {
+////        if (string.IsNullOrWhiteSpace(SomeText)) return;
+////        AddToHistory(_textConverter.ConvertText(SomeText));
+////        SomeText = string.Empty;
+//            var test = 123;
+//        }
 
         //        private void AddToHistory(string item)
         //        {

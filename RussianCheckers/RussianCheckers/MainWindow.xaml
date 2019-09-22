@@ -64,7 +64,7 @@
             <ColumnDefinition Width="480"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ItemsControl Grid.Row="1" Grid.Column="1" Name="ChessBoard">
+        <ItemsControl Grid.Row="1" Grid.Column="1" Name="ChessBoard" ItemsSource="{Binding Positions}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas>

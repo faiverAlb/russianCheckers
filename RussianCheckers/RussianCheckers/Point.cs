@@ -12,7 +12,7 @@ namespace RussianCheckers
                 throw new Exception("Invalid column value");
 
             X = CalculateX(column - 1);
-            Y = CalculateY(row - 1);
+            Y = CalculateY(8 - row);
         }
 
         private int CalculateX(int column)

@@ -10,40 +10,64 @@ namespace RussianCheckers
         private string _someText;
         private readonly ObservableCollection<string> _history = new ObservableCollection<string>();
 
-
-
-
-        public string SomeText
+        public ObservableCollection<ChessPiece> Positions
         {
-            get { return _someText; }
-            set
+            get
             {
-                _someText = value;
-                RaisePropertyChangedEvent("SomeText");
-            }
+                return new ObservableCollection<ChessPiece>()
+                {
+                    new ChessPiece
+                    {
+                        Pos = new Point(1, 1), Type = PieceType.Queen, Side = Side.Black
+                    },
+                    new ChessPiece
+                    {
+                        Pos = new Point(1, 7), Type = PieceType.Checker, Side = Side.White
+                    },
+                    new ChessPiece
+                    {
+                        Pos = new Point(8, 8), Type = PieceType.Queen, Side = Side.White
+                    },
+                    new ChessPiece
+                    {
+                        Pos = new Point(4, 4), Type = PieceType.Queen, Side = Side.White
+                    },
+                };
+            }  
         }
 
-        public IEnumerable<string> History
-        {
-            get { return _history; }
-        }
 
-        public ICommand ConvertTextCommand
-        {
-            get { return new DelegateCommand(ConvertText); }
-        }
+//        public string SomeText
+//        {
+//            get { return _someText; }
+//            set
+//            {
+//                _someText = value;
+//                RaisePropertyChangedEvent("SomeText");
+//            }
+//        }
 
-        private void ConvertText()
-        {
-            if (string.IsNullOrWhiteSpace(SomeText)) return;
-            AddToHistory(_textConverter.ConvertText(SomeText));
-            SomeText = string.Empty;
-        }
+//        public IEnumerable<string> History
+//        {
+//            get { return _history; }
+//        }
 
-        private void AddToHistory(string item)
-        {
-            if (!_history.Contains(item))
-                _history.Add(item);
-        }
+//        public ICommand ConvertTextCommand
+//        {
+//            get { return new DelegateCommand(ConvertText); }
+//        }
+
+//        private void ConvertText()
+//        {
+//            if (string.IsNullOrWhiteSpace(SomeText)) return;
+//            AddToHistory(_textConverter.ConvertText(SomeText));
+//            SomeText = string.Empty;
+//        }
+
+//        private void AddToHistory(string item)
+//        {
+//            if (!_history.Contains(item))
+//                _history.Add(item);
+//        }
     }
 }

@@ -110,7 +110,7 @@
             <ColumnDefinition Width="480"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ItemsControl Grid.Row="1" Grid.Column="1" x:Name="ChessBoard" ItemsSource="{Binding BoardViewModel.Positions}">
+        <ItemsControl Grid.Row="1" Grid.Column="1" x:Name="ChessBoard" ItemsSource="{Binding Positions}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas>

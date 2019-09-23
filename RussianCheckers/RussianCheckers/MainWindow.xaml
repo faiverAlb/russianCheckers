@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         
         Title="Russian checkers" Height="700" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-        <Window.DataContext>
-            <local:BoardViewModel></local:BoardViewModel>
-        </Window.DataContext>
+        <!--<Window.DataContext>
+            <local:GameViewModel></local:GameViewModel>
+        </Window.DataContext>-->
         <Window.Resources>
 
         <Style x:Key="ChessPieceStyle" TargetType="{x:Type Image}">
@@ -110,7 +110,7 @@
             <ColumnDefinition Width="480"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ItemsControl Grid.Row="1" Grid.Column="1" x:Name="ChessBoard" ItemsSource="{Binding Positions}">
+        <ItemsControl Grid.Row="1" Grid.Column="1" x:Name="ChessBoard" ItemsSource="{Binding BoardViewModel.Positions}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas>

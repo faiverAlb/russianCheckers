@@ -1,10 +1,5 @@
 ﻿namespace RussianCheckers
 {
-    public class Player
-    {
-        
-    }
-
     public enum Side
     {
         White,

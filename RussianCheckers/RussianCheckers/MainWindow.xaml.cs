@@ -10,6 +10,10 @@ namespace RussianCheckers
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new GameViewModel(
+                  new BoardViewModel()
+                , new HumanPlayer()
+                , new RobotPlayer());
         }
     }
 }

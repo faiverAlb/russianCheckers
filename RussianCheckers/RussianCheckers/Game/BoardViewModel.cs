@@ -5,6 +5,25 @@ using System.Windows.Input;
 
 namespace RussianCheckers
 {
+
+    public class GameViewModel : ObservableObject
+    {
+        private readonly PlayerViewModel playerOne;
+        private readonly PlayerViewModel playerTwo;
+
+        public GameViewModel(BoardViewModel boardViewModel
+            , PlayerViewModel playerOne
+            , PlayerViewModel playerTwo)
+        {
+            BoardViewModel = boardViewModel;
+            this.playerOne = playerOne;
+            this.playerTwo = playerTwo;
+        }
+
+        public BoardViewModel BoardViewModel { get; }
+    }
+
+
     public class BoardViewModel : ObservableObject
     {
 //        private readonly TextConverter _textConverter = new TextConverter(s => s.ToUpper());

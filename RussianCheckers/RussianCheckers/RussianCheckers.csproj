@@ -55,8 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CheckerElement.cs" />
-    <Compile Include="BoardViewModel.cs" />
+    <Compile Include="Game\CheckerElement.cs" />
+    <Compile Include="Game\BoardViewModel.cs" />
+    <Compile Include="Game\GameEnums.cs" />
+    <Compile Include="Game\PlayerViewModel.cs" />
     <Compile Include="TextConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -74,7 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ObservableObject.cs" />
-    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

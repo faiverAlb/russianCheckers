@@ -4,12 +4,12 @@ namespace RussianCheckers
 {
     public abstract class PlayerViewModel: ObservableObject
     {
-        private readonly Side side;
+        public readonly Side Side;
         public  List<CheckerElement> PlayerPositions { get; protected set; }
 
         public PlayerViewModel(Side side)
         {
-            this.side = side;
+            this.Side = side;
         }
     }
 

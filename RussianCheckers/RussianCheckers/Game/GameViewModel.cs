@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace RussianCheckers
@@ -10,14 +11,16 @@ namespace RussianCheckers
         private readonly PlayerViewModel _playerOne;
         private readonly PlayerViewModel _playerTwo;
         private readonly ObservableCollection<CheckerElement> _positions = new ObservableCollection<CheckerElement>();
-
+        private readonly Side[,] _data = new Side[8,8];
         public GameViewModel(PlayerViewModel playerOne
             , PlayerViewModel playerTwo)
         {
             _playerOne = playerOne;
             _playerTwo = playerTwo;
             NextMoveSide = Side.White;
-            _positions = new ObservableCollection<CheckerElement>(GetInitialPositionsOnBoard(playerOne, playerTwo));
+            IEnumerable<CheckerElement> initialPositionsOnBoard = GetInitialPositionsOnBoard(playerOne, playerTwo);
+
+            _positions = new ObservableCollection<CheckerElement>(initialPositionsOnBoard);
         }
 
         public Side NextMoveSide
@@ -36,15 +39,26 @@ namespace RussianCheckers
             foreach (CheckerElement position in playerOne.PlayerPositions)
             {
                 positions.Add(position);
+                _data[position.Column -1 , position.Row - 1] = playerOne.Side;
             }
+
             foreach (CheckerElement position in playerTwo.PlayerPositions)
             {
                 positions.Add(position);
+                _data[position.Column - 1, position.Row - 1] = playerTwo.Side;
             }
-            foreach (CheckerElement position in GetInitialEmptyPositions())
+
+            for (int i = 0; i < 8; i++)
             {
-                positions.Add(position);
+                for (int j = 0; j < 8; j++)
+                {
+                    if (_data[j,i] == Side.Empty)
+                    {
+                        positions.Add(new CheckerElement(j+1, i + 1, PieceType.Checker, Side.Empty)); 
+                    }
+                }
             }
+
             return positions;
         }
 
@@ -64,20 +78,6 @@ namespace RussianCheckers
 
             _selectedChecker = newSelectedChecker;
             _selectedChecker.IsSelected = true;
-        }
-
-        private IEnumerable<CheckerElement> GetInitialEmptyPositions()
-        {
-            var positions = new List<CheckerElement>();
-            for (int col = 1; col <= 8; col++)
-            {
-                for (int row = 4; row <= 5; row++)
-                {
-                    positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.Empty));
-                }
-            }
-            return positions;
-
         }
 
         public ObservableCollection<CheckerElement> Positions

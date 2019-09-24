@@ -7,8 +7,8 @@ namespace RussianCheckers
         public CheckerElement(int column, int row, PieceType type, Side side)
         {
             _pos = new Point(row, column);
-            _column = column;
-            _row = row;
+            Column = column;
+            Row = row;
             _type = type;
             _side = side;
         }
@@ -19,8 +19,9 @@ namespace RussianCheckers
             set { this._pos = value; RaisePropertyChangedEvent(nameof(Pos)); }
         }
 
-        private readonly int _column;
-        private readonly int _row;
+        public readonly int Column;
+        public readonly int Row;
+
         private PieceType _type;
         public PieceType Type
         {
@@ -71,6 +72,8 @@ namespace RussianCheckers
 
         public int X { get; set; }
         public int Y { get; set; }
+
+
     }
 
 }

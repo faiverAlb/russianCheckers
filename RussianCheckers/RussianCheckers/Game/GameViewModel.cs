@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using RussianCheckers.MVVM;
 
 namespace RussianCheckers
 {
@@ -10,13 +11,16 @@ namespace RussianCheckers
     {
         private readonly PlayerViewModel _playerOne;
         private readonly PlayerViewModel _playerTwo;
+        private readonly IDialogService _notificationDialog;
         private readonly ObservableCollection<CheckerElement> _positions = new ObservableCollection<CheckerElement>();
         private readonly Side[,] _data = new Side[8,8];
         public GameViewModel(PlayerViewModel playerOne
-            , PlayerViewModel playerTwo)
+            , PlayerViewModel playerTwo
+            , IDialogService notificationDialog)
         {
             _playerOne = playerOne;
             _playerTwo = playerTwo;
+            _notificationDialog = notificationDialog;
             NextMoveSide = Side.White;
             IEnumerable<CheckerElement> initialPositionsOnBoard = GetInitialPositionsOnBoard(playerOne, playerTwo);
 
@@ -63,7 +67,7 @@ namespace RussianCheckers
         }
 
 
-        public ICommand SelectCheckerCommand { get { return new RelayCommand<CheckerElement>(OnSelectChecker); } }
+        public ICommand SelectCheckerCommand { get { return new ActionCommand(OnSelectChecker); } }
 
         private CheckerElement _selectedChecker;
         private  Side _nextMoveSide;
@@ -75,9 +79,40 @@ namespace RussianCheckers
             {
                 _selectedChecker.IsSelected = false;
             }
+            else
+            {
+                if (NextMoveSide != newSelectedChecker.Side)
+                {
+//                    ShowErrorMessage();
+                }
+            }
+
+            if (_selectedChecker == newSelectedChecker)
+            {
+                _selectedChecker = null;
+                return;
+            }
 
             _selectedChecker = newSelectedChecker;
             _selectedChecker.IsSelected = true;
+        }
+
+        private void ShowErrorMessage()
+        {
+            var notificationDialogViewModel = new NotificationDialogViewModel("Hello error");
+            bool? result = _notificationDialog.ShowDialog(notificationDialogViewModel);
+
+            //            if (result.HasValue)
+            //            {
+            //                if (result.Value)
+            //                {
+            //                    // Accepted
+            //                }
+            //                else
+            //                {
+            //                    // Cancelled
+            //                }
+            //            }
         }
 
         public ObservableCollection<CheckerElement> Positions

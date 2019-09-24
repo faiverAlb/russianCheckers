@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using RussianCheckers.MVVM;
 
 namespace RussianCheckers
 {
@@ -12,7 +13,8 @@ namespace RussianCheckers
             InitializeComponent();
             this.DataContext = new GameViewModel(
                 new MainHumanPlayer(Side.White)
-                , new RobotPlayer(Side.Black));
+                , new RobotPlayer(Side.Black),
+                new NotificationDialogService(this));
         }
     }
 }

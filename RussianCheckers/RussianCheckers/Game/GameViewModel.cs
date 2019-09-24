@@ -16,8 +16,18 @@ namespace RussianCheckers
         {
             _playerOne = playerOne;
             _playerTwo = playerTwo;
-
+            NextMoveSide = Side.White;
             _positions = new ObservableCollection<CheckerElement>(GetInitialPositionsOnBoard(playerOne, playerTwo));
+        }
+
+        public Side NextMoveSide
+        {
+            get { return _nextMoveSide; }
+            set
+            {
+                _nextMoveSide = value;
+                RaisePropertyChangedEvent(nameof(NextMoveSide));
+            }
         }
 
         private IEnumerable<CheckerElement> GetInitialPositionsOnBoard(PlayerViewModel playerOne, PlayerViewModel playerTwo)
@@ -42,6 +52,8 @@ namespace RussianCheckers
         public ICommand SelectCheckerCommand { get { return new RelayCommand<CheckerElement>(OnSelectChecker); } }
 
         private CheckerElement _selectedChecker;
+        private  Side _nextMoveSide;
+
         private void OnSelectChecker(object obj)
         {
             var newSelectedChecker = (CheckerElement)obj;
@@ -72,7 +84,6 @@ namespace RussianCheckers
         {
             get
             {
-              
                 return _positions;
             }
         }

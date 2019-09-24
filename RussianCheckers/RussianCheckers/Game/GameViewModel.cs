@@ -83,7 +83,7 @@ namespace RussianCheckers
             {
                 if (NextMoveSide != newSelectedChecker.Side)
                 {
-//                    ShowErrorMessage();
+                    ShowErrorMessage();
                 }
             }
 

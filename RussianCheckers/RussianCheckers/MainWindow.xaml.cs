@@ -11,10 +11,12 @@ namespace RussianCheckers
         public MainWindow()
         {
             InitializeComponent();
+            var notificationDialogService = new NotificationDialogService(this);
+            notificationDialogService.Register<NotificationDialogViewModel,NotificationDialog>();
             this.DataContext = new GameViewModel(
                 new MainHumanPlayer(Side.White)
                 , new RobotPlayer(Side.Black),
-                new NotificationDialogService(this));
+                notificationDialogService);
         }
     }
 }

@@ -6,7 +6,8 @@ namespace RussianCheckers.Game
     {
         public GameStatus GetGameStatus()
         {
-            return GameStatus.BlackWin;
+            //TODO: to do :)
+            return GameStatus.InProgress;
         }
     }
 }

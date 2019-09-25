@@ -91,11 +91,11 @@ namespace RussianCheckers
                 ShowNotificationMessage(preValidationMoveValidationResult.ErrorMessage);
                 return;
             }
-
            
             bool makeMoveStatus = IsCheckerMoved(newSelectedChecker);
             if (makeMoveStatus == false)
             {
+                //TODo: make move here
                 return;
             }
 
@@ -126,7 +126,7 @@ namespace RussianCheckers
 
             var moveValidationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide);
             MoveValidationResult validationResult =  moveValidationManager.GetMoveValidationResult();
-            if (validationResult.Status == MoveValidationStatus.CheckerSelected)
+            if (validationResult.Status == MoveValidationStatus.NewItemSelected)
             {
                 if (_selectedChecker != null)
                 {
@@ -137,7 +137,7 @@ namespace RussianCheckers
                 return false;
             }
 
-            if (validationResult.Status == MoveValidationStatus.NothingSelected)
+            if (validationResult.Status == MoveValidationStatus.DeselectChecker)
             {
                 _selectedChecker.IsSelected = false;
                 _selectedChecker = null;

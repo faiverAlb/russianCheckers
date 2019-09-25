@@ -4,7 +4,7 @@
     {
         Ok,
         Error,
-        CheckerSelected,
-        NothingSelected
+        NewItemSelected,
+        DeselectChecker
     }
 }

@@ -30,5 +30,24 @@ namespace RussianCheckers
 
             return new MoveValidationResult(MoveValidationStatus.Ok);
         }
+
+        public MoveValidationResult GetMoveValidationResult()
+        {
+            if (_oldSelectedElement == null)
+            {
+                return new MoveValidationResult(MoveValidationStatus.CheckerSelected);
+            }
+
+            if (_oldSelectedElement == _newSelectedElement)
+            {
+                return new MoveValidationResult(MoveValidationStatus.NothingSelected);
+            }
+
+            if (_oldSelectedElement.Side == _newSelectedElement.Side)
+            {
+                return new MoveValidationResult(MoveValidationStatus.CheckerSelected);
+            }
+            return  new MoveValidationResult(MoveValidationStatus.Ok);
+        }
     }
 }

@@ -3,6 +3,8 @@
     public enum MoveValidationStatus
     {
         Ok,
-        Error
+        Error,
+        CheckerSelected,
+        NothingSelected
     }
 }

@@ -92,7 +92,13 @@ namespace RussianCheckers
                 return;
             }
 
-            MakeMove();
+           
+            MakeMoveStatus makeMoveStatus = MakeMoveStatus(newSelectedChecker);
+            if (makeMoveStatus == RussianCheckers.MakeMoveStatus.NothingSelected 
+                || makeMoveStatus == RussianCheckers.MakeMoveStatus.CheckerSelected)
+            {
+                return;
+            }
 
             NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
 
@@ -103,16 +109,7 @@ namespace RussianCheckers
                 IsGameFinished = true;
                 string pleaseSelectCheckerFirst = gameStatus == GameStatus.BlackWin? "Black win!":"White win!";
                 ShowNotificationMessage(pleaseSelectCheckerFirst);
-                return;
             }
-//            if (_selectedChecker == newSelectedChecker)
-//            {
-//                _selectedChecker = null;
-//                return;
-//            }
-//
-//            _selectedChecker = newSelectedChecker;
-//            _selectedChecker.IsSelected = true;
         }
 
         public bool IsGameFinished
@@ -125,8 +122,33 @@ namespace RussianCheckers
             }
         }
 
-        private void MakeMove()
+        private MakeMoveStatus MakeMoveStatus(CheckerElement newSelectedChecker)
         {
+
+            if (_selectedChecker == null)
+            {
+                _selectedChecker = newSelectedChecker;
+                _selectedChecker.IsSelected = true;
+                return RussianCheckers.MakeMoveStatus.CheckerSelected;
+            }
+
+            if (_selectedChecker == newSelectedChecker)
+            {
+                _selectedChecker.IsSelected = false;
+                _selectedChecker = null;
+                return RussianCheckers.MakeMoveStatus.NothingSelected;
+            }
+
+            if (newSelectedChecker.Side == _selectedChecker.Side)
+            {
+                _selectedChecker.IsSelected = false;
+                _selectedChecker = newSelectedChecker;
+                _selectedChecker.IsSelected = true;
+                return RussianCheckers.MakeMoveStatus.CheckerSelected;
+            }
+            _selectedChecker.IsSelected = false;
+            _selectedChecker = null;
+            return RussianCheckers.MakeMoveStatus.ReadyToMove;
         }
 
 
@@ -155,5 +177,12 @@ namespace RussianCheckers
                 return _positions;
             }
         }
+    }
+
+    public enum MakeMoveStatus
+    {
+        ReadyToMove,
+        NothingSelected,
+        CheckerSelected
     }
 }

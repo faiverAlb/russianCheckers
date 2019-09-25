@@ -23,7 +23,7 @@ namespace RussianCheckers
                 return new MoveValidationResult(MoveValidationStatus.Error, "Please select checker first");
             }
 
-            if (_newSelectedElement.Side != _nextMoveSide)
+            if (_newSelectedElement.Side != _nextMoveSide && _newSelectedElement.Side != Side.Empty)
             {
                 return new MoveValidationResult(MoveValidationStatus.Error, $"Next move should be done by {_nextMoveSide}");
             }

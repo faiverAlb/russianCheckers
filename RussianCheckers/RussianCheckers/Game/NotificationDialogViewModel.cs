@@ -23,7 +23,7 @@ namespace RussianCheckers
         {
             NotificationMessage = notificationMessage;
 
-//            OkCommand = new RelayCommand(p => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true)));
+            OkCommand = new ActionCommand(p => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true)));
 
         }
 

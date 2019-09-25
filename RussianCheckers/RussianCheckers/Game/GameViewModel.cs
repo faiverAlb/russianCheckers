@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using RussianCheckers.Game;
+using RussianCheckers.Game.GameInfrastructure;
 using RussianCheckers.MVVM;
 
 namespace RussianCheckers
@@ -67,39 +69,70 @@ namespace RussianCheckers
         }
 
 
-        public ICommand SelectCheckerCommand { get { return new ActionCommand(OnSelectChecker); } }
+        public ICommand SelectCheckerCommand { get { return new ActionCommand(OnTryMakeMove); } }
 
         private CheckerElement _selectedChecker;
         private  Side _nextMoveSide;
+        private bool _isGameFinished;
 
-        private void OnSelectChecker(object obj)
+        private void OnTryMakeMove(object obj)
         {
-            var newSelectedChecker = (CheckerElement)obj;
-            if (_selectedChecker != null)
+            if (IsGameFinished)
             {
-                _selectedChecker.IsSelected = false;
+                ShowNotificationMessage("Game is over!");
+                return;
             }
-            else
-            {
-                if (NextMoveSide != newSelectedChecker.Side)
-                {
-                    ShowErrorMessage();
-                }
-            }
+            CheckerElement newSelectedChecker = (CheckerElement)obj;
+            var validationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide);
 
-            if (_selectedChecker == newSelectedChecker)
+            MoveValidationResult preValidationMoveValidationResult = validationManager.GetPreValidationResult();
+            if (preValidationMoveValidationResult.Status == MoveValidationStatus.Error)
             {
-                _selectedChecker = null;
+                ShowNotificationMessage(preValidationMoveValidationResult.ErrorMessage);
                 return;
             }
 
-            _selectedChecker = newSelectedChecker;
-            _selectedChecker.IsSelected = true;
+            MakeMove();
+
+            NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
+
+            var gameStatusChecker = new GameStatusChecker();
+            GameStatus gameStatus = gameStatusChecker.GetGameStatus();
+            if (gameStatus != GameStatus.InProgress)
+            {
+                IsGameFinished = true;
+                string pleaseSelectCheckerFirst = gameStatus == GameStatus.BlackWin? "Black win!":"White win!";
+                ShowNotificationMessage(pleaseSelectCheckerFirst);
+                return;
+            }
+//            if (_selectedChecker == newSelectedChecker)
+//            {
+//                _selectedChecker = null;
+//                return;
+//            }
+//
+//            _selectedChecker = newSelectedChecker;
+//            _selectedChecker.IsSelected = true;
         }
 
-        private void ShowErrorMessage()
+        public bool IsGameFinished
         {
-            var notificationDialogViewModel = new NotificationDialogViewModel("Hello error");
+            get { return _isGameFinished; }
+            set
+            {
+                _isGameFinished = value;
+                RaisePropertyChangedEvent(nameof(IsGameFinished));
+            }
+        }
+
+        private void MakeMove()
+        {
+        }
+
+
+        private void ShowNotificationMessage(string message)
+        {
+            var notificationDialogViewModel = new NotificationDialogViewModel(message);
             bool? result = _notificationDialog.ShowDialog(notificationDialogViewModel);
 
             //            if (result.HasValue)

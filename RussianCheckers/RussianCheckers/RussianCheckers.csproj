@@ -57,9 +57,14 @@
     </ApplicationDefinition>
     <Compile Include="Game\CheckerElement.cs" />
     <Compile Include="Game\GameEnums.cs" />
+    <Compile Include="Game\GameInfrastructure\GameStatus.cs" />
+    <Compile Include="Game\GameStatusChecker.cs" />
     <Compile Include="Game\GameViewModel.cs" />
     <Compile Include="Game\NotificationDialogViewModel.cs" />
     <Compile Include="Game\PlayerViewModel.cs" />
+    <Compile Include="Game\MoveValidationManager.cs" />
+    <Compile Include="Game\GameInfrastructure\MoveValidationResult.cs" />
+    <Compile Include="Game\GameInfrastructure\MoveValidationStatus.cs" />
     <Compile Include="MVVM\DialogCloseRequestedEventArgs.cs" />
     <Compile Include="MVVM\IDialog.cs" />
     <Compile Include="MVVM\IDialogRequestClose.cs" />

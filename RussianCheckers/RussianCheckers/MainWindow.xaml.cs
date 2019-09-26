@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using RussianCheckers.MVVM;
+using RussianCheckers.Infrastructure;
 
 namespace RussianCheckers
 {
@@ -11,7 +11,7 @@ namespace RussianCheckers
         public MainWindow()
         {
             InitializeComponent();
-            var notificationDialogService = new NotificationDialogService(this);
+            var notificationDialogService = new DialogService(this);
             notificationDialogService.Register<NotificationDialogViewModel,NotificationDialog>();
             this.DataContext = new GameViewModel(
                 new MainHumanPlayer(Side.White)

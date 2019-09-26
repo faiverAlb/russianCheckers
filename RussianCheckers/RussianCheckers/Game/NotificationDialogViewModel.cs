@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
-using RussianCheckers.MVVM;
+using RussianCheckers.Infrastructure;
 
 namespace RussianCheckers
 {

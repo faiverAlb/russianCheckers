@@ -1,4 +1,4 @@
-﻿namespace RussianCheckers.MVVM
+﻿namespace RussianCheckers.Infrastructure
 {
     public interface IDialogService
     {

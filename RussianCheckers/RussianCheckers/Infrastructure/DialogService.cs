@@ -1,20 +1,20 @@
-﻿namespace RussianCheckers.MVVM
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+
+namespace RussianCheckers.Infrastructure
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Windows;
-
-    public class NotificationDialogService : IDialogService
+    public class DialogService : IDialogService
     {
-        private readonly Window owner;
+        private readonly Window _owner;
 
-        public NotificationDialogService(Window owner)
+        public DialogService(Window owner)
         {
-            this.owner = owner;
+            _owner = owner;
             Mappings = new Dictionary<Type, Type>();
         }
 
-        public IDictionary<Type, Type> Mappings { get; }
+        private IDictionary<Type, Type> Mappings { get; }
 
         public void Register<TViewModel, TView>() where TViewModel : IDialogRequestClose
             where TView : IDialog
@@ -52,7 +52,7 @@
             viewModel.CloseRequested += handler;
 
             dialog.DataContext = viewModel;
-            dialog.Owner = owner;
+            dialog.Owner = _owner;
 
             return dialog.ShowDialog();
         }

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace RussianCheckers.MVVM
+namespace RussianCheckers.Infrastructure
 {
     public interface IDialog
     {

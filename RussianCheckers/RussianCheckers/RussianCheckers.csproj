@@ -65,11 +65,11 @@
     <Compile Include="Game\MoveValidationManager.cs" />
     <Compile Include="Game\GameInfrastructure\MoveValidationResult.cs" />
     <Compile Include="Game\GameInfrastructure\MoveValidationStatus.cs" />
-    <Compile Include="MVVM\DialogCloseRequestedEventArgs.cs" />
-    <Compile Include="MVVM\IDialog.cs" />
-    <Compile Include="MVVM\IDialogRequestClose.cs" />
-    <Compile Include="MVVM\IDialogService.cs" />
-    <Compile Include="MVVM\NotificationDialogService.cs" />
+    <Compile Include="Infrastructure\DialogCloseRequestedEventArgs.cs" />
+    <Compile Include="Infrastructure\IDialog.cs" />
+    <Compile Include="Infrastructure\IDialogRequestClose.cs" />
+    <Compile Include="Infrastructure\IDialogService.cs" />
+    <Compile Include="Infrastructure\DialogService.cs" />
     <Compile Include="NotificationDialog.xaml.cs">
       <DependentUpon>NotificationDialog.xaml</DependentUpon>
     </Compile>

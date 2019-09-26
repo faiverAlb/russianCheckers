@@ -6,7 +6,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using RussianCheckers.Game;
 using RussianCheckers.Game.GameInfrastructure;
-using RussianCheckers.MVVM;
+using RussianCheckers.Infrastructure;
 
 namespace RussianCheckers
 {

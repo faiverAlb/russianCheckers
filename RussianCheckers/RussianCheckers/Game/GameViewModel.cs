@@ -91,17 +91,17 @@ namespace RussianCheckers
                 ShowNotificationMessage(preValidationMoveValidationResult.ErrorMessage);
                 return;
             }
-           
-            bool makeMoveStatus = IsCheckerMoved(newSelectedChecker);
+
+            PlayerViewModel player = _playerOne.Side == NextMoveSide ? _playerOne : _playerTwo;
+            bool makeMoveStatus = IsCheckerMoved(newSelectedChecker, player);
             if (makeMoveStatus == false)
             {
-                //TODo: make move here
                 return;
             }
 
             NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
 
-            var gameStatusChecker = new GameStatusChecker();
+            var gameStatusChecker = new GameStatusChecker(_data);
             GameStatus gameStatus = gameStatusChecker.GetGameStatus();
             if (gameStatus != GameStatus.InProgress)
             {
@@ -121,7 +121,7 @@ namespace RussianCheckers
             }
         }
 
-        private bool IsCheckerMoved(CheckerElement newSelectedChecker)
+        private bool IsCheckerMoved(CheckerElement newSelectedChecker, PlayerViewModel player)
         {
 
             var moveValidationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide);
@@ -143,9 +143,24 @@ namespace RussianCheckers
                 _selectedChecker = null;
                 return false;
             }
+
+            MoveCheckerToNewPlace(_selectedChecker, newSelectedChecker,player, newSelectedChecker.Column, newSelectedChecker.Row);
+
             _selectedChecker.IsSelected = false;
             _selectedChecker = null;
             return true;
+        }
+
+        private void MoveCheckerToNewPlace(CheckerElement selectedChecker,
+            CheckerElement newSelectedChecker,
+            PlayerViewModel player, 
+            int column, 
+            int row)
+        {
+            CheckerElement toMoveChecker = _positions.Single(x => x == selectedChecker);
+            CheckerElement emptyElement = _positions.Single(x => x == newSelectedChecker);
+            emptyElement.SetNewPosition(toMoveChecker.Column, toMoveChecker.Row);
+            toMoveChecker.SetNewPosition(column, row);
         }
 
 

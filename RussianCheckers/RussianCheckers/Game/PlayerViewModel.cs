@@ -7,9 +7,9 @@ namespace RussianCheckers
         public readonly Side Side;
         public  List<CheckerElement> PlayerPositions { get; protected set; }
 
-        public PlayerViewModel(Side side)
+        protected PlayerViewModel(Side side)
         {
-            this.Side = side;
+            Side = side;
         }
     }
 
@@ -35,9 +35,7 @@ namespace RussianCheckers
                     if (row % 2 == 0 && col % 2 == 0)
                     {
                         positions.Add(new CheckerElement(col, row, PieceType.Checker, side));
-                        continue;
                     }
-                    //positions.Add(new CheckerElement(col, row, PieceType.Checker, side));
                 }
             }
             return positions;

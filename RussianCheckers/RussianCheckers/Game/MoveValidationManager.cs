@@ -20,7 +20,7 @@ namespace RussianCheckers
         {
             if (_oldSelectedElement == null && _newSelectedElement.Side == Side.Empty)
             {
-                return new MoveValidationResult(MoveValidationStatus.Error, "Please select checker first");
+                return new MoveValidationResult(MoveValidationStatus.NothingSelected, "Please select checker first");
             }
 
             if (_newSelectedElement.Side != _nextMoveSide && _newSelectedElement.Side != Side.Empty)

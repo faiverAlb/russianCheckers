@@ -5,6 +5,7 @@
         Ok,
         Error,
         NewItemSelected,
-        DeselectChecker
+        DeselectChecker,
+        NothingSelected
     }
 }

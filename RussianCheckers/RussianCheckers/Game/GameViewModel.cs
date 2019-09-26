@@ -92,6 +92,11 @@ namespace RussianCheckers
                 return;
             }
 
+            if (preValidationMoveValidationResult.Status == MoveValidationStatus.NothingSelected)
+            {
+                return;
+            }
+
             PlayerViewModel player = _playerOne.Side == NextMoveSide ? _playerOne : _playerTwo;
             bool makeMoveStatus = IsCheckerMoved(newSelectedChecker, player);
             if (makeMoveStatus == false)

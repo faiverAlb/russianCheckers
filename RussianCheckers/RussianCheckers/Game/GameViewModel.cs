@@ -47,7 +47,6 @@ namespace RussianCheckers
 
         private IEnumerable<CheckerElement> GetInitialEmptyPositionsOnBoard(PlayerViewModel playerOne, PlayerViewModel playerTwo)
         {
-            List<CheckerElement> positions = new List<CheckerElement>();  
             foreach (CheckerElement position in playerOne.PlayerPositions)
             {
                 _data[position.Column -1 , position.Row - 1] = playerOne.Side;
@@ -58,12 +57,23 @@ namespace RussianCheckers
                 _data[position.Column - 1, position.Row - 1] = playerTwo.Side;
             }
 
+            List<CheckerElement> positions = new List<CheckerElement>();  
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
                     if (_data[j,i] == Side.Empty)
                     {
+                        if (i % 2 == 0 && j % 2 != 0)
+                        {
+                            continue;
+                        }
+
+                        if (i % 2 != 0 && j % 2 == 0)
+                        {
+                            continue;
+                        }
+
                         positions.Add(new CheckerElement(j+1, i + 1, PieceType.Checker, Side.Empty)); 
                     }
                 }

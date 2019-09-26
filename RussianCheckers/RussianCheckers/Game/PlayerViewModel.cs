@@ -16,7 +16,7 @@ namespace RussianCheckers
 
         public void MoveCheckerToNewPlace(CheckerElement checker, int column, int row)
         {
-            var foundChecker = PlayerPositions.Single(x => x == checker);
+            CheckerElement foundChecker = PlayerPositions.Single(x => x == checker);
             foundChecker.SetNewPosition(column, row);
         }
     }

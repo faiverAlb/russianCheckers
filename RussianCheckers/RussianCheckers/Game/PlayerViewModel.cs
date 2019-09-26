@@ -1,15 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace RussianCheckers
 {
     public abstract class PlayerViewModel: ObservableObject
     {
         public readonly Side Side;
-        public  List<CheckerElement> PlayerPositions { get; protected set; }
+        public  ObservableCollection<CheckerElement> PlayerPositions { get; protected set; }
 
         protected PlayerViewModel(Side side)
         {
             Side = side;
+        }
+
+        public void MoveCheckerToNewPlace(CheckerElement checker, int column, int row)
+        {
+            var foundChecker = PlayerPositions.Single(x => x == checker);
+            foundChecker.SetNewPosition(column, row);
         }
     }
 
@@ -17,7 +25,7 @@ namespace RussianCheckers
     {
         public MainHumanPlayer(Side side):base(side)
         {
-            PlayerPositions = GetInitialPositions(side);
+            PlayerPositions = new ObservableCollection<CheckerElement>(GetInitialPositions(side));
         }
 
         private List<CheckerElement> GetInitialPositions(Side side)
@@ -46,7 +54,7 @@ namespace RussianCheckers
     {
         public RobotPlayer(Side side) : base(side)
         {
-            PlayerPositions = GetInitialPositions(side);
+            PlayerPositions = new ObservableCollection<CheckerElement>(GetInitialPositions(side));
 
         }
 

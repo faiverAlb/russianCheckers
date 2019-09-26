@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Input;
 using RussianCheckers.Game;
 using RussianCheckers.Game.GameInfrastructure;
@@ -11,10 +12,10 @@ namespace RussianCheckers
 {
     public class GameViewModel : ObservableObject
     {
-        private readonly PlayerViewModel _playerOne;
+
         private readonly PlayerViewModel _playerTwo;
         private readonly IDialogService _notificationDialog;
-        private readonly ObservableCollection<CheckerElement> _positions = new ObservableCollection<CheckerElement>();
+        private readonly CompositeCollection _positions = new CompositeCollection();
         private readonly Side[,] _data = new Side[8,8];
         public GameViewModel(PlayerViewModel playerOne
             , PlayerViewModel playerTwo
@@ -24,9 +25,14 @@ namespace RussianCheckers
             _playerTwo = playerTwo;
             _notificationDialog = notificationDialog;
             NextMoveSide = Side.White;
-            IEnumerable<CheckerElement> initialPositionsOnBoard = GetInitialPositionsOnBoard(playerOne, playerTwo);
 
-            _positions = new ObservableCollection<CheckerElement>(initialPositionsOnBoard);
+            _emptyCollection = new ObservableCollection< CheckerElement>(GetInitialEmptyPositionsOnBoard(playerOne, playerTwo));
+            var playerOneCollectionContainer = new CollectionContainer { Collection = playerOne.PlayerPositions};
+            var playerTwoCollectionContainer = new CollectionContainer{ Collection = playerTwo.PlayerPositions };
+            var emptyCollectionContainer = new CollectionContainer{ Collection = _emptyCollection };
+            _positions.Add(playerOneCollectionContainer);
+            _positions.Add(playerTwoCollectionContainer);
+            _positions.Add(emptyCollectionContainer);
         }
 
         public Side NextMoveSide
@@ -39,18 +45,16 @@ namespace RussianCheckers
             }
         }
 
-        private IEnumerable<CheckerElement> GetInitialPositionsOnBoard(PlayerViewModel playerOne, PlayerViewModel playerTwo)
+        private IEnumerable<CheckerElement> GetInitialEmptyPositionsOnBoard(PlayerViewModel playerOne, PlayerViewModel playerTwo)
         {
             List<CheckerElement> positions = new List<CheckerElement>();  
             foreach (CheckerElement position in playerOne.PlayerPositions)
             {
-                positions.Add(position);
                 _data[position.Column -1 , position.Row - 1] = playerOne.Side;
             }
 
             foreach (CheckerElement position in playerTwo.PlayerPositions)
             {
-                positions.Add(position);
                 _data[position.Column - 1, position.Row - 1] = playerTwo.Side;
             }
 
@@ -74,6 +78,8 @@ namespace RussianCheckers
         private CheckerElement _selectedChecker;
         private  Side _nextMoveSide;
         private bool _isGameFinished;
+        private readonly ObservableCollection<CheckerElement> _emptyCollection;
+        private readonly PlayerViewModel _playerOne;
 
         private void OnTryMakeMove(object obj)
         {
@@ -128,7 +134,6 @@ namespace RussianCheckers
 
         private bool IsCheckerMoved(CheckerElement newSelectedChecker, PlayerViewModel player)
         {
-
             var moveValidationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide);
             MoveValidationResult validationResult =  moveValidationManager.GetMoveValidationResult();
             if (validationResult.Status == MoveValidationStatus.NewItemSelected)
@@ -162,10 +167,11 @@ namespace RussianCheckers
             int column, 
             int row)
         {
-            CheckerElement toMoveChecker = _positions.Single(x => x == selectedChecker);
-            CheckerElement emptyElement = _positions.Single(x => x == newSelectedChecker);
-            emptyElement.SetNewPosition(toMoveChecker.Column, toMoveChecker.Row);
-            toMoveChecker.SetNewPosition(column, row);
+            int selectedCheckerColumn = selectedChecker.Column;
+            int selectedCheckerRow = selectedChecker.Row;
+            player.MoveCheckerToNewPlace(selectedChecker, column, row);
+            CheckerElement emptyElement = _emptyCollection.Single(x => x == newSelectedChecker);
+            emptyElement.SetNewPosition(selectedCheckerColumn, selectedCheckerRow);
         }
 
 
@@ -187,7 +193,7 @@ namespace RussianCheckers
             //            }
         }
 
-        public ObservableCollection<CheckerElement> Positions
+        public CompositeCollection Positions
         {
             get
             {

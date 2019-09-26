@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using RussianCheckers.Infrastructure;
 
-namespace RussianCheckers
+namespace RussianCheckers.Game
 {
     public class NotificationDialogViewModel :ObservableObject, IDialogRequestClose
     {

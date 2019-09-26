@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RussianCheckers"
+        xmlns:game="clr-namespace:RussianCheckers.Game"
         mc:Ignorable="d"
         
         Title="Russian checkers" Height="700" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
@@ -13,8 +14,8 @@
             <Style.Triggers>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Type}" Value="{x:Static local:PieceType.Queen}"/>
-                        <Condition Binding="{Binding Side}" Value="{x:Static local:Side.Black}"/>
+                        <Condition Binding="{Binding Type}" Value="{x:Static game:PieceType.Queen}"/>
+                        <Condition Binding="{Binding Side}" Value="{x:Static game:Side.Black}"/>
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.Setters>
                         <Setter Property="Image.Source" Value="Images/black_queen.png" />
@@ -22,8 +23,8 @@
                 </MultiDataTrigger>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Type}" Value="{x:Static local:PieceType.Queen}"/>
-                        <Condition Binding="{Binding Side}" Value="{x:Static local:Side.White}"/>
+                        <Condition Binding="{Binding Type}" Value="{x:Static game:PieceType.Queen}"/>
+                        <Condition Binding="{Binding Side}" Value="{x:Static game:Side.White}"/>
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.Setters>
                         <Setter Property="Image.Source" Value="Images/white_queen.png" />
@@ -31,8 +32,8 @@
                 </MultiDataTrigger>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Type}" Value="{x:Static local:PieceType.Checker}"/>
-                        <Condition Binding="{Binding Side}" Value="{x:Static local:Side.Black}"/>
+                        <Condition Binding="{Binding Type}" Value="{x:Static game:PieceType.Checker}"/>
+                        <Condition Binding="{Binding Side}" Value="{x:Static game:Side.Black}"/>
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.Setters>
                         <Setter Property="Image.Source" Value="Images/blackCheker.png" />
@@ -40,8 +41,8 @@
                 </MultiDataTrigger>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Type}" Value="{x:Static local:PieceType.Checker}"/>
-                        <Condition Binding="{Binding Side}" Value="{x:Static local:Side.White}"/>
+                        <Condition Binding="{Binding Type}" Value="{x:Static game:PieceType.Checker}"/>
+                        <Condition Binding="{Binding Side}" Value="{x:Static game:Side.White}"/>
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.Setters>
                         <Setter Property="Image.Source" Value="Images/whiteChecker.png" />
@@ -49,7 +50,7 @@
                 </MultiDataTrigger>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Side}" Value="{x:Static local:Side.Empty}"/>
+                        <Condition Binding="{Binding Side}" Value="{x:Static game:Side.Empty}"/>
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.Setters>
                         <Setter Property="Image.Source" Value="Images/empty.png" />

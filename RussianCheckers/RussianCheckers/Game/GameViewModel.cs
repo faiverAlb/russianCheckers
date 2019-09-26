@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
-using RussianCheckers.Game;
 using RussianCheckers.Game.GameInfrastructure;
 using RussianCheckers.Infrastructure;
 
-namespace RussianCheckers
+namespace RussianCheckers.Game
 {
     public class GameViewModel : ObservableObject
     {

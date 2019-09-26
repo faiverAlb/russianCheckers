@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RussianCheckers
+namespace RussianCheckers.Game
 {
     public class CheckerElement : ObservableObject
     {

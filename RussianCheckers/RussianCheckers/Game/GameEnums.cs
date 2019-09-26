@@ -1,4 +1,4 @@
-﻿namespace RussianCheckers
+﻿namespace RussianCheckers.Game
 {
     public enum Side
     {

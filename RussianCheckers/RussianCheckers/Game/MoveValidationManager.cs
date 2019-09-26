@@ -1,7 +1,6 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using RussianCheckers.Game.GameInfrastructure;
+﻿using RussianCheckers.Game.GameInfrastructure;
 
-namespace RussianCheckers
+namespace RussianCheckers.Game
 {
     public class MoveValidationManager
     {

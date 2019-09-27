@@ -20,6 +20,26 @@ namespace RussianCheckers
             CheckerElement foundChecker = PlayerPositions.Single(x => x == checker);
             foundChecker.SetNewPosition(column, row);
         }
+
+        public void SetPossibleMovementElements(List<CheckerElement> allEmptyElements)
+        {
+            foreach (CheckerElement playerChecker in PlayerPositions)
+            {
+                var checkerPossibleMoves = new List<CheckerElement>();
+                foreach (CheckerElement emptyElement in allEmptyElements)
+                {
+                    if (playerChecker.Type == PieceType.Checker)
+                    {
+                        //TODO: Calculate positions for simple type
+                    }
+                    else
+                    {
+                        //TODO: Calculate positions for queen type
+                    }
+                }
+                playerChecker.SetPossibleMovementElements(checkerPossibleMoves);
+            }
+        }
     }
 
     public class MainHumanPlayer : PlayerViewModel

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RussianCheckers.Game
 {
@@ -18,6 +19,15 @@ namespace RussianCheckers.Game
             get { return this._pos; }
             set { this._pos = value; RaisePropertyChangedEvent(nameof(Pos)); }
         }
+
+        public List<CheckerElement> PossibleMovementElements { get; private set; } = new List<CheckerElement>();
+
+        public void SetPossibleMovementElements(List<CheckerElement> possibleMovementElements)
+        {
+            PossibleMovementElements = possibleMovementElements;
+        }
+
+
 
         public int Column { get; private set; }
         public int Row { get; private set; }

@@ -4,7 +4,8 @@
     {
         Empty,
         White,
-        Black
+        Black, 
+        None
     }
 
     public enum PieceType

@@ -14,7 +14,7 @@ namespace RussianCheckers.Game
         private readonly PlayerViewModel _playerTwo;
         private readonly IDialogService _notificationDialog;
         private readonly CompositeCollection _positions = new CompositeCollection();
-        private readonly Side[,] _data = new Side[8,8];
+        private readonly Side[,] _data;
         public GameViewModel(PlayerViewModel playerOne
             , PlayerViewModel playerTwo
             , IDialogService notificationDialog)
@@ -24,13 +24,31 @@ namespace RussianCheckers.Game
             _notificationDialog = notificationDialog;
             NextMoveSide = Side.White;
 
-            _emptyCollection = new ObservableCollection< CheckerElement>(GetInitialEmptyPositionsOnBoard(playerOne, playerTwo));
+            _data = GetCurrentGamePositions(_playerOne, playerTwo);
+            _emptyCollection = new ObservableCollection<CheckerElement>(GetInitialEmptyPositionsOnBoard());
+
             var playerOneCollectionContainer = new CollectionContainer { Collection = playerOne.PlayerPositions};
             var playerTwoCollectionContainer = new CollectionContainer{ Collection = playerTwo.PlayerPositions };
             var emptyCollectionContainer = new CollectionContainer{ Collection = _emptyCollection };
             _positions.Add(playerOneCollectionContainer);
             _positions.Add(playerTwoCollectionContainer);
             _positions.Add(emptyCollectionContainer);
+        }
+
+        private Side[,] GetCurrentGamePositions(PlayerViewModel playerOne, PlayerViewModel playerTwo)
+        {
+            var data = new Side[8, 8];
+            foreach (CheckerElement position in playerOne.PlayerPositions)
+            {
+                data[position.Column - 1, position.Row - 1] = playerOne.Side;
+            }
+
+            foreach (CheckerElement position in playerTwo.PlayerPositions)
+            {
+                data[position.Column - 1, position.Row - 1] = playerTwo.Side;
+            }
+
+            return data;
         }
 
         public Side NextMoveSide
@@ -43,18 +61,8 @@ namespace RussianCheckers.Game
             }
         }
 
-        private IEnumerable<CheckerElement> GetInitialEmptyPositionsOnBoard(PlayerViewModel playerOne, PlayerViewModel playerTwo)
+        private IEnumerable<CheckerElement> GetInitialEmptyPositionsOnBoard()
         {
-            foreach (CheckerElement position in playerOne.PlayerPositions)
-            {
-                _data[position.Column -1 , position.Row - 1] = playerOne.Side;
-            }
-
-            foreach (CheckerElement position in playerTwo.PlayerPositions)
-            {
-                _data[position.Column - 1, position.Row - 1] = playerTwo.Side;
-            }
-
             List<CheckerElement> positions = new List<CheckerElement>();  
             for (int i = 0; i < 8; i++)
             {
@@ -64,11 +72,13 @@ namespace RussianCheckers.Game
                     {
                         if (i % 2 == 0 && j % 2 != 0)
                         {
+                            _data[j, i] = Side.None;
                             continue;
                         }
 
                         if (i % 2 != 0 && j % 2 == 0)
                         {
+                            _data[j, i] = Side.None;
                             continue;
                         }
 

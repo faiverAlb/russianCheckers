@@ -46,7 +46,13 @@ namespace RussianCheckers.Game
             {
                 return new MoveValidationResult(MoveValidationStatus.NewItemSelected);
             }
-            return  new MoveValidationResult(MoveValidationStatus.Ok);
+
+            if (_oldSelectedElement != null && !_oldSelectedElement.CanMoveToPosition(_newSelectedElement))
+            {
+                return new MoveValidationResult(MoveValidationStatus.Error, "Can't move checker to this place");
+            }
+
+            return new MoveValidationResult(MoveValidationStatus.Ok);
         }
     }
 }

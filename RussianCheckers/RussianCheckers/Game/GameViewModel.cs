@@ -129,6 +129,8 @@ namespace RussianCheckers.Game
             {
                 return;
             }
+            _playerOne.SetPossibleMovementElements(_emptyCollection.ToList());
+            _playerTwo.SetPossibleMovementElements(_emptyCollection.ToList());
 
             NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
 
@@ -174,8 +176,13 @@ namespace RussianCheckers.Game
                 return false;
             }
 
-            MoveCheckerToNewPlace(_selectedChecker, newSelectedChecker,player, newSelectedChecker.Column, newSelectedChecker.Row);
+            if (validationResult.Status == MoveValidationStatus.Error)
+            {
+                ShowNotificationMessage(validationResult.ErrorMessage);
+                return false;
+            }
 
+            MoveCheckerToNewPlace(_selectedChecker, newSelectedChecker,player, newSelectedChecker.Column, newSelectedChecker.Row);
             _selectedChecker.IsSelected = false;
             _selectedChecker = null;
             return true;
@@ -192,6 +199,7 @@ namespace RussianCheckers.Game
             player.MoveCheckerToNewPlace(selectedChecker, column, row);
             CheckerElement emptyElement = _emptyCollection.Single(x => x == newSelectedChecker);
             emptyElement.SetNewPosition(selectedCheckerColumn, selectedCheckerRow);
+
         }
 
 

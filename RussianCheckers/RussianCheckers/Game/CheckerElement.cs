@@ -27,6 +27,11 @@ namespace RussianCheckers.Game
             _possibleMovementElements = possibleMovementElements;
         }
 
+        public bool CanMoveToPosition(CheckerElement element)
+        {
+            return _possibleMovementElements.Contains(element);
+        }
+
 
 
         public int Column { get; private set; }

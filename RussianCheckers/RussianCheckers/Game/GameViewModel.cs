@@ -26,8 +26,9 @@ namespace RussianCheckers.Game
 
             _data = GetCurrentGamePositions(_playerOne, playerTwo);
             _emptyCollection = new ObservableCollection<CheckerElement>(GetInitialEmptyPositionsOnBoard());
-
             playerOne.SetPossibleMovementElements(_emptyCollection.ToList());
+            playerTwo.SetPossibleMovementElements(_emptyCollection.ToList());
+
             var playerOneCollectionContainer = new CollectionContainer { Collection = playerOne.PlayerPositions};
             var playerTwoCollectionContainer = new CollectionContainer{ Collection = playerTwo.PlayerPositions };
             var emptyCollectionContainer = new CollectionContainer{ Collection = _emptyCollection };
@@ -83,7 +84,7 @@ namespace RussianCheckers.Game
                             continue;
                         }
 
-                        positions.Add(new CheckerElement(j+1, i + 1, PieceType.Checker, Side.Empty)); 
+                        positions.Add(new CheckerElement(j + 1, i + 1, PieceType.Checker, Side.Empty));
                     }
                 }
             }

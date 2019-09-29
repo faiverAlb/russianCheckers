@@ -25,18 +25,48 @@ namespace RussianCheckers
         {
             foreach (CheckerElement playerChecker in PlayerPositions)
             {
+                var emptyPositionsToCheck = new Queue<CheckerElement>(allEmptyElements);
                 var checkerPossibleMoves = new List<CheckerElement>();
-                foreach (CheckerElement emptyElement in allEmptyElements)
+
+                while (emptyPositionsToCheck.Any())
                 {
-                    if (playerChecker.Type == PieceType.Checker)
+                    CheckerElement emptyElement = emptyPositionsToCheck.Dequeue();
+                    if (playerChecker.Column - 1 == emptyElement.Column && playerChecker.Row - 1 == emptyElement.Row)
                     {
-                        //TODO: Calculate positions for simple type
+                        checkerPossibleMoves.Add(emptyElement);
+                        continue;
                     }
-                    else
+
+                    if (playerChecker.Column - 1 == emptyElement.Column && playerChecker.Row + 1 == emptyElement.Row)
                     {
-                        //TODO: Calculate positions for queen type
+                        checkerPossibleMoves.Add(emptyElement);
+                        continue;
+                    }
+
+                    if (playerChecker.Column + 1 == emptyElement.Column && playerChecker.Row - 1 == emptyElement.Row)
+                    {
+                        checkerPossibleMoves.Add(emptyElement);
+                        continue;
+                    }
+
+                    if (playerChecker.Column + 1 == emptyElement.Column && playerChecker.Row + 1 == emptyElement.Row)
+                    {
+                        checkerPossibleMoves.Add(emptyElement);
+                        continue;
                     }
                 }
+
+//                foreach (CheckerElement emptyElement in allEmptyElements)
+//                {
+//                    if (playerChecker.Type == PieceType.Checker)
+//                    {
+//                        //TODO: Calculate positions for simple type
+//                    }
+//                    else
+//                    {
+//                        //TODO: Calculate positions for queen type
+//                    }
+//                }
                 playerChecker.SetPossibleMovementElements(checkerPossibleMoves);
             }
         }

@@ -12,6 +12,7 @@ namespace RussianCheckers.Game
             Row = row;
             _type = type;
             _side = side;
+            _possibleMovementElements = new List<CheckerElement>();
         }
         private Point _pos;
         public Point Pos
@@ -20,11 +21,10 @@ namespace RussianCheckers.Game
             set { this._pos = value; RaisePropertyChangedEvent(nameof(Pos)); }
         }
 
-        public List<CheckerElement> PossibleMovementElements { get; private set; } = new List<CheckerElement>();
-
+        private List<CheckerElement> _possibleMovementElements;
         public void SetPossibleMovementElements(List<CheckerElement> possibleMovementElements)
         {
-            PossibleMovementElements = possibleMovementElements;
+            _possibleMovementElements = possibleMovementElements;
         }
 
 
@@ -51,7 +51,14 @@ namespace RussianCheckers.Game
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { _isSelected = value; RaisePropertyChangedEvent(nameof(IsSelected)); ; }
+            set {
+                _isSelected = value;
+                RaisePropertyChangedEvent(nameof(IsSelected));
+                foreach (CheckerElement possibleMovementElement in _possibleMovementElements)
+                {
+                    possibleMovementElement.IsSelected = value;
+                }
+            }
         }
 
         public void SetNewPosition(int column, int row)

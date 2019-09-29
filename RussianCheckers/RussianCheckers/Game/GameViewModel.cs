@@ -26,8 +26,8 @@ namespace RussianCheckers.Game
 
             _data = GetCurrentGamePositions(_playerOne, playerTwo);
             _emptyCollection = new ObservableCollection<CheckerElement>(GetInitialEmptyPositionsOnBoard());
-            playerOne.SetPossibleMovementElements(_emptyCollection.ToList());
-            playerTwo.SetPossibleMovementElements(_emptyCollection.ToList());
+            playerOne.SetPossibleMovementElements(_emptyCollection.ToList(),new List<CheckerElement>());
+            playerTwo.SetPossibleMovementElements(_emptyCollection.ToList(), new List<CheckerElement>());
 
             var playerOneCollectionContainer = new CollectionContainer { Collection = playerOne.PlayerPositions};
             var playerTwoCollectionContainer = new CollectionContainer{ Collection = playerTwo.PlayerPositions };
@@ -129,8 +129,18 @@ namespace RussianCheckers.Game
             {
                 return;
             }
-            _playerOne.SetPossibleMovementElements(_emptyCollection.ToList());
-            _playerTwo.SetPossibleMovementElements(_emptyCollection.ToList());
+
+            List<CheckerElement> allEmptyElements = _emptyCollection.ToList();
+            if (_playerOne.Side == NextMoveSide)
+            {
+                _playerTwo.SetPossibleMovementElements(allEmptyElements, _playerOne.PlayerPositions.ToList());
+                _playerOne.SetPossibleMovementElements(allEmptyElements, _playerTwo.PlayerPositions.ToList());
+            }
+            else
+            {
+                _playerOne.SetPossibleMovementElements(allEmptyElements, _playerTwo.PlayerPositions.ToList());
+                _playerTwo.SetPossibleMovementElements(allEmptyElements, _playerOne.PlayerPositions.ToList());
+            }
 
             NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
 

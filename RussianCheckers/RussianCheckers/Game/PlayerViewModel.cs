@@ -21,52 +21,36 @@ namespace RussianCheckers
             foundChecker.SetNewPosition(column, row);
         }
 
-        public void SetPossibleMovementElements(List<CheckerElement> allEmptyElements)
+        public void SetPossibleMovementElements(List<CheckerElement> allEmptyElements, List<CheckerElement> otherPlayerCheckers)
         {
-            foreach (CheckerElement playerChecker in PlayerPositions)
+            var queueOfElements = new Queue<CheckerElement>(PlayerPositions);
+            while (queueOfElements.Any()) 
             {
+                var playerChecker = queueOfElements.Dequeue();
                 var emptyPositionsToCheck = new Queue<CheckerElement>(allEmptyElements);
                 var checkerPossibleMoves = new List<CheckerElement>();
 
-                while (emptyPositionsToCheck.Any())
+                IEnumerable<CheckerElement> otherPlayerNearestCheckElements = otherPlayerCheckers.Where(x => x.IsCheckerNearChecker(playerChecker));
+                foreach(var emptyElement in allEmptyElements)
                 {
-                    CheckerElement emptyElement = emptyPositionsToCheck.Dequeue();
-                    if (playerChecker.Column - 1 == emptyElement.Column && playerChecker.Row - 1 == emptyElement.Row)
+                    if (playerChecker.IsCheckerNearChecker(emptyElement) && !checkerPossibleMoves.Contains(emptyElement)) 
                     {
                         checkerPossibleMoves.Add(emptyElement);
-                        continue;
-                    }
-
-                    if (playerChecker.Column - 1 == emptyElement.Column && playerChecker.Row + 1 == emptyElement.Row)
-                    {
-                        checkerPossibleMoves.Add(emptyElement);
-                        continue;
-                    }
-
-                    if (playerChecker.Column + 1 == emptyElement.Column && playerChecker.Row - 1 == emptyElement.Row)
-                    {
-                        checkerPossibleMoves.Add(emptyElement);
-                        continue;
-                    }
-
-                    if (playerChecker.Column + 1 == emptyElement.Column && playerChecker.Row + 1 == emptyElement.Row)
-                    {
-                        checkerPossibleMoves.Add(emptyElement);
-                        continue;
                     }
                 }
 
-//                foreach (CheckerElement emptyElement in allEmptyElements)
-//                {
-//                    if (playerChecker.Type == PieceType.Checker)
-//                    {
-//                        //TODO: Calculate positions for simple type
-//                    }
-//                    else
-//                    {
-//                        //TODO: Calculate positions for queen type
-//                    }
-//                }
+
+                //                foreach (CheckerElement emptyElement in allEmptyElements)
+                //                {
+                //                    if (playerChecker.Type == PieceType.Checker)
+                //                    {
+                //                        //TODO: Calculate positions for simple type
+                //                    }
+                //                    else
+                //                    {
+                //                        //TODO: Calculate positions for queen type
+                //                    }
+                //                }
                 playerChecker.SetPossibleMovementElements(checkerPossibleMoves);
             }
         }

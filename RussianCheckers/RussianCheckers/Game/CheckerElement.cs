@@ -12,7 +12,7 @@ namespace RussianCheckers.Game
             Row = row;
             _type = type;
             _side = side;
-            _possibleMovementElements = new List<CheckerElement>();
+            PossibleMovementElements = new List<CheckerElement>();
         }
         private Point _pos;
         public Point Pos
@@ -21,15 +21,16 @@ namespace RussianCheckers.Game
             set { this._pos = value; RaisePropertyChangedEvent(nameof(Pos)); }
         }
 
-        private List<CheckerElement> _possibleMovementElements;
+        public List<CheckerElement> PossibleMovementElements { get; private set; }
+
         public void SetPossibleMovementElements(List<CheckerElement> possibleMovementElements)
         {
-            _possibleMovementElements = possibleMovementElements;
+            PossibleMovementElements = possibleMovementElements;
         }
 
         public bool CanMoveToPosition(CheckerElement element)
         {
-            return _possibleMovementElements.Contains(element);
+            return PossibleMovementElements.Contains(element);
         }
 
 
@@ -59,7 +60,7 @@ namespace RussianCheckers.Game
             set {
                 _isSelected = value;
                 RaisePropertyChangedEvent(nameof(IsSelected));
-                foreach (CheckerElement possibleMovementElement in _possibleMovementElements)
+                foreach (CheckerElement possibleMovementElement in PossibleMovementElements)
                 {
                     possibleMovementElement.IsSelected = value;
                 }
@@ -71,6 +72,18 @@ namespace RussianCheckers.Game
             Column = column;
             Row = row;
             _pos.ChangePosition(column, row);
+        }
+
+        public bool IsCheckerNearChecker(CheckerElement otherChecker)
+        {
+            bool isNear = false;
+            isNear = Column - 1 == otherChecker.Column && Row - 1 == otherChecker.Row;
+            isNear = isNear || Column - 1 == otherChecker.Column && Row + 1 == otherChecker.Row;
+            isNear = isNear || Column - 1 == otherChecker.Column && Row + 1 == otherChecker.Row;
+            isNear = isNear || Column + 1 == otherChecker.Column && Row - 1 == otherChecker.Row;
+            isNear = isNear || Column + 1 == otherChecker.Column && Row + 1 == otherChecker.Row;
+
+            return isNear;
         }
     }
 

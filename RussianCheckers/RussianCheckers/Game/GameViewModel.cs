@@ -14,7 +14,7 @@ namespace RussianCheckers.Game
         private readonly PlayerViewModel _playerTwo;
         private readonly IDialogService _notificationDialog;
         private readonly CompositeCollection _positions = new CompositeCollection();
-        private readonly Side[,] _data;
+        private readonly CheckerElement[,] _data;
         public GameViewModel(PlayerViewModel playerOne
             , PlayerViewModel playerTwo
             , IDialogService notificationDialog)
@@ -25,9 +25,11 @@ namespace RussianCheckers.Game
             NextMoveSide = Side.White;
 
             _data = GetCurrentGamePositions(_playerOne, playerTwo);
-            _emptyCollection = new ObservableCollection<CheckerElement>(GetInitialEmptyPositionsOnBoard());
-            playerOne.SetPossibleMovementElements(_emptyCollection.ToList(),new List<CheckerElement>());
-            playerTwo.SetPossibleMovementElements(_emptyCollection.ToList(), new List<CheckerElement>());
+            _emptyCollection = new ObservableCollection<CheckerElement>(GetInitialEmptyPositionsOnBoard(_data));
+            playerOne.CalculateNeighbors(_data);
+            playerTwo.CalculateNeighbors(_data);
+//            playerOne.SetPossibleMovementElements(_emptyCollection.ToList(),new List<CheckerElement>());
+//            playerTwo.SetPossibleMovementElements(_emptyCollection.ToList(), new List<CheckerElement>());
 
             var playerOneCollectionContainer = new CollectionContainer { Collection = playerOne.PlayerPositions};
             var playerTwoCollectionContainer = new CollectionContainer{ Collection = playerTwo.PlayerPositions };
@@ -37,17 +39,17 @@ namespace RussianCheckers.Game
             _positions.Add(emptyCollectionContainer);
         }
 
-        private Side[,] GetCurrentGamePositions(PlayerViewModel playerOne, PlayerViewModel playerTwo)
+        private CheckerElement[,] GetCurrentGamePositions(PlayerViewModel playerOne, PlayerViewModel playerTwo)
         {
-            var data = new Side[8, 8];
+            var data = new CheckerElement[8, 8];
             foreach (CheckerElement position in playerOne.PlayerPositions)
             {
-                data[position.Column - 1, position.Row - 1] = playerOne.Side;
+                data[position.Column , position.Row] = position;
             }
 
             foreach (CheckerElement position in playerTwo.PlayerPositions)
             {
-                data[position.Column - 1, position.Row - 1] = playerTwo.Side;
+                data[position.Column, position.Row] = position;
             }
 
             return data;
@@ -63,28 +65,30 @@ namespace RussianCheckers.Game
             }
         }
 
-        private IEnumerable<CheckerElement> GetInitialEmptyPositionsOnBoard()
+        private IEnumerable<CheckerElement> GetInitialEmptyPositionsOnBoard(CheckerElement[,] data)
         {
             List<CheckerElement> positions = new List<CheckerElement>();  
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if (_data[j,i] == Side.Empty)
+                    if (data[j,i] == null)
                     {
                         if (i % 2 == 0 && j % 2 != 0)
                         {
-                            _data[j, i] = Side.None;
+                            data[j, i] = null;
                             continue;
                         }
 
                         if (i % 2 != 0 && j % 2 == 0)
                         {
-                            _data[j, i] = Side.None;
+                            data[j, i] = null;
                             continue;
                         }
 
-                        positions.Add(new CheckerElement(j + 1, i + 1, PieceType.Checker, Side.Empty));
+                        CheckerElement emptyCheckerElement = new CheckerElement(j, i, PieceType.Checker, Side.Empty);
+                        data[j, i] = emptyCheckerElement;
+                        positions.Add(emptyCheckerElement);
                     }
                 }
             }
@@ -131,16 +135,16 @@ namespace RussianCheckers.Game
             }
 
             List<CheckerElement> allEmptyElements = _emptyCollection.ToList();
-            if (_playerOne.Side == NextMoveSide)
-            {
-                _playerTwo.SetPossibleMovementElements(allEmptyElements, _playerOne.PlayerPositions.ToList());
-                _playerOne.SetPossibleMovementElements(allEmptyElements, _playerTwo.PlayerPositions.ToList());
-            }
-            else
-            {
-                _playerOne.SetPossibleMovementElements(allEmptyElements, _playerTwo.PlayerPositions.ToList());
-                _playerTwo.SetPossibleMovementElements(allEmptyElements, _playerOne.PlayerPositions.ToList());
-            }
+//            if (_playerOne.Side == NextMoveSide)
+//            {
+//                _playerTwo.SetPossibleMovementElements(allEmptyElements, _playerOne.PlayerPositions.ToList());
+//                _playerOne.SetPossibleMovementElements(allEmptyElements, _playerTwo.PlayerPositions.ToList());
+//            }
+//            else
+//            {
+//                _playerOne.SetPossibleMovementElements(allEmptyElements, _playerTwo.PlayerPositions.ToList());
+//                _playerTwo.SetPossibleMovementElements(allEmptyElements, _playerOne.PlayerPositions.ToList());
+//            }
 
             NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
 
@@ -175,6 +179,8 @@ namespace RussianCheckers.Game
                     _selectedChecker.IsSelected = false;
                 }
                 _selectedChecker = newSelectedChecker;
+//                player.SetPossibleMovements(_selectedChecker);
+
                 _selectedChecker.IsSelected = true;
                 return false;
             }
@@ -198,19 +204,42 @@ namespace RussianCheckers.Game
             return true;
         }
 
-        private void MoveCheckerToNewPlace(CheckerElement selectedChecker,
+        private void MoveCheckerToNewPlace(CheckerElement oldCheckerPosition,
             CheckerElement newSelectedChecker,
             PlayerViewModel player, 
             int column, 
             int row)
         {
-            int selectedCheckerColumn = selectedChecker.Column;
-            int selectedCheckerRow = selectedChecker.Row;
-            player.MoveCheckerToNewPlace(selectedChecker, column, row);
-            CheckerElement emptyElement = _emptyCollection.Single(x => x == newSelectedChecker);
-            emptyElement.SetNewPosition(selectedCheckerColumn, selectedCheckerRow);
+//            int selectedCheckerColumn = oldCheckerPosition.Column;
+//            int selectedCheckerRow = oldCheckerPosition.Row;
+//            UpdateData(oldCheckerPosition, newSelectedChecker);
+
+            int selectedOldCheckerColumn = oldCheckerPosition.Column;
+            int selectedCheckerRow = oldCheckerPosition.Row;
+
+            int newPosCol = newSelectedChecker.Column;
+            int newPosRow = newSelectedChecker.Row;
+
+            CheckerElement newPosition = _data[newPosCol, newPosRow];
+            _data[newPosCol, newPosRow] = _data[selectedOldCheckerColumn, selectedCheckerRow];
+
+            player.MoveCheckerToNewPlace(oldCheckerPosition, newPosCol, newPosRow);
+
+            newPosition.SetNewPosition(selectedOldCheckerColumn, selectedCheckerRow);
+            _data[selectedOldCheckerColumn, selectedCheckerRow] = newPosition;
+
+            _playerOne.CalculateNeighbors(_data);
+            _playerTwo.CalculateNeighbors(_data);
+
+//            CheckerElement emptyElement = _emptyCollection.Single(x => x == newSelectedChecker);
 
         }
+
+//        private void UpdateData(CheckerElement oldCheckerPosition, CheckerElement newCheckerPosition)
+//        {
+//            
+//
+//        }
 
 
         private void ShowNotificationMessage(string message)

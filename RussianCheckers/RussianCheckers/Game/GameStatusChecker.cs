@@ -4,9 +4,9 @@ namespace RussianCheckers.Game
 {
     internal class GameStatusChecker
     {
-        private readonly Side[,] _data;
+        private readonly CheckerElement[,] _data;
 
-        public GameStatusChecker(Side[,] data)
+        public GameStatusChecker(CheckerElement[,] data)
         {
             _data = data;
         }

@@ -13,6 +13,7 @@ namespace RussianCheckers.Game
             _type = type;
             _side = side;
             PossibleMovementElements = new List<CheckerElement>();
+            Neighbors = new List<CheckerElement>();
         }
         private Point _pos;
         public Point Pos
@@ -67,6 +68,13 @@ namespace RussianCheckers.Game
             }
         }
 
+        public List<CheckerElement> Neighbors { get; private set; }
+
+        public void SetNeighbors(List<CheckerElement> neighbors)
+        {
+            Neighbors = neighbors;
+        }
+
         public void SetNewPosition(int column, int row)
         {
             Column = column;
@@ -85,6 +93,11 @@ namespace RussianCheckers.Game
 
             return isNear;
         }
+
+        public override string ToString()
+        {
+            return $"{Side}, {Type}, [{Column},{Row}]";
+        }
     }
 
 
@@ -95,9 +108,9 @@ namespace RussianCheckers.Game
 
         public Point(int row, int column)
         {
-            if (row < 1 || row > 8)
+            if (row < 0 || row > 7)
                 throw new Exception("Invalid row value");
-            if (column < 1 || column > 8)
+            if (column < 0 || column > 7)
                 throw new Exception("Invalid column value");
 
             ChangePosition(column, row);
@@ -142,8 +155,8 @@ namespace RussianCheckers.Game
 
         public void ChangePosition(int column, int row)
         {
-            X = CalculateX(column - 1);
-            Y = CalculateY(8 - row);
+            X = CalculateX(column);
+            Y = CalculateY(7 - row);
         }
     }
 

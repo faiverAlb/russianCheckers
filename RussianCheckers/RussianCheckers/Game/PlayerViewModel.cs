@@ -27,7 +27,6 @@ namespace RussianCheckers
             while (queueOfElements.Any()) 
             {
                 var playerChecker = queueOfElements.Dequeue();
-                var emptyPositionsToCheck = new Queue<CheckerElement>(allEmptyElements);
                 var checkerPossibleMoves = new List<CheckerElement>();
 
                 IEnumerable<CheckerElement> otherPlayerNearestCheckElements = otherPlayerCheckers.Where(x => x.IsCheckerNearChecker(playerChecker));
@@ -54,6 +53,54 @@ namespace RussianCheckers
                 playerChecker.SetPossibleMovementElements(checkerPossibleMoves);
             }
         }
+        public void CalculateNeighbors(CheckerElement[,] currentData)
+        {
+            foreach (CheckerElement playerPosition in PlayerPositions)
+            {
+                CheckerElement checkerElement = currentData[playerPosition.Column, playerPosition.Row];
+                List<CheckerElement> neighbors = new List<CheckerElement>();
+                if (checkerElement.Column -1 >= 0)
+                {
+                    if (checkerElement.Row - 1 >= 0)
+                    {
+                        neighbors.Add(currentData[checkerElement.Column - 1, checkerElement.Row - 1]);
+                    }
+                    if (checkerElement.Row + 1 < 8)
+                    {
+                        neighbors.Add(currentData[checkerElement.Column - 1, checkerElement.Row + 1]);
+                    }
+                }
+
+                if (checkerElement.Column + 1 < 8)
+                {
+                    if (checkerElement.Row - 1 >= 0)
+                    {
+                        neighbors.Add(currentData[checkerElement.Column + 1, checkerElement.Row - 1]);
+                    }
+                    if (checkerElement.Row + 1 < 8)
+                    {
+                        neighbors.Add(currentData[checkerElement.Column + 1, checkerElement.Row + 1]);
+                    }
+                }
+
+                playerPosition.SetNeighbors(neighbors);
+                SetPossibleMovements(playerPosition);
+            }
+        }
+
+        private void SetPossibleMovements(CheckerElement playerChecker)
+        {
+            var emptyItems = new List<CheckerElement>();
+            foreach (CheckerElement neighbor in playerChecker.Neighbors)
+            {
+                if (neighbor.Side == Side.Empty)
+                {
+                    emptyItems.Add(neighbor);
+                }
+            }
+
+            playerChecker.SetPossibleMovementElements(emptyItems);
+        }
     }
 
     public class MainHumanPlayer : PlayerViewModel
@@ -66,9 +113,9 @@ namespace RussianCheckers
         private List<CheckerElement> GetInitialPositions(Side side)
         {
             var positions = new List<CheckerElement>();
-            for (int col = 1; col <= 8; col++)
+            for (int col = 0; col < 8; col++)
             {
-                for (int row = 1; row <= 3; row++)
+                for (int row = 0; row < 3; row++)
                 {
                     if (row % 2 == 1 && col % 2 == 1)
                     {
@@ -96,9 +143,9 @@ namespace RussianCheckers
         private List<CheckerElement> GetInitialPositions(Side side)
         {
             var positions = new List<CheckerElement>();
-            for (int col = 1; col <= 8; col++)
+            for (int col = 0; col < 8; col++)
             {
-                for (int row = 6; row <= 8; row++)
+                for (int row = 5; row < 8; row++)
                 {
                     if (row % 2 == 1 && col % 2 == 1)
                     {

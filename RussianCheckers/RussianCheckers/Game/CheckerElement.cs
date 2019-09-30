@@ -38,7 +38,6 @@ namespace RussianCheckers.Game
 
         public int Column { get; private set; }
         public int Row { get; private set; }
-        public bool HaveOtherSideNeighbor { get; private set; }
 
         private PieceType _type;
         public PieceType Type
@@ -71,12 +70,10 @@ namespace RussianCheckers.Game
 
         public List<CheckerElement> Neighbors { get; private set; }
 
-        public void SetNeighbors(List<CheckerElement> neighbors, bool haveOtherSideNeighbor)
+        public void SetNeighbors(List<CheckerElement> neighbors)
         {
             Neighbors = neighbors;
-            HaveOtherSideNeighbor = haveOtherSideNeighbor;
         }
-
 
         public void SetNewPosition(int column, int row)
         {

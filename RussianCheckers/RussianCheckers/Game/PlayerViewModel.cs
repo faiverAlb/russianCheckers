@@ -65,23 +65,64 @@ namespace RussianCheckers
                     }
                 }
 
-                playerPosition.SetNeighbors(neighbors, haveOtherSideNeighbor);
-                SetPossibleMovements(playerPosition);
+                playerPosition.SetNeighbors(neighbors);
+                SetPossibleMovements(playerPosition, haveOtherSideNeighbor);
             }
         }
 
-        private void SetPossibleMovements(CheckerElement playerChecker)
+        private void SetPossibleMovements(CheckerElement playerChecker, bool haveOtherSideNeighbor)
         {
-            var emptyItems = new List<CheckerElement>();
-            foreach (CheckerElement neighbor in playerChecker.Neighbors)
+            if (!haveOtherSideNeighbor)
             {
-                if (neighbor.Side == Side.Empty)
+                playerChecker.SetPossibleMovementElements(playerChecker.Neighbors.Where(x => x.Side == Side.Empty).ToList());
+                return;
+            }
+
+            List<CheckerElement> possibleMovements = new List<CheckerElement>();
+
+            foreach (CheckerElement otherSideNeighbor in playerChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side !=playerChecker.Side))
+            {
+                CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(playerChecker, otherSideNeighbor);
+                if (positionAfterNextChecker != null && positionAfterNextChecker.Side == Side.Empty)
                 {
-                    emptyItems.Add(neighbor);
+                    possibleMovements.Add(positionAfterNextChecker);
                 }
             }
 
-            playerChecker.SetPossibleMovementElements(emptyItems);
+            if (!possibleMovements.Any())
+            {
+                playerChecker.SetPossibleMovementElements(playerChecker.Neighbors.Where(x => x.Side == Side.Empty).ToList());
+                return;
+            }
+
+            playerChecker.SetPossibleMovementElements(possibleMovements);
+        }
+
+        private CheckerElement GetNextElementInDiagonal(CheckerElement playerChecker, CheckerElement otherSideNeighbor)
+        {
+            if (playerChecker.Column - otherSideNeighbor.Column > 0)
+            {
+                if (playerChecker.Row -  otherSideNeighbor.Row > 0)
+                {
+                    return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column - 2 && x.Row == playerChecker.Row - 2);
+                }
+                else
+                {
+                    return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column - 2 && x.Row == playerChecker.Row + 2);
+                }
+            }
+            else
+            {
+                if (playerChecker.Row - otherSideNeighbor.Row > 0)
+                {
+                    return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column + 2 && x.Row == playerChecker.Row - 2);
+                }
+                else
+                {
+                    return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column + 2 && x.Row == playerChecker.Row + 2);
+                }
+
+            }
         }
     }
 

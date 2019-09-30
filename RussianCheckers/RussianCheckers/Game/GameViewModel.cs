@@ -198,48 +198,31 @@ namespace RussianCheckers.Game
                 return false;
             }
 
-            MoveCheckerToNewPlace(_selectedChecker, newSelectedChecker,player, newSelectedChecker.Column, newSelectedChecker.Row);
+            MoveCheckerToNewPlace(_selectedChecker, newSelectedChecker,player);
             _selectedChecker.IsSelected = false;
             _selectedChecker = null;
             return true;
         }
 
-        private void MoveCheckerToNewPlace(CheckerElement oldCheckerPosition,
-            CheckerElement newSelectedChecker,
-            PlayerViewModel player, 
-            int column, 
-            int row)
+        private void MoveCheckerToNewPlace(CheckerElement currentPositionElement, CheckerElement nextPositionElement, PlayerViewModel player)
         {
-//            int selectedCheckerColumn = oldCheckerPosition.Column;
-//            int selectedCheckerRow = oldCheckerPosition.Row;
-//            UpdateData(oldCheckerPosition, newSelectedChecker);
+            int currentCol = currentPositionElement.Column;
+            int currentRow = currentPositionElement.Row;
 
-            int selectedOldCheckerColumn = oldCheckerPosition.Column;
-            int selectedCheckerRow = oldCheckerPosition.Row;
+            int nextCol = nextPositionElement.Column;
+            int nextRow = nextPositionElement.Row;
 
-            int newPosCol = newSelectedChecker.Column;
-            int newPosRow = newSelectedChecker.Row;
+            CheckerElement newPosition = _data[nextCol, nextRow];
+            _data[nextCol, nextRow] = _data[currentCol, currentRow];
 
-            CheckerElement newPosition = _data[newPosCol, newPosRow];
-            _data[newPosCol, newPosRow] = _data[selectedOldCheckerColumn, selectedCheckerRow];
+            player.MoveCheckerToNewPlace(currentPositionElement, nextCol, nextRow);
 
-            player.MoveCheckerToNewPlace(oldCheckerPosition, newPosCol, newPosRow);
-
-            newPosition.SetNewPosition(selectedOldCheckerColumn, selectedCheckerRow);
-            _data[selectedOldCheckerColumn, selectedCheckerRow] = newPosition;
+            newPosition.SetNewPosition(currentCol, currentRow);
+            _data[currentCol, currentRow] = newPosition;
 
             _playerOne.CalculateNeighbors(_data);
             _playerTwo.CalculateNeighbors(_data);
-
-//            CheckerElement emptyElement = _emptyCollection.Single(x => x == newSelectedChecker);
-
         }
-
-//        private void UpdateData(CheckerElement oldCheckerPosition, CheckerElement newCheckerPosition)
-//        {
-//            
-//
-//        }
 
 
         private void ShowNotificationMessage(string message)

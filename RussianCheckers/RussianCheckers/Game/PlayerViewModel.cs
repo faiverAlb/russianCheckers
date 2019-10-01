@@ -19,11 +19,7 @@ namespace RussianCheckers
         {
             CheckerElement foundChecker = PlayerPositions.Single(x => x == checker);
             foundChecker.SetNewPosition(column, row);
-
-            foreach (var element in foundChecker.PossibleMovementElements)
-            {
-                element.IsSelected = false;
-            }
+            foundChecker.DeSelectPossibleMovement();
         }
 
         public void CalculateNeighbors(CheckerElement[,] currentData)

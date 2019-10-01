@@ -139,6 +139,7 @@ namespace RussianCheckers.Game
                 if (_selectedChecker != null)
                 {
                     _selectedChecker.IsSelected = false;
+                    _selectedChecker.DeSelectPossibleMovement();
                 }
                 _selectedChecker = newSelectedChecker;
 
@@ -183,6 +184,7 @@ namespace RussianCheckers.Game
             newPosition.SetNewPosition(currentCol, currentRow);
             _data[currentCol, currentRow] = newPosition;
 
+            _emptyCellsPlayer.CalculateNeighbors(_data);
             _playerOne.CalculateNeighbors(_data);
             _playerTwo.CalculateNeighbors(_data);
         }

@@ -59,12 +59,12 @@ namespace RussianCheckers.Game
         {
             get { return _isSelected; }
             set {
+                if (_isSelected == value)
+                {
+                    return;
+                }
                 _isSelected = value;
                 RaisePropertyChangedEvent(nameof(IsSelected));
-                foreach (CheckerElement possibleMovementElement in PossibleMovementElements)
-                {
-                    possibleMovementElement.IsSelected = value;
-                }
             }
         }
 
@@ -97,6 +97,21 @@ namespace RussianCheckers.Game
         public override string ToString()
         {
             return $"{Side}, {Type}, [{Column},{Row}]";
+        }
+
+        public void SelectPossibleMovement()
+        {
+            foreach (CheckerElement possibleMovementElement in PossibleMovementElements)
+            {
+              possibleMovementElement.IsSelected = true;
+            }
+        }
+        public void DeSelectPossibleMovement()
+        {
+            foreach (CheckerElement possibleMovementElement in PossibleMovementElements)
+            {
+              possibleMovementElement.IsSelected = false;
+            }
         }
     }
 

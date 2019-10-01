@@ -78,7 +78,7 @@ namespace RussianCheckers
                 return;
             }
 
-            List<CheckerElement> possibleMovements = new List<CheckerElement>();
+            var possibleMovements = new List<CheckerElement>();
 
             foreach (CheckerElement otherSideNeighbor in playerChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side !=playerChecker.Side))
             {
@@ -111,84 +111,15 @@ namespace RussianCheckers
                     return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column - 2 && x.Row == playerChecker.Row + 2);
                 }
             }
+
+            if (playerChecker.Row - otherSideNeighbor.Row > 0)
+            {
+                return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column + 2 && x.Row == playerChecker.Row - 2);
+            }
             else
             {
-                if (playerChecker.Row - otherSideNeighbor.Row > 0)
-                {
-                    return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column + 2 && x.Row == playerChecker.Row - 2);
-                }
-                else
-                {
-                    return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column + 2 && x.Row == playerChecker.Row + 2);
-                }
-
+                return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column + 2 && x.Row == playerChecker.Row + 2);
             }
         }
     }
-
-    public class MainHumanPlayer : PlayerViewModel
-    {
-        public MainHumanPlayer(Side side):base(side)
-        {
-            PlayerPositions = new ObservableCollection<CheckerElement>(GetInitialPositions(side));
-        }
-
-        private List<CheckerElement> GetInitialPositions(Side side)
-        {
-            var positions = new List<CheckerElement>();
-            for (int col = 0; col < 8; col++)
-            {
-                for (int row = 0; row < 3; row++)
-                {
-                    if (row % 2 == 1 && col % 2 == 1)
-                    {
-                        positions.Add(new CheckerElement(col, row, PieceType.Checker, side));
-                        continue;
-                    }
-                    if (row % 2 == 0 && col % 2 == 0)
-                    {
-                        positions.Add(new CheckerElement(col, row, PieceType.Checker, side));
-                    }
-                }
-            }
-            return positions;
-        }
-    }
-
-    public class RobotPlayer: PlayerViewModel
-    {
-        public RobotPlayer(Side side) : base(side)
-        {
-            PlayerPositions = new ObservableCollection<CheckerElement>(GetInitialPositions(side));
-
-        }
-
-        private List<CheckerElement> GetInitialPositions(Side side)
-        {
-            var positions = new List<CheckerElement>();
-            for (int col = 0; col < 8; col++)
-            {
-                for (int row = 5; row < 8; row++)
-                {
-                    if (row % 2 == 1 && col % 2 == 1)
-                    {
-                        positions.Add(new CheckerElement(col, row, PieceType.Checker, side));
-                        continue;
-                    }
-                    if (row % 2 == 0 && col % 2 == 0)
-                    {
-                        positions.Add(new CheckerElement(col, row, PieceType.Checker, side));
-                        continue;
-                    }
-                    //positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.Empty));
-
-                }
-            }
-            return positions;
-
-        }
-
-    }
-
-
 }

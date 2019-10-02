@@ -62,6 +62,10 @@ namespace RussianCheckers
                 }
 
                 playerPosition.SetNeighbors(neighbors);
+                //if (playerPosition.Side == Side.Empty)
+                {
+                 //   continue;
+                }
                 SetPossibleMovements(playerPosition, haveOtherSideNeighbor);
             }
         }
@@ -79,23 +83,37 @@ namespace RussianCheckers
             
 
             var possibleMovements = new List<CheckerElement>();
-            int maxLevel = 0;
-            int currentLevel = 0;
+            int localMaximum = 0;
+            int currentMaxLevel = 0;
+            List<CheckerElement> passedCheckers = new List<CheckerElement>();
+            Side initialCheckerSide = initialChecker.Side;
             while (processingQueue.Any())
             {
                 CheckerElement playerChecker = processingQueue.Dequeue();
+                passedCheckers.Add(playerChecker);
                 foreach (CheckerElement otherSideNeighbor in 
-                    playerChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != playerChecker.Side))
+                    playerChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != initialCheckerSide))
                 {
+                    
                     CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(playerChecker, otherSideNeighbor);
-                    if (positionAfterNextChecker != null 
-                        && positionAfterNextChecker.Side == Side.Empty
-                        && !possibleMovements.Contains(positionAfterNextChecker))
+                    if (passedCheckers.Contains(positionAfterNextChecker))
                     {
-                        possibleMovements.Add(positionAfterNextChecker);
+                        continue;
+                    }
+                    if (positionAfterNextChecker != null 
+                        && positionAfterNextChecker.Side == Side.Empty)
+                    {
+                        if (localMaximum < currentMaxLevel)
+                        {
+                            localMaximum = currentMaxLevel;
+                            possibleMovements.Clear();
+                        }
                         processingQueue.Enqueue(positionAfterNextChecker);
+                        possibleMovements.Add(positionAfterNextChecker);
                     }
                 }
+
+                currentMaxLevel++;
             }
             
 

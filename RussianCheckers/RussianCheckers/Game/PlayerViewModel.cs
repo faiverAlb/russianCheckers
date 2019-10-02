@@ -62,9 +62,9 @@ namespace RussianCheckers
                 }
 
                 playerPosition.SetNeighbors(neighbors);
-                //if (playerPosition.Side == Side.Empty)
+                if (playerPosition.Side == Side.Empty)
                 {
-                 //   continue;
+                    continue;
                 }
                 SetPossibleMovements(playerPosition, haveOtherSideNeighbor);
             }

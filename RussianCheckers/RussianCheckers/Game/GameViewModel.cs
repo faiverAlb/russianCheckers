@@ -187,6 +187,10 @@ namespace RussianCheckers.Game
             _emptyCellsPlayer.CalculateNeighbors(_data);
             _playerOne.CalculateNeighbors(_data);
             _playerTwo.CalculateNeighbors(_data);
+
+            //todo: fix it. move calc to game vm?
+            _playerOne.CalculateNeighbors(_data);
+            _playerTwo.CalculateNeighbors(_data);
         }
 
 

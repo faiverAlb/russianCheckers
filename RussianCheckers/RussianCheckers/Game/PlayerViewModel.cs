@@ -66,32 +66,46 @@ namespace RussianCheckers
             }
         }
 
-        private void SetPossibleMovements(CheckerElement playerChecker, bool haveOtherSideNeighbor)
+        private void SetPossibleMovements(CheckerElement initialChecker, bool haveOtherSideNeighbor)
         {
             if (!haveOtherSideNeighbor)
             {
-                playerChecker.SetPossibleMovementElements(playerChecker.Neighbors.Where(x => x.Side == Side.Empty).ToList());
+                initialChecker.SetPossibleMovementElements(initialChecker.Neighbors.Where(x => x.Side == Side.Empty).ToList());
                 return;
             }
 
-            var possibleMovements = new List<CheckerElement>();
+            Queue<CheckerElement> processingQueue = new Queue<CheckerElement>();
+            processingQueue.Enqueue(initialChecker);
+            
 
-            foreach (CheckerElement otherSideNeighbor in playerChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side !=playerChecker.Side))
+            var possibleMovements = new List<CheckerElement>();
+            int maxLevel = 0;
+            int currentLevel = 0;
+            while (processingQueue.Any())
             {
-                CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(playerChecker, otherSideNeighbor);
-                if (positionAfterNextChecker != null && positionAfterNextChecker.Side == Side.Empty)
+                CheckerElement playerChecker = processingQueue.Dequeue();
+                foreach (CheckerElement otherSideNeighbor in 
+                    playerChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != playerChecker.Side))
                 {
-                    possibleMovements.Add(positionAfterNextChecker);
+                    CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(playerChecker, otherSideNeighbor);
+                    if (positionAfterNextChecker != null 
+                        && positionAfterNextChecker.Side == Side.Empty
+                        && !possibleMovements.Contains(positionAfterNextChecker))
+                    {
+                        possibleMovements.Add(positionAfterNextChecker);
+                        processingQueue.Enqueue(positionAfterNextChecker);
+                    }
                 }
             }
+            
 
             if (!possibleMovements.Any())
             {
-                playerChecker.SetPossibleMovementElements(playerChecker.Neighbors.Where(x => x.Side == Side.Empty).ToList());
+                initialChecker.SetPossibleMovementElements(initialChecker.Neighbors.Where(x => x.Side == Side.Empty).ToList());
                 return;
             }
 
-            playerChecker.SetPossibleMovementElements(possibleMovements);
+            initialChecker.SetPossibleMovementElements(possibleMovements);
         }
 
         private CheckerElement GetNextElementInDiagonal(CheckerElement playerChecker, CheckerElement otherSideNeighbor)

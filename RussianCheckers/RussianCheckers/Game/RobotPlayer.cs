@@ -6,7 +6,7 @@ namespace RussianCheckers
 {
     public class RobotPlayer: PlayerViewModel
     {
-        public RobotPlayer(Side side) : base(side)
+        public RobotPlayer(Side side) : base(side, false)
         {
             PlayerPositions = new ObservableCollection<CheckerElement>(GetInitialPositions(side));
         }

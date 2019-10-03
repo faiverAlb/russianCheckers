@@ -6,7 +6,7 @@ namespace RussianCheckers
 {
     public class EmptyCellsPlayer : PlayerViewModel
     {
-        public EmptyCellsPlayer(Side side) : base(side)
+        public EmptyCellsPlayer(Side side) : base(side, false)
         {
             PlayerPositions = new ObservableCollection<CheckerElement>(GetInitialPositions(side));
 

@@ -6,7 +6,7 @@ namespace RussianCheckers
 {
     public class MainHumanPlayer : PlayerViewModel
     {
-        public MainHumanPlayer(Side side):base(side)
+        public MainHumanPlayer(Side side):base(side, true)
         {
             PlayerPositions = new ObservableCollection<CheckerElement>(GetInitialPositions(side));
         }

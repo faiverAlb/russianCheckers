@@ -7,13 +7,16 @@ namespace RussianCheckers
 {
     public abstract class PlayerViewModel: ObservableObject
     {
+        public bool IsMainPLayer { get; private set; }
         public readonly Side Side;
         public  ObservableCollection<CheckerElement> PlayerPositions { get; protected set; }
 
-        protected PlayerViewModel(Side side)
+        protected PlayerViewModel(Side side, bool isMainPLayer)
         {
             Side = side;
+            IsMainPLayer = isMainPLayer;
         }
+
 
         public void MoveCheckerToNewPlace(CheckerElement checker, int column, int row)
         {
@@ -72,9 +75,10 @@ namespace RussianCheckers
 
         private void SetPossibleMovements(CheckerElement initialChecker, bool haveOtherSideNeighbor)
         {
+            List<CheckerElement> oneDirectionEmptyMoves = GetSimpleEmptyMoves(initialChecker);
             if (!haveOtherSideNeighbor)
             {
-                initialChecker.SetPossibleMovementElements(initialChecker.Neighbors.Where(x => x.Side == Side.Empty).ToList());
+                initialChecker.SetPossibleMovementElements(oneDirectionEmptyMoves);
                 return;
             }
 
@@ -119,11 +123,22 @@ namespace RussianCheckers
 
             if (!possibleMovements.Any())
             {
-                initialChecker.SetPossibleMovementElements(initialChecker.Neighbors.Where(x => x.Side == Side.Empty).ToList());
+                initialChecker.SetPossibleMovementElements(oneDirectionEmptyMoves);
                 return;
             }
 
             initialChecker.SetPossibleMovementElements(possibleMovements);
+        }
+
+        private List<CheckerElement> GetSimpleEmptyMoves(CheckerElement initialChecker)
+        {
+            List<CheckerElement> moves = initialChecker.Neighbors.Where(x => x.Side == Side.Empty).ToList();
+            if (IsMainPLayer)
+            {
+                return moves.Where(x => x.Row > initialChecker.Row).ToList();
+            }
+            return moves.Where(x => x.Row < initialChecker.Row).ToList();
+
         }
 
         private CheckerElement GetNextElementInDiagonal(CheckerElement playerChecker, CheckerElement otherSideNeighbor)

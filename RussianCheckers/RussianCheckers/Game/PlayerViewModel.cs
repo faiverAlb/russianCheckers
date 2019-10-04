@@ -82,6 +82,52 @@ namespace RussianCheckers
                 return;
             }
 
+            Stack<CheckerElement> processingQueue = new Stack<CheckerElement>();
+            processingQueue.Push(initialChecker);
+            
+
+            var possibleMovements = new List<CheckerElement>();
+            Side initialCheckerSide = initialChecker.Side;
+            List<CheckerElement> visitedElements = new List<CheckerElement>();
+            while (processingQueue.Any())
+            {
+                CheckerElement playerChecker = processingQueue.Pop();
+
+                visitedElements.Add(playerChecker);
+                foreach (CheckerElement otherSideNeighbor in 
+                    playerChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != initialCheckerSide))
+                {
+                    
+                    CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(playerChecker, otherSideNeighbor);
+                    if (positionAfterNextChecker != null 
+                        && positionAfterNextChecker.Side == Side.Empty
+                        && !visitedElements.Contains(positionAfterNextChecker))
+                    {
+                        processingQueue.Push(positionAfterNextChecker);
+                        possibleMovements.Add(positionAfterNextChecker);
+                    }
+                }
+
+            }
+            
+
+            if (!possibleMovements.Any())
+            {
+                initialChecker.SetPossibleMovementElements(oneDirectionEmptyMoves);
+                return;
+            }
+
+            initialChecker.SetPossibleMovementElements(possibleMovements);
+        }
+        private void SetPossibleMovementsUsingQueue(CheckerElement initialChecker, bool haveOtherSideNeighbor)
+        {
+            List<CheckerElement> oneDirectionEmptyMoves = GetSimpleEmptyMoves(initialChecker);
+            if (!haveOtherSideNeighbor)
+            {
+                initialChecker.SetPossibleMovementElements(oneDirectionEmptyMoves);
+                return;
+            }
+
             Queue<CheckerElement> processingQueue = new Queue<CheckerElement>();
             processingQueue.Enqueue(initialChecker);
             

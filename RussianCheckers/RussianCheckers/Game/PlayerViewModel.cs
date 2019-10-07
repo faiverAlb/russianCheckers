@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using RussianCheckers.Game;
@@ -82,34 +83,37 @@ namespace RussianCheckers
                 return;
             }
 
-            Stack<CheckerElement> processingQueue = new Stack<CheckerElement>();
-            processingQueue.Push(initialChecker);
-            
+            Stack<CheckerElement> stack = new Stack<CheckerElement>();
+            stack.Push(initialChecker);
 
             var possibleMovements = new List<CheckerElement>();
             Side initialCheckerSide = initialChecker.Side;
-            List<CheckerElement> visitedElements = new List<CheckerElement>();
-            while (processingQueue.Any())
-            {
-                CheckerElement playerChecker = processingQueue.Pop();
+            List<CheckerElement> visited = new List<CheckerElement>();
+            var parentsList = new List<Tuple<CheckerElement, CheckerElement>>();
+            var pathsDict = new Dictionary<string,LinkedList<CheckerElement>>();
 
-                visitedElements.Add(playerChecker);
-                foreach (CheckerElement otherSideNeighbor in 
-                    playerChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != initialCheckerSide))
+            while (stack.Count > 0)
+            {
+                CheckerElement playerChecker = stack.Pop();
+
+                visited.Add(playerChecker);
+                BuildPathToCurrentChecker(playerChecker, initialChecker, parentsList, pathsDict);
+
+                foreach (CheckerElement otherSideNeighbor in playerChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != initialCheckerSide))
                 {
                     
                     CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(playerChecker, otherSideNeighbor);
                     if (positionAfterNextChecker != null 
                         && positionAfterNextChecker.Side == Side.Empty
-                        && !visitedElements.Contains(positionAfterNextChecker))
+                        && !visited.Contains(positionAfterNextChecker)
+                        )
                     {
-                        processingQueue.Push(positionAfterNextChecker);
+                        stack.Push(positionAfterNextChecker);
                         possibleMovements.Add(positionAfterNextChecker);
+                        parentsList.Add(new Tuple<CheckerElement, CheckerElement>(playerChecker, positionAfterNextChecker));
                     }
                 }
-
             }
-            
 
             if (!possibleMovements.Any())
             {
@@ -119,6 +123,38 @@ namespace RussianCheckers
 
             initialChecker.SetPossibleMovementElements(possibleMovements);
         }
+
+        private void BuildPathToCurrentChecker(CheckerElement playerChecker, CheckerElement initialChecker, List<Tuple<CheckerElement, CheckerElement>> parentsList, Dictionary<string, LinkedList<CheckerElement>> pathsDict)
+        {
+
+            Tuple<CheckerElement, CheckerElement> cur = parentsList.LastOrDefault(x => x.Item2 == playerChecker);
+            if (cur == null)
+            {
+                return;
+            }
+
+            var pathToElements = new LinkedList<CheckerElement>();
+            pathToElements.AddFirst(playerChecker);
+            string res = $"({playerChecker.Column},{playerChecker.Row})";
+            while (cur.Item1 != initialChecker)
+            {
+                cur = parentsList.Last(x => x.Item2 == cur.Item1);
+                res = $"({cur.Item2.Column},{cur.Item2.Row}) - {res}";
+                pathToElements.AddFirst(cur.Item2);
+            }
+            res = $"({cur.Item1.Column},{cur.Item1.Row}) - {res}";
+            pathToElements.AddFirst(cur.Item1);
+
+
+            if (pathsDict.ContainsKey(res))
+            {
+                return;
+            }
+
+            pathsDict.Add(res, pathToElements);
+
+        }
+
         private void SetPossibleMovementsUsingQueue(CheckerElement initialChecker, bool haveOtherSideNeighbor)
         {
             List<CheckerElement> oneDirectionEmptyMoves = GetSimpleEmptyMoves(initialChecker);

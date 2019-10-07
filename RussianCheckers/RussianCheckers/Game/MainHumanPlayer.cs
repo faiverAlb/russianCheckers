@@ -9,6 +9,12 @@ namespace RussianCheckers
         public MainHumanPlayer(Side side):base(side, true)
         {
             PlayerPositions = new ObservableCollection<CheckerElement>(GetInitialPositions(side));
+            PlayerPositions = new ObservableCollection<CheckerElement>(GetTestSchema(side));
+        }
+
+        private List<CheckerElement> GetTestSchema(Side side)
+        {
+            return new List<CheckerElement>(){new CheckerElement(4,2,PieceType.Checker,side)};
         }
 
         private List<CheckerElement> GetInitialPositions(Side side)

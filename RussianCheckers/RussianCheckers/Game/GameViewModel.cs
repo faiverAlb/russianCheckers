@@ -20,7 +20,7 @@ namespace RussianCheckers.Game
         {
             _playerOne = playerOne;
             _playerTwo = playerTwo;
-            _emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty);
+            _emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, _playerOne,playerTwo);
             _data = GetCurrentGamePositions(_playerOne, playerTwo, _emptyCellsPlayer);
             _notificationDialog = notificationDialog;
             NextMoveSide = Side.White;

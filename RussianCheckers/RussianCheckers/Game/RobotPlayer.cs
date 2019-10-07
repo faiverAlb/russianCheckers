@@ -9,6 +9,19 @@ namespace RussianCheckers
         public RobotPlayer(Side side) : base(side, false)
         {
             PlayerPositions = new ObservableCollection<CheckerElement>(GetInitialPositions(side));
+            PlayerPositions = new ObservableCollection<CheckerElement>(GetTestSchema1(side));
+        }
+
+        private List<CheckerElement> GetTestSchema1(Side side)
+        {
+            return new List<CheckerElement>()
+            {
+                new CheckerElement(3,3,PieceType.Checker,side),
+                new CheckerElement(5,3,PieceType.Checker,side),
+                new CheckerElement(3,5,PieceType.Checker,side),
+                new CheckerElement(5,5,PieceType.Checker,side),
+                new CheckerElement(5,1,PieceType.Checker,side),
+            };
         }
 
         private List<CheckerElement> GetInitialPositions(Side side)
@@ -28,7 +41,6 @@ namespace RussianCheckers
                         positions.Add(new CheckerElement(col, row, PieceType.Checker, side));
                         continue;
                     }
-                    //positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.Empty));
 
                 }
             }

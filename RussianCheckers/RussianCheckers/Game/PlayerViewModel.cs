@@ -70,7 +70,13 @@ namespace RussianCheckers
                 {
                     continue;
                 }
-                SetPossibleMovements(playerPosition, haveOtherSideNeighbor);
+
+                var currentPath = new LinkedList<CheckerElement>();
+//                Stack<CheckerElement> stack = new Stack<CheckerElement>();
+                Side initialCheckerSide = playerPosition.Side;
+             List<CheckerElement> visited = new List<CheckerElement>();
+             List<LinkedList<CheckerElement>> paths = new List<LinkedList<CheckerElement>>();
+             SetPossibleMovementsRecursive(playerPosition, currentPath, visited, initialCheckerSide,paths);
             }
         }
 
@@ -84,33 +90,46 @@ namespace RussianCheckers
             }
 
             Stack<CheckerElement> stack = new Stack<CheckerElement>();
+            var currentPath = new LinkedList<CheckerElement>();
             stack.Push(initialChecker);
 
             var possibleMovements = new List<CheckerElement>();
             Side initialCheckerSide = initialChecker.Side;
             List<CheckerElement> visited = new List<CheckerElement>();
-            var parentsList = new List<Tuple<CheckerElement, CheckerElement>>();
-            var pathsDict = new Dictionary<string,LinkedList<CheckerElement>>();
-
+            var toVisitByChecker = new Dictionary<CheckerElement, List<CheckerElement>>();
             while (stack.Count > 0)
             {
                 CheckerElement playerChecker = stack.Pop();
-
+                currentPath.AddLast(playerChecker);
                 visited.Add(playerChecker);
-                BuildPathToCurrentChecker(playerChecker, initialChecker, parentsList, pathsDict);
-
+//                BuildPathToCurrentChecker(playerChecker, initialChecker, parentsList, pathsDict);
+                
                 foreach (CheckerElement otherSideNeighbor in playerChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != initialCheckerSide))
                 {
+                    if (!toVisitByChecker.ContainsKey(playerChecker))
+                    {
+                        toVisitByChecker.Add(playerChecker, new List<CheckerElement>());
+                    }
                     
                     CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(playerChecker, otherSideNeighbor);
                     if (positionAfterNextChecker != null 
                         && positionAfterNextChecker.Side == Side.Empty
-                        && !visited.Contains(positionAfterNextChecker)
                         )
                     {
-                        stack.Push(positionAfterNextChecker);
-                        possibleMovements.Add(positionAfterNextChecker);
-                        parentsList.Add(new Tuple<CheckerElement, CheckerElement>(playerChecker, positionAfterNextChecker));
+                        if (!visited.Contains(positionAfterNextChecker))
+                        {
+                            stack.Push(positionAfterNextChecker);
+                            possibleMovements.Add(positionAfterNextChecker);
+                            toVisitByChecker[playerChecker].Add(positionAfterNextChecker);
+
+                        }
+                        else
+                        {
+                            toVisitByChecker[playerChecker].Remove(positionAfterNextChecker);
+                            var test = 123;
+                        }
+
+//                        parentsList.Add(new Tuple<CheckerElement, CheckerElement>(playerChecker, positionAfterNextChecker));
                     }
                 }
             }
@@ -122,6 +141,27 @@ namespace RussianCheckers
             }
 
             initialChecker.SetPossibleMovementElements(possibleMovements);
+        }
+
+        private void SetPossibleMovementsRecursive(CheckerElement currentChecker, LinkedList<CheckerElement> path, List<CheckerElement> visited, Side checkerSide, List<LinkedList<CheckerElement>> paths)
+        {
+            path.AddLast(currentChecker);
+            paths.Add(new LinkedList<CheckerElement>(path));
+            visited.Add(currentChecker);
+            foreach (CheckerElement otherSideNeighbor in currentChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != checkerSide))
+            {
+                CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(currentChecker, otherSideNeighbor);
+                if (positionAfterNextChecker != null && positionAfterNextChecker.Side == Side.Empty)
+                {
+                    if (!visited.Contains(positionAfterNextChecker))
+                    {
+                        SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
+//                        path.RemoveLast();
+                    }
+                }
+            }
+
+            path.RemoveLast();
         }
 
         private void BuildPathToCurrentChecker(CheckerElement playerChecker, CheckerElement initialChecker, List<Tuple<CheckerElement, CheckerElement>> parentsList, Dictionary<string, LinkedList<CheckerElement>> pathsDict)

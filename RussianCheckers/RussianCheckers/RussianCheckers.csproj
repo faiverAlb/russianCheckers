@@ -67,6 +67,7 @@
     <Compile Include="Game\MoveValidationManager.cs" />
     <Compile Include="Game\GameInfrastructure\MoveValidationResult.cs" />
     <Compile Include="Game\GameInfrastructure\MoveValidationStatus.cs" />
+    <Compile Include="Game\Point.cs" />
     <Compile Include="Game\RobotPlayer.cs" />
     <Compile Include="Infrastructure\DialogCloseRequestedEventArgs.cs" />
     <Compile Include="Infrastructure\IDialog.cs" />

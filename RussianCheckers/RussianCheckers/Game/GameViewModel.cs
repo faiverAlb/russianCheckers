@@ -28,6 +28,9 @@ namespace RussianCheckers.Game
             _emptyCellsPlayer.CalculateNeighbors(_data);
             playerOne.CalculateNeighbors(_data);
             playerTwo.CalculateNeighbors(_data);
+            
+            playerOne.CalculateNeighbors(_data);
+            playerTwo.CalculateNeighbors(_data);
 
             var playerOneCollectionContainer = new CollectionContainer { Collection = playerOne.PlayerPositions};
             var playerTwoCollectionContainer = new CollectionContainer{ Collection = playerTwo.PlayerPositions };

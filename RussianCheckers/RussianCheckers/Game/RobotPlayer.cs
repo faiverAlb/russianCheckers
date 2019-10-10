@@ -21,6 +21,7 @@ namespace RussianCheckers
                 new CheckerElement(3,5,PieceType.Checker,side),
                 new CheckerElement(5,5,PieceType.Checker,side),
                 new CheckerElement(5,1,PieceType.Checker,side),
+                new CheckerElement(1,5,PieceType.Checker,side),
             };
         }
 

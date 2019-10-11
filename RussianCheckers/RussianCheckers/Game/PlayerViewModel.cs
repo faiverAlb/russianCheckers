@@ -143,7 +143,11 @@ namespace RussianCheckers
             initialChecker.SetPossibleMovementElements(possibleMovements);
         }
 
-        private void SetPossibleMovementsRecursive(CheckerElement currentChecker, LinkedList<CheckerElement> path, List<CheckerElement> visited, Side checkerSide, List<LinkedList<CheckerElement>> paths)
+        private void SetPossibleMovementsRecursive(CheckerElement currentChecker
+            , LinkedList<CheckerElement> path
+            , List<CheckerElement> visited
+            , Side checkerSide
+            , List<LinkedList<CheckerElement>> paths)
         {
             path.AddLast(currentChecker);
             paths.Add(new LinkedList<CheckerElement>(path));
@@ -151,13 +155,46 @@ namespace RussianCheckers
             foreach (CheckerElement otherSideNeighbor in currentChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != checkerSide))
             {
                 CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(currentChecker, otherSideNeighbor);
-                if (positionAfterNextChecker != null && positionAfterNextChecker.Side == Side.Empty)
+                if (positionAfterNextChecker != null 
+                    && (   positionAfterNextChecker.Side == Side.Empty 
+                        || path.Contains(positionAfterNextChecker)))
                 {
+                    if (path.Contains(positionAfterNextChecker)) // Cycle here
+                    {
+                        int indexOfChecker = 0;
+                        int index = 0;
+                        foreach (var checkerElement in path)
+                        {
+                            if (checkerElement == positionAfterNextChecker)
+                            {
+                                indexOfChecker = index;
+                            }
+
+                            index++;
+                        }
+
+                        var len = index - indexOfChecker;
+                        if (len > 2)
+                        {
+                            var test = 123;
+                        }
+                    }
                     if (!visited.Contains(positionAfterNextChecker))
                     {
                         SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
-//                        path.RemoveLast();
                     }
+                    else
+                    {
+                        if (path.Contains(positionAfterNextChecker))
+                        {
+                            var test = 213;
+                        }
+                        else
+                        {
+                            var tset = 222;
+                        }
+                    }
+
                 }
             }
 

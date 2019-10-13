@@ -33,7 +33,7 @@ namespace RussianCheckers
                 bool haveOtherSideNeighbor = false;
                 CheckerElement checkerElement = currentData[playerPosition.Column, playerPosition.Row];
                 List<CheckerElement> neighbors = new List<CheckerElement>();
-                if (checkerElement.Column -1 >= 0)
+                if (checkerElement.Column - 1 >= 0)
                 {
                     if (checkerElement.Row - 1 >= 0)
                     {
@@ -41,10 +41,12 @@ namespace RussianCheckers
                         haveOtherSideNeighbor = (element.Side != playerPosition.Side) && element.Side != Side.Empty;
                         neighbors.Add(element);
                     }
+
                     if (checkerElement.Row + 1 < 8)
                     {
                         var element = currentData[checkerElement.Column - 1, checkerElement.Row + 1];
-                        haveOtherSideNeighbor = haveOtherSideNeighbor || ((element.Side != playerPosition.Side) && element.Side != Side.Empty);
+                        haveOtherSideNeighbor = haveOtherSideNeighbor ||
+                                                ((element.Side != playerPosition.Side) && element.Side != Side.Empty);
                         neighbors.Add(element);
                     }
                 }
@@ -54,13 +56,16 @@ namespace RussianCheckers
                     if (checkerElement.Row - 1 >= 0)
                     {
                         var element = currentData[checkerElement.Column + 1, checkerElement.Row - 1];
-                        haveOtherSideNeighbor = haveOtherSideNeighbor || ((element.Side != playerPosition.Side) && element.Side != Side.Empty);
+                        haveOtherSideNeighbor = haveOtherSideNeighbor ||
+                                                ((element.Side != playerPosition.Side) && element.Side != Side.Empty);
                         neighbors.Add(element);
                     }
+
                     if (checkerElement.Row + 1 < 8)
                     {
                         var element = currentData[checkerElement.Column + 1, checkerElement.Row + 1];
-                        haveOtherSideNeighbor = haveOtherSideNeighbor || ((element.Side != playerPosition.Side) && element.Side != Side.Empty);
+                        haveOtherSideNeighbor = haveOtherSideNeighbor ||
+                                                ((element.Side != playerPosition.Side) && element.Side != Side.Empty);
                         neighbors.Add(element);
                     }
                 }
@@ -72,18 +77,25 @@ namespace RussianCheckers
                 }
 
                 var currentPath = new LinkedList<CheckerElement>();
-//                Stack<CheckerElement> stack = new Stack<CheckerElement>();
                 Side initialCheckerSide = playerPosition.Side;
-             List<CheckerElement> visited = new List<CheckerElement>();
-             List<LinkedList<CheckerElement>> paths = new List<LinkedList<CheckerElement>>();
-             SetPossibleMovementsRecursive(playerPosition, currentPath, visited, initialCheckerSide, paths);
-             var possibleMovements = new List<CheckerElement>();
-             IGrouping<int, LinkedList<CheckerElement>> maxValues = paths.GroupBy(x => x.Count).OrderByDescending(x => x.Key).FirstOrDefault();
-             foreach (var max in maxValues)
-             {
-                 possibleMovements.Add(max.Last.Value);
-             }
-             playerPosition.SetPossibleMovementElements(possibleMovements);
+                List<CheckerElement> visited = new List<CheckerElement>();
+                List<LinkedList<CheckerElement>> paths = new List<LinkedList<CheckerElement>>();
+                SetPossibleMovementsRecursive(playerPosition, currentPath, visited, initialCheckerSide, paths);
+                var possibleMovements = new List<CheckerElement>();
+                IGrouping<int, LinkedList<CheckerElement>> maxValues = paths.GroupBy(x => x.Count).OrderByDescending(x => x.Key).FirstOrDefault();
+                foreach (var max in maxValues)
+                {
+                    if (max.Count == 1)
+                    {
+                        possibleMovements.AddRange(GetSimpleEmptyMoves(max.Last.Value));
+                    }
+                    else
+                    {
+                        possibleMovements.Add(max.Last.Value);
+                    }
+                }
+
+                playerPosition.SetPossibleMovementElements(possibleMovements);
             }
         }
 

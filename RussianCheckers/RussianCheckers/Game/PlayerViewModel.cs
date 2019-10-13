@@ -76,7 +76,14 @@ namespace RussianCheckers
                 Side initialCheckerSide = playerPosition.Side;
              List<CheckerElement> visited = new List<CheckerElement>();
              List<LinkedList<CheckerElement>> paths = new List<LinkedList<CheckerElement>>();
-             SetPossibleMovementsRecursive(playerPosition, currentPath, visited, initialCheckerSide,paths);
+             SetPossibleMovementsRecursive(playerPosition, currentPath, visited, initialCheckerSide, paths);
+             var possibleMovements = new List<CheckerElement>();
+             IGrouping<int, LinkedList<CheckerElement>> maxValues = paths.GroupBy(x => x.Count).OrderByDescending(x => x.Key).FirstOrDefault();
+             foreach (var max in maxValues)
+             {
+                 possibleMovements.Add(max.Last.Value);
+             }
+             playerPosition.SetPossibleMovementElements(possibleMovements);
             }
         }
 
@@ -147,7 +154,8 @@ namespace RussianCheckers
             , LinkedList<CheckerElement> path
             , List<CheckerElement> visited
             , Side checkerSide
-            , List<LinkedList<CheckerElement>> paths)
+            , List<LinkedList<CheckerElement>> paths
+            , LinkedList<CheckerElement> outerCycle = null)
         {
             path.AddLast(currentChecker);
             paths.Add(new LinkedList<CheckerElement>(path));
@@ -159,12 +167,18 @@ namespace RussianCheckers
                     && (   positionAfterNextChecker.Side == Side.Empty 
                         || path.Contains(positionAfterNextChecker)))
                 {
+                    if (outerCycle != null && outerCycle.Contains(positionAfterNextChecker))
+                    {
+                        continue;
+                    }
                     if (path.Contains(positionAfterNextChecker)) // Cycle here
                     {
+                        var cycle = new LinkedList<CheckerElement>();
                         int indexOfChecker = 0;
                         int index = 0;
                         foreach (var checkerElement in path)
                         {
+                            cycle.AddLast(checkerElement);
                             if (checkerElement == positionAfterNextChecker)
                             {
                                 indexOfChecker = index;
@@ -176,23 +190,29 @@ namespace RussianCheckers
                         var len = index - indexOfChecker;
                         if (len > 2)
                         {
-                            var test = 123;
+
+                            var test = 123; 
+
+                            foreach (CheckerElement checkerElement in positionAfterNextChecker.Neighbors)
+                            {
+                                CheckerElement tempToDelete = GetNextElementInDiagonal(positionAfterNextChecker, checkerElement);
+                                CheckerElement firstToNotDelete = path.Last.Value;
+                                CheckerElement secondToNotDelete = path.Find(positionAfterNextChecker).Next.Value;
+                                if (tempToDelete != null 
+                                    && (tempToDelete.Side == Side.Empty) 
+                                    && tempToDelete != firstToNotDelete 
+                                    && tempToDelete != secondToNotDelete)
+                                {
+                                    visited.Remove(tempToDelete);
+                                }
+
+                            }
+                            SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, cycle);
                         }
                     }
                     if (!visited.Contains(positionAfterNextChecker))
                     {
                         SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
-                    }
-                    else
-                    {
-                        if (path.Contains(positionAfterNextChecker))
-                        {
-                            var test = 213;
-                        }
-                        else
-                        {
-                            var tset = 222;
-                        }
                     }
 
                 }

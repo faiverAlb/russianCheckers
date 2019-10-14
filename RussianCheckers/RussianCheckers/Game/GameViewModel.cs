@@ -90,8 +90,9 @@ namespace RussianCheckers.Game
                 ShowNotificationMessage("Game is over!");
                 return;
             }
+            PlayerViewModel player = _playerOne.Side == NextMoveSide ? _playerOne : _playerTwo;
             CheckerElement newSelectedChecker = (CheckerElement)obj;
-            var validationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide);
+            var validationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide, player);
 
             MoveValidationResult preValidationMoveValidationResult = validationManager.GetPreValidationResult();
             if (preValidationMoveValidationResult.Status == MoveValidationStatus.Error)
@@ -105,7 +106,6 @@ namespace RussianCheckers.Game
                 return;
             }
 
-            PlayerViewModel player = _playerOne.Side == NextMoveSide ? _playerOne : _playerTwo;
             bool makeMoveStatus = IsCheckerMoved(newSelectedChecker, player);
             if (makeMoveStatus == false)
             {
@@ -136,7 +136,7 @@ namespace RussianCheckers.Game
 
         private bool IsCheckerMoved(CheckerElement newSelectedChecker, PlayerViewModel player)
         {
-            var moveValidationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide);
+            var moveValidationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide, player);
             MoveValidationResult validationResult =  moveValidationManager.GetMoveValidationResult();
             if (validationResult.Status == MoveValidationStatus.NewItemSelected)
             {

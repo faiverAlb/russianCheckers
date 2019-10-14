@@ -1,4 +1,5 @@
-﻿using RussianCheckers.Game.GameInfrastructure;
+﻿using System.Linq;
+using RussianCheckers.Game.GameInfrastructure;
 
 namespace RussianCheckers.Game
 {
@@ -7,13 +8,15 @@ namespace RussianCheckers.Game
         private readonly CheckerElement _oldSelectedElement;
         private readonly CheckerElement _newSelectedElement;
         private readonly Side _nextMoveSide;
+        private readonly PlayerViewModel _player;
 
         public MoveValidationManager(CheckerElement oldSelectedElement, CheckerElement newSelectedElement,
-            Side nextMoveSide)
+            Side nextMoveSide, PlayerViewModel player)
         {
             _oldSelectedElement = oldSelectedElement;
             _newSelectedElement = newSelectedElement;
             _nextMoveSide = nextMoveSide;
+            _player = player;
         }
         public MoveValidationResult GetPreValidationResult()
         {
@@ -32,6 +35,12 @@ namespace RussianCheckers.Game
 
         public MoveValidationResult GetMoveValidationResult()
         {
+            if (_player.AvailablePaths.Any() && (_oldSelectedElement == null || _oldSelectedElement.Side == _newSelectedElement.Side) &&_player.AvailablePaths.All(x => x.First.Value != _newSelectedElement))
+            {
+
+                return new MoveValidationResult(MoveValidationStatus.Error, "You have required move by other checker");
+            }
+
             if (_oldSelectedElement == null)
             {
                 return new MoveValidationResult(MoveValidationStatus.NewItemSelected);

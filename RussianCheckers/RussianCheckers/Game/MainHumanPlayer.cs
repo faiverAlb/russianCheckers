@@ -14,7 +14,11 @@ namespace RussianCheckers
 
         private List<CheckerElement> GetTestSchema1(Side side)
         {
-            return new List<CheckerElement>(){new CheckerElement(4,2,PieceType.Checker,side)};
+            return new List<CheckerElement>()
+            {
+                new CheckerElement(4,2,PieceType.Checker,side),
+                new CheckerElement(0,2,PieceType.Checker,side)
+            };
         }
 
         private List<CheckerElement> GetInitialPositions(Side side)

@@ -37,6 +37,11 @@ namespace RussianCheckers.Game
             }
 
             LinkedList<CheckerElement> neededPath = availablePaths.SingleOrDefault(x => x.Last.Value.Column == column && x.Last.Value.Row == row);
+            if (neededPath == null)
+            {
+                return new List<CheckerElement>();
+            }
+
             var itemsToRemove = new List<CheckerElement>(neededPath.Where(x => x.Side != Side.Empty && x.Side != checker.Side));
             return itemsToRemove;
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -182,7 +183,20 @@ namespace RussianCheckers.Game
             CheckerElement newPosition = _data[nextCol, nextRow];
             _data[nextCol, nextRow] = _data[currentCol, currentRow];
 
-            player.MoveCheckerToNewPlace(currentPositionElement, nextCol, nextRow);
+            List<CheckerElement> itemsTakeByOtherUser = player.MoveCheckerToNewPlace(currentPositionElement, nextCol, nextRow);
+            foreach (CheckerElement checkerElement in itemsTakeByOtherUser)
+            {
+                _data[checkerElement.Column,checkerElement.Row] = new CheckerElement(checkerElement.Column, checkerElement.Row,PieceType.Checker,Side.Empty);
+                _emptyCellsPlayer.PlayerPositions.Add(_data[checkerElement.Column, checkerElement.Row]);
+            }
+            if (player == _playerOne)
+            {
+                _playerTwo.RemoveCheckers(itemsTakeByOtherUser);
+            }
+            else
+            {
+                _playerOne.RemoveCheckers(itemsTakeByOtherUser);
+            }
 
             newPosition.SetNewPosition(currentCol, currentRow);
             _data[currentCol, currentRow] = newPosition;

@@ -1,35 +1,51 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using RussianCheckers.Game;
 
-namespace RussianCheckers
+namespace RussianCheckers.Game
 {
     public abstract class PlayerViewModel: ObservableObject
     {
         public bool IsMainPLayer { get; private set; }
         public readonly Side Side;
         public  ObservableCollection<CheckerElement> PlayerPositions { get; protected set; }
+        public List<LinkedList<CheckerElement>> AvailablePaths { get;private set; }
 
         protected PlayerViewModel(Side side, bool isMainPLayer)
         {
             Side = side;
             IsMainPLayer = isMainPLayer;
+            AvailablePaths = new List<LinkedList<CheckerElement>>();
         }
 
 
-        public void MoveCheckerToNewPlace(CheckerElement checker, int column, int row)
+        public List<CheckerElement> MoveCheckerToNewPlace(CheckerElement checker, int column, int row)
         {
             CheckerElement foundChecker = PlayerPositions.Single(x => x == checker);
+            List<CheckerElement> itemsToTake = TakeCheckers(AvailablePaths, column, row, checker);
+
             foundChecker.SetNewPosition(column, row);
             foundChecker.DeSelectPossibleMovement();
+            return itemsToTake;
+        }
+
+        private List<CheckerElement> TakeCheckers(List<LinkedList<CheckerElement>> availablePaths, int column, int row, CheckerElement checker)
+        {
+            if (!availablePaths.Any())
+            {
+                return new List<CheckerElement>();
+            }
+
+            LinkedList<CheckerElement> neededPath = availablePaths.SingleOrDefault(x => x.Last.Value.Column == column && x.Last.Value.Row == row);
+            var itemsToRemove = new List<CheckerElement>(neededPath.Where(x => x.Side != Side.Empty && x.Side != checker.Side));
+            return itemsToRemove;
         }
 
         public void CalculateNeighbors(CheckerElement[,] currentData)
         {
+            AvailablePaths.Clear();
             foreach (CheckerElement playerPosition in PlayerPositions)
             {
-                bool haveOtherSideNeighbor = false;
                 CheckerElement checkerElement = currentData[playerPosition.Column, playerPosition.Row];
                 List<CheckerElement> neighbors = new List<CheckerElement>();
                 if (checkerElement.Column - 1 >= 0)
@@ -37,15 +53,12 @@ namespace RussianCheckers
                     if (checkerElement.Row - 1 >= 0)
                     {
                         var element = currentData[checkerElement.Column - 1, checkerElement.Row - 1];
-                        haveOtherSideNeighbor = (element.Side != playerPosition.Side) && element.Side != Side.Empty;
                         neighbors.Add(element);
                     }
 
                     if (checkerElement.Row + 1 < 8)
                     {
                         var element = currentData[checkerElement.Column - 1, checkerElement.Row + 1];
-                        haveOtherSideNeighbor = haveOtherSideNeighbor ||
-                                                ((element.Side != playerPosition.Side) && element.Side != Side.Empty);
                         neighbors.Add(element);
                     }
                 }
@@ -55,16 +68,12 @@ namespace RussianCheckers
                     if (checkerElement.Row - 1 >= 0)
                     {
                         var element = currentData[checkerElement.Column + 1, checkerElement.Row - 1];
-                        haveOtherSideNeighbor = haveOtherSideNeighbor ||
-                                                ((element.Side != playerPosition.Side) && element.Side != Side.Empty);
                         neighbors.Add(element);
                     }
 
                     if (checkerElement.Row + 1 < 8)
                     {
                         var element = currentData[checkerElement.Column + 1, checkerElement.Row + 1];
-                        haveOtherSideNeighbor = haveOtherSideNeighbor ||
-                                                ((element.Side != playerPosition.Side) && element.Side != Side.Empty);
                         neighbors.Add(element);
                     }
                 }
@@ -82,7 +91,7 @@ namespace RussianCheckers
                 SetPossibleMovementsRecursive(playerPosition, currentPath, visited, initialCheckerSide, paths);
                 var possibleMovements = new List<CheckerElement>();
                 IGrouping<int, LinkedList<CheckerElement>> maxValues = paths.GroupBy(x => x.Count).OrderByDescending(x => x.Key).FirstOrDefault();
-                foreach (var max in maxValues)
+                foreach (LinkedList<CheckerElement> max in maxValues)
                 {
                     if (max.Count == 1)
                     {
@@ -91,6 +100,7 @@ namespace RussianCheckers
                     else
                     {
                         possibleMovements.Add(max.Last.Value);
+                        AvailablePaths.Add(max);
                     }
                 }
 
@@ -136,7 +146,7 @@ namespace RussianCheckers
                         }
 
                         var len = index - indexOfChecker;
-                        if (len > 2)
+                        if (len > 3)
                         {
 
                             foreach (CheckerElement checkerElement in positionAfterNextChecker.Neighbors)
@@ -153,12 +163,17 @@ namespace RussianCheckers
                                 }
 
                             }
+
+                            path.AddLast(otherSideNeighbor);
                             SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, cycle);
+                            path.RemoveLast();
                         }
                     }
                     if (!visited.Contains(positionAfterNextChecker))
                     {
+                        path.AddLast(otherSideNeighbor);
                         SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
+                        path.RemoveLast();
                     }
 
                 }
@@ -199,6 +214,14 @@ namespace RussianCheckers
             else
             {
                 return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column + 2 && x.Row == playerChecker.Row + 2);
+            }
+        }
+
+        public void RemoveCheckers(List<CheckerElement> itemsTakeByOtherUser)
+        {
+            foreach (var checkerElement in itemsTakeByOtherUser)
+            {
+                PlayerPositions.Remove(checkerElement);
             }
         }
     }

@@ -177,10 +177,10 @@ namespace RussianCheckers.Game
                     }
 
                     bool notContainsInCycle = !cycle.Contains(positionAfterNextChecker);
-                    bool inVisitedArray = !visited.Contains(positionAfterNextChecker);
-                    bool isVisitedInPast = !IsVisitedAsPartOfSomePath(path, positionAfterNextChecker, paths); 
+//                    bool inVisitedArray = !visited.Contains(positionAfterNextChecker);
+//                    bool isVisitedInPast = !IsVisitedAsPartOfSomePath(path, positionAfterNextChecker, paths); 
 
-                    if ((inVisitedArray || isVisitedInPast) && notContainsInCycle)
+                    if (/*(inVisitedArray || isVisitedInPast) && */notContainsInCycle)
                     {
                         path.AddLast(otherSideNeighbor);
                         SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
@@ -230,30 +230,6 @@ namespace RussianCheckers.Game
             }
 
             return true;
-        }
-
-        private bool IsVisitedAsPartOfSomePath1(CheckerElement currentChecker, CheckerElement positionAfterNextChecker, List<LinkedList<CheckerElement>> paths)
-        {
-            foreach (LinkedList<CheckerElement> path in paths)
-            {
-                LinkedListNode<CheckerElement> header = path.First;
-
-                while (header.Next != null/* && header.Next.Next != null*/)
-                {
-                    if (header.Value == currentChecker)
-                    {
-                        var nextAfterNext = header.Next;//.Next;
-                        if (nextAfterNext.Value == positionAfterNextChecker)
-                        {
-                            return true;
-                        }
-                    }
-
-                    header = header.Next;
-                }
-            }
-
-            return false;
         }
 
 

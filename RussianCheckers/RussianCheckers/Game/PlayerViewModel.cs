@@ -48,7 +48,6 @@ namespace RussianCheckers.Game
 
         public void CalculateNeighbors(CheckerElement[,] currentData)
         {
-            AvailablePaths.Clear();
             foreach (CheckerElement playerPosition in PlayerPositions)
             {
                 CheckerElement checkerElement = currentData[playerPosition.Column, playerPosition.Row];
@@ -84,6 +83,15 @@ namespace RussianCheckers.Game
                 }
 
                 playerPosition.SetNeighbors(neighbors);
+               
+            }
+        }
+
+        public void CalculateAvailablePaths()
+        {
+            AvailablePaths.Clear();
+            foreach (CheckerElement playerPosition in PlayerPositions)
+            {
                 if (playerPosition.Side == Side.Empty)
                 {
                     continue;
@@ -135,7 +143,7 @@ namespace RussianCheckers.Game
                         continue;
                     }
 
-                        var cycle = new LinkedList<CheckerElement>();
+                    var cycle = new LinkedList<CheckerElement>();
                     if (path.Contains(positionAfterNextChecker)) // Cycle here
                     {
                         int indexOfChecker = 0;

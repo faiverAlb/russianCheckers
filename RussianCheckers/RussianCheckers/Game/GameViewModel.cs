@@ -28,10 +28,10 @@ namespace RussianCheckers.Game
 
             _emptyCellsPlayer.CalculateNeighbors(_data);
             playerOne.CalculateNeighbors(_data);
-            playerTwo.CalculateNeighbors(_data);
+            playerTwo.CalculateNeighbors(_data); 
             
-            playerOne.CalculateNeighbors(_data);
-            playerTwo.CalculateNeighbors(_data);
+            playerOne.CalculateAvailablePaths();
+            playerTwo.CalculateAvailablePaths();
 
             var playerOneCollectionContainer = new CollectionContainer { Collection = playerOne.PlayerPositions};
             var playerTwoCollectionContainer = new CollectionContainer{ Collection = playerTwo.PlayerPositions };
@@ -202,12 +202,20 @@ namespace RussianCheckers.Game
             _data[currentCol, currentRow] = newPosition;
 
             _emptyCellsPlayer.CalculateNeighbors(_data);
-            _playerOne.CalculateNeighbors(_data);
-            _playerTwo.CalculateNeighbors(_data);
+            if (player == _playerOne)
+            {
+                _playerOne.CalculateNeighbors(_data);
+                _playerTwo.CalculateNeighbors(_data);
+            }
+            else
+            {
+                _playerTwo.CalculateNeighbors(_data);
+                _playerOne.CalculateNeighbors(_data);
+            }
 
-            //todo: fix it. move calc to game vm?
-            _playerOne.CalculateNeighbors(_data);
-            _playerTwo.CalculateNeighbors(_data);
+            _playerOne.CalculateAvailablePaths();
+            _playerTwo.CalculateAvailablePaths();
+
         }
 
 

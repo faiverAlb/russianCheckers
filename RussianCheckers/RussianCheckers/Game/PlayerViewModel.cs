@@ -113,6 +113,11 @@ namespace RussianCheckers.Game
                     else
                     {
                         possibleMovements.Add(max.Last.Value);
+                        if (AvailablePaths.Count > 0 && AvailablePaths.Max(x => x.Count) > max.Count)
+                        {
+                            continue;
+                        }
+
                         AvailablePaths.Add(max);
                     }
                 }

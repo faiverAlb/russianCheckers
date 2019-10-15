@@ -134,9 +134,10 @@ namespace RussianCheckers.Game
                     {
                         continue;
                     }
+
+                        var cycle = new LinkedList<CheckerElement>();
                     if (path.Contains(positionAfterNextChecker)) // Cycle here
                     {
-                        var cycle = new LinkedList<CheckerElement>();
                         int indexOfChecker = 0;
                         int index = 0;
                         foreach (var checkerElement in path)
@@ -150,11 +151,11 @@ namespace RussianCheckers.Game
                             index++;
                         }
 
-                        var len = index - indexOfChecker;
-                        if (len > 3)
+                        int len = index - indexOfChecker;
+                        if (len > 2)
                         {
 
-                            foreach (CheckerElement checkerElement in positionAfterNextChecker.Neighbors)
+                            foreach (CheckerElement checkerElement in positionAfterNextChecker.Neighbors.Where(x => x.Side != Side.Empty))
                             {
                                 CheckerElement tempToDelete = GetNextElementInDiagonal(positionAfterNextChecker, checkerElement);
                                 CheckerElement firstToNotDelete = path.Last.Value;
@@ -169,16 +170,21 @@ namespace RussianCheckers.Game
 
                             }
 
-                            path.AddLast(otherSideNeighbor);
+//                            path.AddLast(otherSideNeighbor);
                             SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, cycle);
-                            path.RemoveLast();
+//                            path.RemoveLast();
                         }
                     }
-                    if (!visited.Contains(positionAfterNextChecker))
+
+                    bool notContainsInCycle = !cycle.Contains(positionAfterNextChecker);
+                    bool inVisitedArray = !visited.Contains(positionAfterNextChecker);
+                    bool isVisitedInPast = !IsVisitedAsPartOfSomePath(path, positionAfterNextChecker, paths); 
+
+                    if ((inVisitedArray || isVisitedInPast) && notContainsInCycle)
                     {
-                        path.AddLast(otherSideNeighbor);
+//                        path.AddLast(otherSideNeighbor);
                         SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
-                        path.RemoveLast();
+//                        path.RemoveLast();
                     }
 
                 }
@@ -186,6 +192,70 @@ namespace RussianCheckers.Game
 
             path.RemoveLast();
         }
+
+        private bool IsVisitedAsPartOfSomePath(LinkedList<CheckerElement> currentPath, CheckerElement positionAfterNextChecker, List<LinkedList<CheckerElement>> paths)
+        {
+            foreach (LinkedList<CheckerElement> historyPath in paths)
+            {
+                var tempPath =new LinkedList<CheckerElement>(currentPath);
+                tempPath.AddLast(positionAfterNextChecker);
+                bool isPathsEquals = CompareLists(tempPath, historyPath);
+                if (isPathsEquals)
+                {
+                    return true;
+                }
+
+            }
+
+            return false;
+        }
+
+        private bool CompareLists(LinkedList<CheckerElement> tempPath, LinkedList<CheckerElement> historyPath)
+        {
+            if (tempPath.Count != historyPath.Count)
+            {
+                return false;
+            }
+
+            var currentTempHeader = tempPath.First;
+            var historyHeader = historyPath.First;
+            while (currentTempHeader != null)
+            {
+                if (currentTempHeader.Value != historyHeader.Value)
+                {
+                    return false;
+                }
+                currentTempHeader = currentTempHeader.Next;
+                historyHeader = historyHeader.Next;
+            }
+
+            return true;
+        }
+
+        private bool IsVisitedAsPartOfSomePath1(CheckerElement currentChecker, CheckerElement positionAfterNextChecker, List<LinkedList<CheckerElement>> paths)
+        {
+            foreach (LinkedList<CheckerElement> path in paths)
+            {
+                LinkedListNode<CheckerElement> header = path.First;
+
+                while (header.Next != null/* && header.Next.Next != null*/)
+                {
+                    if (header.Value == currentChecker)
+                    {
+                        var nextAfterNext = header.Next;//.Next;
+                        if (nextAfterNext.Value == positionAfterNextChecker)
+                        {
+                            return true;
+                        }
+                    }
+
+                    header = header.Next;
+                }
+            }
+
+            return false;
+        }
+
 
         private List<CheckerElement> GetSimpleEmptyMoves(CheckerElement initialChecker)
         {

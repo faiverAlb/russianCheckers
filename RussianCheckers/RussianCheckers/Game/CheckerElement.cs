@@ -47,6 +47,7 @@ namespace RussianCheckers.Game
 
         private Side _side;
         private bool _isSelected;
+        private bool _selfAsPossible;
 
         public Side Side
         {
@@ -66,6 +67,20 @@ namespace RussianCheckers.Game
                 RaisePropertyChangedEvent(nameof(IsSelected));
             }
         }
+        public bool SelfAsPossible
+        {
+            get { return _selfAsPossible; }
+            set {
+                if (_selfAsPossible == value)
+                {
+                    return;
+                }
+                _selfAsPossible = value;
+                RaisePropertyChangedEvent(nameof(SelfAsPossible));
+            }
+        }
+
+        
 
         public List<CheckerElement> Neighbors { get; private set; }
 
@@ -81,18 +96,6 @@ namespace RussianCheckers.Game
             _pos.ChangePosition(column, row);
         }
 
-        public bool IsCheckerNearChecker(CheckerElement otherChecker)
-        {
-            bool isNear = false;
-            isNear = Column - 1 == otherChecker.Column && Row - 1 == otherChecker.Row;
-            isNear = isNear || Column - 1 == otherChecker.Column && Row + 1 == otherChecker.Row;
-            isNear = isNear || Column - 1 == otherChecker.Column && Row + 1 == otherChecker.Row;
-            isNear = isNear || Column + 1 == otherChecker.Column && Row - 1 == otherChecker.Row;
-            isNear = isNear || Column + 1 == otherChecker.Column && Row + 1 == otherChecker.Row;
-
-            return isNear;
-        }
-
         public override string ToString()
         {
             return $"{Side}, {Type}, [{Column},{Row}]";
@@ -102,7 +105,12 @@ namespace RussianCheckers.Game
         {
             foreach (CheckerElement possibleMovementElement in PossibleMovementElements)
             {
-              possibleMovementElement.IsSelected = true;
+                if (possibleMovementElement == this)
+                {
+                    possibleMovementElement.SelfAsPossible = true;
+                }
+
+                possibleMovementElement.IsSelected = true;
             }
         }
         public void DeSelectPossibleMovement()
@@ -110,6 +118,7 @@ namespace RussianCheckers.Game
             foreach (CheckerElement possibleMovementElement in PossibleMovementElements)
             {
               possibleMovementElement.IsSelected = false;
+              possibleMovementElement.SelfAsPossible = false;
             }
         }
     }

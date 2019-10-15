@@ -46,6 +46,11 @@ namespace RussianCheckers.Game
                 return new MoveValidationResult(MoveValidationStatus.NewItemSelected);
             }
 
+            if (_oldSelectedElement == _newSelectedElement && _player.AvailablePaths.Any(x => x.Last.Value == _newSelectedElement))
+            {
+                return new MoveValidationResult(MoveValidationStatus.Ok);
+            }
+
             if (_oldSelectedElement == _newSelectedElement)
             {
                 return new MoveValidationResult(MoveValidationStatus.DeselectChecker);

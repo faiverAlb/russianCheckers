@@ -17,6 +17,7 @@ namespace RussianCheckers
             return new List<CheckerElement>()
             {
                 new CheckerElement(4,2,PieceType.Checker,side),
+                new CheckerElement(0,2,PieceType.Checker,side)
             };
         }
 

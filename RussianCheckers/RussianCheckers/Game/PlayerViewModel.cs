@@ -36,7 +36,7 @@ namespace RussianCheckers.Game
                 return new List<CheckerElement>();
             }
 
-            LinkedList<CheckerElement> neededPath = availablePaths.SingleOrDefault(x => x.Last.Value.Column == column && x.Last.Value.Row == row);
+            LinkedList<CheckerElement> neededPath = availablePaths.FirstOrDefault(x => x.Last.Value.Column == column && x.Last.Value.Row == row);
             if (neededPath == null)
             {
                 return new List<CheckerElement>();
@@ -152,7 +152,7 @@ namespace RussianCheckers.Game
                         }
 
                         int len = index - indexOfChecker;
-                        if (len > 2)
+                        if (len > 3)
                         {
 
                             foreach (CheckerElement checkerElement in positionAfterNextChecker.Neighbors.Where(x => x.Side != Side.Empty))
@@ -170,9 +170,9 @@ namespace RussianCheckers.Game
 
                             }
 
-//                            path.AddLast(otherSideNeighbor);
+                            path.AddLast(otherSideNeighbor);
                             SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, cycle);
-//                            path.RemoveLast();
+                            path.RemoveLast();
                         }
                     }
 
@@ -182,9 +182,9 @@ namespace RussianCheckers.Game
 
                     if ((inVisitedArray || isVisitedInPast) && notContainsInCycle)
                     {
-//                        path.AddLast(otherSideNeighbor);
+                        path.AddLast(otherSideNeighbor);
                         SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
-//                        path.RemoveLast();
+                        path.RemoveLast();
                     }
 
                 }

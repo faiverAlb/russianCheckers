@@ -166,19 +166,19 @@ namespace RussianCheckers.Game
                 return false;
             }
 
-            MoveCheckerToNewPlace(_selectedChecker, newSelectedChecker,player);
+            MoveCheckerToNewPlace(_selectedChecker, newSelectedChecker, player);
             _selectedChecker.IsSelected = false;
             _selectedChecker = null;
             return true;
         }
 
-        private void MoveCheckerToNewPlace(CheckerElement currentPositionElement, CheckerElement nextPositionElement, PlayerViewModel player)
+        private void MoveCheckerToNewPlace(CheckerElement currentPositionElement, CheckerElement emptyPosition, PlayerViewModel player)
         {
             int currentCol = currentPositionElement.Column;
             int currentRow = currentPositionElement.Row;
 
-            int nextCol = nextPositionElement.Column;
-            int nextRow = nextPositionElement.Row;
+            int nextCol = emptyPosition.Column;
+            int nextRow = emptyPosition.Row;
 
             CheckerElement newPosition = _data[nextCol, nextRow];
             _data[nextCol, nextRow] = _data[currentCol, currentRow];

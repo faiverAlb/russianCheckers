@@ -47,7 +47,6 @@ namespace RussianCheckers.Game
             newPosition.SetNewPosition(currentCol, currentRow);
             _dataProvider.SetNewCheckerAtElement(currentCol, currentRow, newPosition);
             
-            
             existingPlayerChecker.DeSelectPossibleMovement();
             return itemsToTake;
         }
@@ -120,11 +119,7 @@ namespace RussianCheckers.Game
                     continue;
                 }
 
-                var currentPath = new LinkedList<CheckerElement>();
-                Side initialCheckerSide = playerPosition.Side;
-                List<CheckerElement> visited = new List<CheckerElement>();
-                List<LinkedList<CheckerElement>> paths = new List<LinkedList<CheckerElement>>();
-                SetPossibleMovementsRecursive(playerPosition, currentPath, visited, initialCheckerSide, paths);
+                List<LinkedList<CheckerElement>> paths = GetPossiblePaths(playerPosition);
                 var possibleMovements = new List<CheckerElement>();
                 IGrouping<int, LinkedList<CheckerElement>> maxValues = paths.GroupBy(x => x.Count).OrderByDescending(x => x.Key).FirstOrDefault();
                 foreach (LinkedList<CheckerElement> max in maxValues)
@@ -147,6 +142,13 @@ namespace RussianCheckers.Game
 
                 playerPosition.SetPossibleMovementElements(possibleMovements);
             }
+        }
+
+        public List<LinkedList<CheckerElement>> GetPossiblePaths(CheckerElement playerPosition)
+        {
+            var paths = new List<LinkedList<CheckerElement>>();
+            SetPossibleMovementsRecursive(playerPosition, new LinkedList<CheckerElement>(), new List<CheckerElement>(),playerPosition.Side, paths);
+            return paths;
         }
 
         private void SetPossibleMovementsRecursive(CheckerElement currentChecker

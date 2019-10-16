@@ -7,10 +7,18 @@ namespace RussianCheckers.Game
     public class DataProvider
     {
         private readonly CheckerElement[,] _data;
+
+        public DataProvider(List<CheckerElement> mainPlayerCheckers, List<CheckerElement> secondPlayerCheckers)
+        {
+            List<CheckerElement> emptyCheckers = GetEmptyCheckersPositions(mainPlayerCheckers, secondPlayerCheckers);
+            _data = GetCurrentGamePositions(mainPlayerCheckers, secondPlayerCheckers, emptyCheckers);
+        }
+
         public DataProvider(Side mainPlayerSide)
         {
             List<CheckerElement> mainPlayerCheckers = GetMainPlayerCheckers(mainPlayerSide);
             Side secondPlayerSide = mainPlayerSide == Side.White? Side.Black: Side.White;
+            
             List<CheckerElement> secondPlayerCheckers = GetSecondPlayerPositions(secondPlayerSide);
             List<CheckerElement> emptyCheckers = GetEmptyCheckersPositions(mainPlayerCheckers, secondPlayerCheckers);
 
@@ -27,8 +35,8 @@ namespace RussianCheckers.Game
         private List<CheckerElement> GetEmptyCheckersPositions(List<CheckerElement> mainPlayerCheckers, List<CheckerElement> secondPlayerCheckers)
         {
             var positions = new List<CheckerElement>();
-            List<CheckerElement> allPositions = mainPlayerCheckers;
-            allPositions.AddRange(secondPlayerCheckers);
+            List<CheckerElement> allPositions = mainPlayerCheckers.ToList();
+            allPositions.AddRange(secondPlayerCheckers.ToList());
 
             List<int> colsForPlayer = mainPlayerCheckers.Select(x => x.Column).Distinct().ToList();
             colsForPlayer.AddRange(secondPlayerCheckers.Select(x => x.Column).Distinct());

@@ -30,9 +30,15 @@ namespace RussianCheckers.Game
 
 
             CheckerElement newPosition = _dataProvider.GetElementAtPosition(nextCol, nextRow);
-            CheckerElement oldPosition = _dataProvider.GetElementAtPosition(currentCol, currentRow);
 
-            _dataProvider.SetNewCheckerAtElement(nextCol, nextRow, oldPosition);
+            
+            CheckerElement oldPositionedChecker = _dataProvider.GetElementAtPosition(currentCol, currentRow);
+            bool shouldTransferToQueen = newPosition.Row == 7;
+            if (shouldTransferToQueen)
+            {
+                oldPositionedChecker.Type = PieceType.Queen;
+            }
+            _dataProvider.MoveCheckerToNewPosition(oldPositionedChecker, nextCol, nextRow);
 
             CheckerElement existingPlayerChecker = PlayerPositions.Single(x => x == checker);
             List<CheckerElement> itemsToTake = TakeCheckers(AvailablePaths, nextCol, nextRow, checker);
@@ -41,11 +47,11 @@ namespace RussianCheckers.Game
             foreach (CheckerElement checkerElement in itemsToTake)
             {
                 var element = new CheckerElement(checkerElement.Column, checkerElement.Row, PieceType.Checker, Side.Empty);
-                _dataProvider.SetNewCheckerAtElement(checkerElement.Column, checkerElement.Row, element);
+                _dataProvider.MoveCheckerToNewPosition(element, checkerElement.Column, checkerElement.Row);
                 
             }
             newPosition.SetNewPosition(currentCol, currentRow);
-            _dataProvider.SetNewCheckerAtElement(currentCol, currentRow, newPosition);
+            _dataProvider.MoveCheckerToNewPosition(newPosition, currentCol, currentRow);
             
             existingPlayerChecker.DeSelectPossibleMovement();
             return itemsToTake;

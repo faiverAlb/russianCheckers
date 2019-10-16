@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using RussianCheckers.Game;
 using RussianCheckers.Infrastructure;
 
@@ -16,9 +17,18 @@ namespace RussianCheckers
             notificationDialogService.Register<NotificationDialogViewModel,NotificationDialog>();
 
             Side mainPlayerSide = Side.White;
-           
 
-            var dataProvider = new DataProvider(mainPlayerSide);
+
+            var mainPlayCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(4, 6, PieceType.Checker, Side.White),
+            };
+            var secondPlayerCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(1, 5, PieceType.Checker, Side.Black),
+            };
+            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+//            var dataProvider = new DataProvider(mainPlayerSide);
 
             var mainHumanPlayer = new MainHumanPlayer(mainPlayerSide, dataProvider);
             var playerViewModel = new RobotPlayer(Side.Black, dataProvider);

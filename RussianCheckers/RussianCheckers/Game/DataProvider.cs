@@ -147,7 +147,7 @@ namespace RussianCheckers.Game
         }
 
 
-        public void SetNewCheckerAtElement(int checkerElementColumn, int checkerElementRow, CheckerElement element)
+        public void MoveCheckerToNewPosition(CheckerElement element, int checkerElementColumn, int checkerElementRow)
         {
             _data[checkerElementColumn, checkerElementRow] = element;
         }

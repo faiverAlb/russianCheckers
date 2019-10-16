@@ -8,24 +8,47 @@ namespace RussianCheckers.Game
     {
         public bool IsMainPLayer { get; private set; }
         public readonly Side Side;
+        protected readonly DataProvider _dataProvider;
         public  ObservableCollection<CheckerElement> PlayerPositions { get; protected set; }
         public List<LinkedList<CheckerElement>> AvailablePaths { get;private set; }
 
-        protected PlayerViewModel(Side side, bool isMainPLayer)
+        protected PlayerViewModel(Side side, DataProvider dataProvider, bool isMainPLayer)
         {
+            List<CheckerElement> mySideCheckers = dataProvider.GetMySideCheckers(side);
+            PlayerPositions = new ObservableCollection<CheckerElement>(mySideCheckers);
             Side = side;
+            _dataProvider = dataProvider;
             IsMainPLayer = isMainPLayer;
             AvailablePaths = new List<LinkedList<CheckerElement>>();
         }
 
 
-        public List<CheckerElement> MoveCheckerToNewPlace(CheckerElement checker, int column, int row)
+        public List<CheckerElement> MoveCheckerToNewPlace(CheckerElement checker, int nextCol, int nextRow)
         {
-            CheckerElement foundChecker = PlayerPositions.Single(x => x == checker);
-            List<CheckerElement> itemsToTake = TakeCheckers(AvailablePaths, column, row, checker);
+            int currentCol = checker.Column;
+            int currentRow = checker.Row;
 
-            foundChecker.SetNewPosition(column, row);
-            foundChecker.DeSelectPossibleMovement();
+
+            CheckerElement newPosition = _dataProvider.GetElementAtPosition(nextCol, nextRow);
+            CheckerElement oldPosition = _dataProvider.GetElementAtPosition(currentCol, currentRow);
+
+            _dataProvider.SetNewCheckerAtElement(nextCol, nextRow, oldPosition);
+
+            CheckerElement existingPlayerChecker = PlayerPositions.Single(x => x == checker);
+            List<CheckerElement> itemsToTake = TakeCheckers(AvailablePaths, nextCol, nextRow, checker);
+            existingPlayerChecker.SetNewPosition(nextCol, nextRow);
+
+            foreach (CheckerElement checkerElement in itemsToTake)
+            {
+                var element = new CheckerElement(checkerElement.Column, checkerElement.Row, PieceType.Checker, Side.Empty);
+                _dataProvider.SetNewCheckerAtElement(checkerElement.Column, checkerElement.Row, element);
+                
+            }
+            newPosition.SetNewPosition(currentCol, currentRow);
+            _dataProvider.SetNewCheckerAtElement(currentCol, currentRow, newPosition);
+            
+            
+            existingPlayerChecker.DeSelectPossibleMovement();
             return itemsToTake;
         }
 
@@ -46,23 +69,23 @@ namespace RussianCheckers.Game
             return itemsToRemove;
         }
 
-        public void CalculateNeighbors(CheckerElement[,] currentData)
+        public void CalculateNeighbors()
         {
             foreach (CheckerElement playerPosition in PlayerPositions)
             {
-                CheckerElement checkerElement = currentData[playerPosition.Column, playerPosition.Row];
+                CheckerElement checkerElement = _dataProvider.GetElementAtPosition(playerPosition.Column, playerPosition.Row);
                 List<CheckerElement> neighbors = new List<CheckerElement>();
                 if (checkerElement.Column - 1 >= 0)
                 {
                     if (checkerElement.Row - 1 >= 0)
                     {
-                        var element = currentData[checkerElement.Column - 1, checkerElement.Row - 1];
+                        var element = _dataProvider.GetElementAtPosition(checkerElement.Column - 1, checkerElement.Row - 1);
                         neighbors.Add(element);
                     }
 
                     if (checkerElement.Row + 1 < 8)
                     {
-                        var element = currentData[checkerElement.Column - 1, checkerElement.Row + 1];
+                        var element = _dataProvider.GetElementAtPosition(checkerElement.Column - 1, checkerElement.Row + 1);
                         neighbors.Add(element);
                     }
                 }
@@ -71,13 +94,13 @@ namespace RussianCheckers.Game
                 {
                     if (checkerElement.Row - 1 >= 0)
                     {
-                        var element = currentData[checkerElement.Column + 1, checkerElement.Row - 1];
+                        var element = _dataProvider.GetElementAtPosition(checkerElement.Column + 1, checkerElement.Row - 1);
                         neighbors.Add(element);
                     }
 
                     if (checkerElement.Row + 1 < 8)
                     {
-                        var element = currentData[checkerElement.Column + 1, checkerElement.Row + 1];
+                        var element = _dataProvider.GetElementAtPosition(checkerElement.Column + 1, checkerElement.Row + 1);
                         neighbors.Add(element);
                     }
                 }

@@ -14,21 +14,23 @@ namespace RussianCheckers.Game
         private readonly PlayerViewModel _playerTwo;
         private readonly IDialogService _notificationDialog;
         private readonly CompositeCollection _positions = new CompositeCollection();
-        private readonly CheckerElement[,] _data;
         public GameViewModel(PlayerViewModel playerOne
             , PlayerViewModel playerTwo
+            , EmptyCellsPlayer emptyCellsPlayer
+            , DataProvider dataProvider
             , IDialogService notificationDialog)
         {
             _playerOne = playerOne;
             _playerTwo = playerTwo;
-            _emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, _playerOne,playerTwo);
-            _data = GetCurrentGamePositions(_playerOne, playerTwo, _emptyCellsPlayer);
+            _emptyCellsPlayer = emptyCellsPlayer;
+            _dataProvider = dataProvider;
+
             _notificationDialog = notificationDialog;
             NextMoveSide = Side.White;
 
-            _emptyCellsPlayer.CalculateNeighbors(_data);
-            playerOne.CalculateNeighbors(_data);
-            playerTwo.CalculateNeighbors(_data); 
+            _emptyCellsPlayer.CalculateNeighbors();
+            playerOne.CalculateNeighbors();
+            playerTwo.CalculateNeighbors(); 
             
             playerOne.CalculateAvailablePaths();
             playerTwo.CalculateAvailablePaths();
@@ -42,27 +44,6 @@ namespace RussianCheckers.Game
         }
 
 
-        private CheckerElement[,] GetCurrentGamePositions(PlayerViewModel playerOne, PlayerViewModel playerTwo,
-            EmptyCellsPlayer emptyCellsPlayer)
-        {
-            var data = new CheckerElement[8, 8];
-            foreach (CheckerElement position in playerOne.PlayerPositions)
-            {
-                data[position.Column , position.Row] = position;
-            }
-
-            foreach (CheckerElement position in playerTwo.PlayerPositions)
-            {
-                data[position.Column, position.Row] = position;
-            }
-
-            foreach (CheckerElement position in emptyCellsPlayer.PlayerPositions)
-            {
-                data[position.Column, position.Row] = position;
-            }
-
-            return data;
-        }
 
         public Side NextMoveSide
         {
@@ -82,6 +63,7 @@ namespace RussianCheckers.Game
         private bool _isGameFinished;
         private readonly PlayerViewModel _playerOne;
         private readonly EmptyCellsPlayer _emptyCellsPlayer;
+        private readonly DataProvider _dataProvider;
 
         private void OnTryMakeMove(object obj)
         {
@@ -114,7 +96,7 @@ namespace RussianCheckers.Game
 
             NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
 
-            var gameStatusChecker = new GameStatusChecker(_data);
+            var gameStatusChecker = new GameStatusChecker(_dataProvider);
             GameStatus gameStatus = gameStatusChecker.GetGameStatus();
             if (gameStatus != GameStatus.InProgress)
             {
@@ -174,21 +156,12 @@ namespace RussianCheckers.Game
 
         private void MoveCheckerToNewPlace(CheckerElement currentPositionElement, CheckerElement emptyPosition, PlayerViewModel player)
         {
-            int currentCol = currentPositionElement.Column;
-            int currentRow = currentPositionElement.Row;
-
             int nextCol = emptyPosition.Column;
             int nextRow = emptyPosition.Row;
 
-            CheckerElement newPosition = _data[nextCol, nextRow];
-            _data[nextCol, nextRow] = _data[currentCol, currentRow];
-
             List<CheckerElement> itemsTakeByOtherUser = player.MoveCheckerToNewPlace(currentPositionElement, nextCol, nextRow);
-            foreach (CheckerElement checkerElement in itemsTakeByOtherUser)
-            {
-                _data[checkerElement.Column,checkerElement.Row] = new CheckerElement(checkerElement.Column, checkerElement.Row,PieceType.Checker,Side.Empty);
-                _emptyCellsPlayer.PlayerPositions.Add(_data[checkerElement.Column, checkerElement.Row]);
-            }
+
+            _emptyCellsPlayer.AddNewEmptyElements(itemsTakeByOtherUser);
             if (player == _playerOne)
             {
                 _playerTwo.RemoveCheckers(itemsTakeByOtherUser);
@@ -197,20 +170,16 @@ namespace RussianCheckers.Game
             {
                 _playerOne.RemoveCheckers(itemsTakeByOtherUser);
             }
-
-            newPosition.SetNewPosition(currentCol, currentRow);
-            _data[currentCol, currentRow] = newPosition;
-
-            _emptyCellsPlayer.CalculateNeighbors(_data);
+            _emptyCellsPlayer.CalculateNeighbors();
             if (player == _playerOne)
             {
-                _playerOne.CalculateNeighbors(_data);
-                _playerTwo.CalculateNeighbors(_data);
+                _playerOne.CalculateNeighbors();
+                _playerTwo.CalculateNeighbors();
             }
             else
             {
-                _playerTwo.CalculateNeighbors(_data);
-                _playerOne.CalculateNeighbors(_data);
+                _playerTwo.CalculateNeighbors();
+                _playerOne.CalculateNeighbors();
             }
 
             _playerOne.CalculateAvailablePaths();

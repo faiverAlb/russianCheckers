@@ -87,7 +87,7 @@ namespace RussianCheckers.Game
                 }
                 else
                 {
-                    neighbors = GetNeighborsForQueen(checkerElement);
+                    neighbors = GetNeighborsForQueen(checkerElement).Select(x => x.Value).ToList();
                 }
 
 
@@ -97,9 +97,9 @@ namespace RussianCheckers.Game
             }
         }
 
-        private List<CheckerElement> GetNeighborsForQueen(CheckerElement checkerElement)
+        private List<KeyValuePair<Diagonal, CheckerElement>> GetNeighborsForQueen(CheckerElement checkerElement)
         {
-            var neighbors = new List<CheckerElement>();
+            var neighbors = new List<KeyValuePair<Diagonal, CheckerElement>>();
 
             int checkerRowUp = checkerElement.Row;
             int checkerRowDown = checkerElement.Row;
@@ -115,7 +115,7 @@ namespace RussianCheckers.Game
                         skipUpDiagonal = true;
                     }
 
-                    neighbors.Add(element);
+                    neighbors.Add(new KeyValuePair<Diagonal, CheckerElement>(Diagonal.LeftUp, element));
                     checkerRowUp++;
                 }
 
@@ -127,7 +127,7 @@ namespace RussianCheckers.Game
                         skipDownDiagonal = true;
                     }
 
-                    neighbors.Add(element);
+                    neighbors.Add(new KeyValuePair<Diagonal, CheckerElement>(Diagonal.LeftDown, element));
                     checkerRowDown--;
 
                 }
@@ -147,7 +147,7 @@ namespace RussianCheckers.Game
                         skipUpDiagonal = true;
                     }
 
-                    neighbors.Add(element);
+                    neighbors.Add(new KeyValuePair<Diagonal, CheckerElement>(Diagonal.RightUp, element));
                     checkerRowUp++;
                 }
 
@@ -159,7 +159,7 @@ namespace RussianCheckers.Game
                         skipDownDiagonal = true;
                     }
 
-                    neighbors.Add(element);
+                    neighbors.Add(new KeyValuePair<Diagonal, CheckerElement>(Diagonal.RightDown, element));
                     checkerRowDown--;
                 }
             }
@@ -291,21 +291,28 @@ namespace RussianCheckers.Game
             , List<CheckerElement> visited
             , Side checkerSide
             , List<LinkedList<CheckerElement>> paths
-            , LinkedList<CheckerElement> outerCycle = null)
+            , LinkedList<CheckerElement> outerCycle = null
+            , Diagonal fromDiagonal = Diagonal.Initial)
         {
             path.AddLast(currentChecker);
             paths.Add(new LinkedList<CheckerElement>(path));
             visited.Add(currentChecker);
-            
-            var otherSideNeighbors = currentChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != checkerSide);
-            foreach (CheckerElement otherSideNeighbor in otherSideNeighbors)
+
+            List<KeyValuePair<Diagonal, CheckerElement>> neighborsForQueen = GetNeighborsForQueen(currentChecker);
+            neighborsForQueen = FilterNeighborsOnOppositeDirection(neighborsForQueen,fromDiagonal);
+            var otherSideNeighbors = neighborsForQueen.Where(x => x.Value.Side != Side.Empty && x.Value.Side != checkerSide);
+            foreach (KeyValuePair<Diagonal, CheckerElement> otherSideNeighborPair in otherSideNeighbors)
             {
-                var elementsAfterOpponent = GetNextElementsInDiagonal(currentChecker, otherSideNeighbor);
-                CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(currentChecker, otherSideNeighbor);
-                if (positionAfterNextChecker != null
-                    && (positionAfterNextChecker.Side == Side.Empty
-                        || path.Contains(positionAfterNextChecker)))
+                Diagonal diagonal = otherSideNeighborPair.Key;
+                CheckerElement otherSideNeighbor = otherSideNeighborPair.Value;
+                List<CheckerElement> elementsAfterOpponent = GetNextElementsInDiagonal(currentChecker, otherSideNeighbor);
+                foreach (CheckerElement positionAfterNextChecker in elementsAfterOpponent)
                 {
+                    if (positionAfterNextChecker == null || (positionAfterNextChecker.Side != Side.Empty && !path.Contains(positionAfterNextChecker)))
+                    {
+                        continue;
+                    }
+
                     if (outerCycle != null && outerCycle.Contains(positionAfterNextChecker))
                     {
                         continue;
@@ -331,9 +338,11 @@ namespace RussianCheckers.Game
                         if (len > 3)
                         {
 
-                            foreach (CheckerElement checkerElement in positionAfterNextChecker.Neighbors.Where(x => x.Side != Side.Empty))
+                            foreach (CheckerElement checkerElement in positionAfterNextChecker.Neighbors.Where(x =>
+                                x.Side != Side.Empty))
                             {
-                                CheckerElement tempToDelete = GetNextElementInDiagonal(positionAfterNextChecker, checkerElement);
+                                CheckerElement tempToDelete =
+                                    GetNextElementInDiagonal(positionAfterNextChecker, checkerElement);
                                 CheckerElement firstToNotDelete = path.Last.Value;
                                 CheckerElement secondToNotDelete = path.Find(positionAfterNextChecker).Next.Value;
                                 if (tempToDelete != null
@@ -347,7 +356,7 @@ namespace RussianCheckers.Game
                             }
 
                             path.AddLast(otherSideNeighbor);
-                            SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, cycle);
+                            SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited, checkerSide, paths,cycle, diagonal);
                             path.RemoveLast();
                         }
                     }
@@ -356,17 +365,40 @@ namespace RussianCheckers.Game
                     //                    bool inVisitedArray = !visited.Contains(positionAfterNextChecker);
                     //                    bool isVisitedInPast = !IsVisitedAsPartOfSomePath(path, positionAfterNextChecker, paths); 
 
-                    if (/*(inVisitedArray || isVisitedInPast) && */notContainsInCycle)
+                    if ( /*(inVisitedArray || isVisitedInPast) && */notContainsInCycle)
                     {
                         path.AddLast(otherSideNeighbor);
-                        SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
+                        SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, cycle, diagonal);
                         path.RemoveLast();
                     }
-
                 }
             }
 
             path.RemoveLast();
+        }
+
+        private List<KeyValuePair<Diagonal, CheckerElement>> FilterNeighborsOnOppositeDirection(List<KeyValuePair<Diagonal, CheckerElement>> neighborsForQueen, Diagonal fromDiagonal)
+        {
+            switch (fromDiagonal)
+            {
+                case Diagonal.LeftDown:
+                    return neighborsForQueen.Where(x => x.Key != Diagonal.RightUp).ToList();
+                    break;
+                case Diagonal.LeftUp:
+                    return neighborsForQueen.Where(x => x.Key != Diagonal.RightDown).ToList();
+                    break;
+                case Diagonal.RightUp:
+                    return neighborsForQueen.Where(x => x.Key != Diagonal.LeftDown).ToList();
+                    break;
+                case Diagonal.RightDown:
+                    return neighborsForQueen.Where(x => x.Key != Diagonal.LeftUp).ToList();
+                    break;
+                case Diagonal.Initial:
+                    return neighborsForQueen;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(fromDiagonal), fromDiagonal, null);
+            }
         }
 
         private void SetPossibleMovementsRecursive(CheckerElement currentChecker
@@ -644,6 +676,7 @@ namespace RussianCheckers.Game
         LeftDown,
         LeftUp,
         RightUp,
-        RightDown
+        RightDown,
+        Initial
     }
 }

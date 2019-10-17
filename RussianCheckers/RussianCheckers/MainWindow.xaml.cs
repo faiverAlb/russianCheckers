@@ -21,7 +21,7 @@ namespace RussianCheckers
 
             var mainPlayCheckers = new List<CheckerElement>()
             {
-                new CheckerElement(4, 6, PieceType.Checker, Side.White),
+                new CheckerElement(4, 6, PieceType.Queen, Side.White),
             };
             var secondPlayerCheckers = new List<CheckerElement>()
             {

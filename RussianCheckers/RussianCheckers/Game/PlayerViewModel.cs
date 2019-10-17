@@ -80,39 +80,124 @@ namespace RussianCheckers.Game
             {
                 CheckerElement checkerElement = _dataProvider.GetElementAtPosition(playerPosition.Column, playerPosition.Row);
                 List<CheckerElement> neighbors = new List<CheckerElement>();
-                if (checkerElement.Column - 1 >= 0)
+                if (checkerElement.Type == PieceType.Checker)
                 {
-                    if (checkerElement.Row - 1 >= 0)
-                    {
-                        var element = _dataProvider.GetElementAtPosition(checkerElement.Column - 1, checkerElement.Row - 1);
-                        neighbors.Add(element);
-                    }
-
-                    if (checkerElement.Row + 1 < 8)
-                    {
-                        var element = _dataProvider.GetElementAtPosition(checkerElement.Column - 1, checkerElement.Row + 1);
-                        neighbors.Add(element);
-                    }
+                    neighbors = GetNeighborsForChecker(checkerElement);
+                }
+                else
+                {
+                    neighbors = GetNeighborsForQueen(checkerElement);
                 }
 
-                if (checkerElement.Column + 1 < 8)
-                {
-                    if (checkerElement.Row - 1 >= 0)
-                    {
-                        var element = _dataProvider.GetElementAtPosition(checkerElement.Column + 1, checkerElement.Row - 1);
-                        neighbors.Add(element);
-                    }
 
-                    if (checkerElement.Row + 1 < 8)
-                    {
-                        var element = _dataProvider.GetElementAtPosition(checkerElement.Column + 1, checkerElement.Row + 1);
-                        neighbors.Add(element);
-                    }
-                }
 
                 playerPosition.SetNeighbors(neighbors);
                
             }
+        }
+
+        private List<CheckerElement> GetNeighborsForQueen(CheckerElement checkerElement)
+        {
+            var neighbors = new List<CheckerElement>();
+
+            int checkerRowUp = checkerElement.Row;
+            int checkerRowDown = checkerElement.Row;
+            bool skipUpDiagonal = false;
+            bool skipDownDiagonal = false;
+            for (int col = checkerElement.Column - 1; col >= 0; col--)
+            {
+                if (checkerRowUp + 1 < 8 && !skipUpDiagonal)
+                {
+                    var element = _dataProvider.GetElementAtPosition(col, checkerRowUp + 1);
+                    if (element.Side != Side.Empty)
+                    {
+                        skipUpDiagonal = true;
+                    }
+
+                    neighbors.Add(element);
+                    checkerRowUp++;
+                }
+
+                if (checkerRowDown - 1 >= 0 && !skipDownDiagonal)
+                {
+                    var element = _dataProvider.GetElementAtPosition(col, checkerRowDown - 1);
+                    if (element.Side != Side.Empty)
+                    {
+                        skipDownDiagonal = true;
+                    }
+
+                    neighbors.Add(element);
+                    checkerRowDown--;
+
+                }
+            }
+
+            checkerRowUp = checkerElement.Row;
+            checkerRowDown = checkerElement.Row;
+            skipUpDiagonal = false;
+            skipDownDiagonal = false;
+            for (int col = checkerElement.Column + 1; col < 8; col++)
+            {
+                if (checkerRowUp + 1 < 8 && !skipUpDiagonal)
+                {
+                    var element = _dataProvider.GetElementAtPosition(col, checkerRowUp + 1);
+                    if (element.Side != Side.Empty)
+                    {
+                        skipUpDiagonal = true;
+                    }
+
+                    neighbors.Add(element);
+                    checkerRowUp++;
+                }
+
+                if (checkerRowDown - 1 >= 0 && !skipDownDiagonal)
+                {
+                    var element = _dataProvider.GetElementAtPosition(col, checkerRowDown - 1);
+                    if (element.Side != Side.Empty)
+                    {
+                        skipDownDiagonal = true;
+                    }
+
+                    neighbors.Add(element);
+                    checkerRowDown--;
+                }
+            }
+
+            return neighbors;
+        }
+
+        private List<CheckerElement> GetNeighborsForChecker(CheckerElement checkerElement)
+        {
+            var neighbors = new List<CheckerElement>();
+            if (checkerElement.Column - 1 >= 0)
+            {
+                if (checkerElement.Row - 1 >= 0)
+                {
+                    var element = _dataProvider.GetElementAtPosition(checkerElement.Column - 1, checkerElement.Row - 1);
+                    neighbors.Add(element);
+                }
+
+                if (checkerElement.Row + 1 < 8)
+                {
+                    var element = _dataProvider.GetElementAtPosition(checkerElement.Column - 1, checkerElement.Row + 1);
+                    neighbors.Add(element);
+                }
+            }
+            if (checkerElement.Column + 1 < 8)
+            {
+                if (checkerElement.Row - 1 >= 0)
+                {
+                    var element = _dataProvider.GetElementAtPosition(checkerElement.Column + 1, checkerElement.Row - 1);
+                    neighbors.Add(element);
+                }
+
+                if (checkerElement.Row + 1 < 8)
+                {
+                    var element = _dataProvider.GetElementAtPosition(checkerElement.Column + 1, checkerElement.Row + 1);
+                    neighbors.Add(element);
+                }
+            }
+            return neighbors;
         }
 
         public void CalculateAvailablePaths()
@@ -153,8 +238,98 @@ namespace RussianCheckers.Game
         public List<LinkedList<CheckerElement>> GetPossiblePaths(CheckerElement playerPosition)
         {
             var paths = new List<LinkedList<CheckerElement>>();
-            SetPossibleMovementsRecursive(playerPosition, new LinkedList<CheckerElement>(), new List<CheckerElement>(),playerPosition.Side, paths);
+            if (playerPosition.Type == PieceType.Checker)
+            {
+                SetPossibleMovementsRecursive(playerPosition, new LinkedList<CheckerElement>(), new List<CheckerElement>(),playerPosition.Side, paths);
+            }
+            else
+            {
+                SetPossibleMovementsForQueenRecursive(playerPosition, new LinkedList<CheckerElement>(), new List<CheckerElement>(),playerPosition.Side, paths);
+
+            }
             return paths;
+        }
+
+        private void SetPossibleMovementsForQueenRecursive(CheckerElement currentChecker
+            , LinkedList<CheckerElement> path
+            , List<CheckerElement> visited
+            , Side checkerSide
+            , List<LinkedList<CheckerElement>> paths
+            , LinkedList<CheckerElement> outerCycle = null)
+        {
+            path.AddLast(currentChecker);
+            paths.Add(new LinkedList<CheckerElement>(path));
+            visited.Add(currentChecker);
+            var otherSideNeighbors = currentChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != checkerSide);
+
+            foreach (CheckerElement otherSideNeighbor in otherSideNeighbors)
+            {
+                CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(currentChecker, otherSideNeighbor);
+                if (positionAfterNextChecker != null
+                    && (positionAfterNextChecker.Side == Side.Empty
+                        || path.Contains(positionAfterNextChecker)))
+                {
+                    if (outerCycle != null && outerCycle.Contains(positionAfterNextChecker))
+                    {
+                        continue;
+                    }
+
+                    var cycle = new LinkedList<CheckerElement>();
+                    if (path.Contains(positionAfterNextChecker)) // Cycle here
+                    {
+                        int indexOfChecker = 0;
+                        int index = 0;
+                        foreach (var checkerElement in path)
+                        {
+                            cycle.AddLast(checkerElement);
+                            if (checkerElement == positionAfterNextChecker)
+                            {
+                                indexOfChecker = index;
+                            }
+
+                            index++;
+                        }
+
+                        int len = index - indexOfChecker;
+                        if (len > 3)
+                        {
+
+                            foreach (CheckerElement checkerElement in positionAfterNextChecker.Neighbors.Where(x => x.Side != Side.Empty))
+                            {
+                                CheckerElement tempToDelete = GetNextElementInDiagonal(positionAfterNextChecker, checkerElement);
+                                CheckerElement firstToNotDelete = path.Last.Value;
+                                CheckerElement secondToNotDelete = path.Find(positionAfterNextChecker).Next.Value;
+                                if (tempToDelete != null
+                                    && (tempToDelete.Side == Side.Empty)
+                                    && tempToDelete != firstToNotDelete
+                                    && tempToDelete != secondToNotDelete)
+                                {
+                                    visited.Remove(tempToDelete);
+                                }
+
+                            }
+
+                            path.AddLast(otherSideNeighbor);
+                            SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, cycle);
+                            path.RemoveLast();
+                        }
+                    }
+
+                    bool notContainsInCycle = !cycle.Contains(positionAfterNextChecker);
+                    //                    bool inVisitedArray = !visited.Contains(positionAfterNextChecker);
+                    //                    bool isVisitedInPast = !IsVisitedAsPartOfSomePath(path, positionAfterNextChecker, paths); 
+
+                    if (/*(inVisitedArray || isVisitedInPast) && */notContainsInCycle)
+                    {
+                        path.AddLast(otherSideNeighbor);
+                        SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
+                        path.RemoveLast();
+                    }
+
+                }
+            }
+
+            path.RemoveLast();
         }
 
         private void SetPossibleMovementsRecursive(CheckerElement currentChecker
@@ -167,7 +342,9 @@ namespace RussianCheckers.Game
             path.AddLast(currentChecker);
             paths.Add(new LinkedList<CheckerElement>(path));
             visited.Add(currentChecker);
-            foreach (CheckerElement otherSideNeighbor in currentChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != checkerSide))
+            var otherSideNeighbors = currentChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != checkerSide);
+
+            foreach (CheckerElement otherSideNeighbor in otherSideNeighbors)
             {
                 CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(currentChecker, otherSideNeighbor);
                 if (positionAfterNextChecker != null 

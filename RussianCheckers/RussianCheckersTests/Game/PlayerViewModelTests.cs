@@ -113,11 +113,7 @@ namespace RussianCheckers.Game.Tests
             {
                 new CheckerElement(1, 3, PieceType.Checker, Side.Black),
             };
-            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-
-            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
-            var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
+            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
             playerOne.CalculateNeighbors();
@@ -128,7 +124,7 @@ namespace RussianCheckers.Game.Tests
         }
 
         [TestMethod()]
-        public void CalculateNeighbors_ForQueen_ShouldHaveBlackNeighbor_ShouldCountAllEmpty()
+        public void CalculateNeighbors_ForQueen_ShouldHaveBlackNeighbor()
         {
             //  Arrange
             var mainPlayCheckers = new List<CheckerElement>()
@@ -152,6 +148,150 @@ namespace RussianCheckers.Game.Tests
             List<CheckerElement> whiteCheckerNeighbors = playerOne.PlayerPositions.Single().Neighbors;
             CheckerElement blackChecker = secondPlayerCheckers.Single();
             Assert.IsTrue(whiteCheckerNeighbors.Contains(blackChecker) );
+        }
+
+        [TestMethod()]
+        public void CalculateNeighbors_ForQueen_ShouldNotHaveEmptyNeighborAfterBlack()
+        {
+            //  Arrange
+            var mainPlayCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+            };
+            var secondPlayerCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(1, 3, PieceType.Checker, Side.Black),
+            };
+            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+
+            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+
+            //  Act
+            playerOne.CalculateNeighbors();
+
+            //  Assert
+            List<CheckerElement> whiteCheckerNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            Assert.IsFalse(whiteCheckerNeighbors.Any(x => x.Side == Side.Empty && x.Column == 0 && x.Row == 2) );
+        }
+
+        [TestMethod()]
+        public void CalculateNeighborsForQueen_HaveTwoBlackNearestNeighbors()
+        {
+            //  Arrange
+            var mainPlayCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+            };
+            var secondPlayerCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(1, 3, PieceType.Checker, Side.Black),
+                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
+            };
+            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+
+            //  Act
+            playerOne.CalculateNeighbors();
+
+            //  Assert
+            List<CheckerElement> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            Assert.AreEqual(2, actualNeighbors.Count(x => x.Side == Side.Black));
+        }
+
+
+        [TestMethod()]
+        public void CalculateNeighborsForQueen_ShouldHave_6_Neighbors()
+        {
+            //  Arrange
+            var mainPlayCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+            };
+            var secondPlayerCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(1, 3, PieceType.Checker, Side.Black),
+                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
+            };
+            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+
+            //  Act
+            playerOne.CalculateNeighbors();
+
+            //  Assert
+            List<CheckerElement> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            Assert.AreEqual(6, actualNeighbors.Count);
+        }
+
+
+        [TestMethod()]
+        public void CalculateNeighborsForQueen_ShouldHave_4_Neighbors()
+        {
+            //  Arrange
+            var mainPlayCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+            };
+            var secondPlayerCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(3, 5, PieceType.Checker, Side.Black),
+                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
+            };
+            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+
+            //  Act
+            playerOne.CalculateNeighbors();
+
+            //  Assert
+            List<CheckerElement> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            Assert.AreEqual(4, actualNeighbors.Count);
+        }
+
+
+        [TestMethod()]
+        public void CalculateNeighborsForQueen_QueenInCorner_ShouldHave_1_Neighbor()
+        {
+            //  Arrange
+            var mainPlayCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(0, 0, PieceType.Queen, Side.White),
+            };
+            var secondPlayerCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(1, 1, PieceType.Checker, Side.Black),
+            };
+            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+
+            //  Act
+            playerOne.CalculateNeighbors();
+
+            //  Assert
+            List<CheckerElement> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            Assert.AreEqual(1, actualNeighbors.Count);
+        }
+
+        [TestMethod()]
+        public void CalculateNeighborsForQueen_QueenInCorner_ShouldHave_7_Neighbor()
+        {
+            //  Arrange
+            var mainPlayCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(0, 0, PieceType.Queen, Side.White),
+            };
+            var secondPlayerCheckers = new List<CheckerElement>()
+            {
+            };
+            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+
+            //  Act
+            playerOne.CalculateNeighbors();
+
+            //  Assert
+            List<CheckerElement> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            Assert.AreEqual(7, actualNeighbors.Count);
         }
 
     }

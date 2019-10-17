@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -296,8 +297,10 @@ namespace RussianCheckers.Game
             paths.Add(new LinkedList<CheckerElement>(path));
             visited.Add(currentChecker);
             
-            foreach (CheckerElement otherSideNeighbor in currentChecker.Neighbors)
+            var otherSideNeighbors = currentChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != checkerSide);
+            foreach (CheckerElement otherSideNeighbor in otherSideNeighbors)
             {
+                var elementsAfterOpponent = GetNextElementsInDiagonal(currentChecker, otherSideNeighbor);
                 CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(currentChecker, otherSideNeighbor);
                 if (positionAfterNextChecker != null
                     && (positionAfterNextChecker.Side == Side.Empty
@@ -488,7 +491,7 @@ namespace RussianCheckers.Game
         }
 
 
-        private CheckerElement GetNextElementInDiagonal(CheckerElement playerChecker, CheckerElement otherSideNeighbor)
+        public CheckerElement GetNextElementInDiagonal(CheckerElement playerChecker, CheckerElement otherSideNeighbor)
         {
             if (playerChecker.Column - otherSideNeighbor.Column > 0)
             {
@@ -512,6 +515,118 @@ namespace RussianCheckers.Game
             }
         }
 
+
+        public Queue<CheckerElement> GetAllElementsInDiagonalFromCurrent(CheckerElement checker, Diagonal diagonal)
+        {
+            switch (diagonal)
+            {
+                case Diagonal.LeftDown:
+                    return GetAllElementsInLeftDownDiagonal(checker);
+                case Diagonal.LeftUp:
+                    return GetAllElementsInLeftUpDiagonal(checker);
+                case Diagonal.RightUp:
+                    return GetAllElementsInRightUpDiagonal(checker);
+                case Diagonal.RightDown:
+                    return GetAllElementsInRightDownDiagonal(checker);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(diagonal), diagonal, null);
+            }
+        }
+
+        private Queue<CheckerElement> GetAllElementsInLeftDownDiagonal(CheckerElement checker)
+        {
+            int checkerRowDown = checker.Row;
+            var elements = new Queue<CheckerElement>();
+            for (int col = checker.Column - 1; col >= 0; col--)
+            {
+                if (checkerRowDown - 1 >= 0)
+                {
+                    var element = _dataProvider.GetElementAtPosition(col, checkerRowDown - 1);
+                    elements.Enqueue(element);
+                    checkerRowDown--;
+                }
+            }
+            return elements;
+        }
+
+        private Queue<CheckerElement> GetAllElementsInRightUpDiagonal(CheckerElement checker)
+        {
+            var checkerRowUp = checker.Row;
+            var elements = new Queue<CheckerElement>();
+            for (int col = checker.Column + 1; col < 8; col++)
+            {
+                if (checkerRowUp + 1 < 8)
+                {
+                    var element = _dataProvider.GetElementAtPosition(col, checkerRowUp + 1);
+
+                    elements.Enqueue(element);
+                    checkerRowUp++;
+                }
+            }
+
+            return elements;
+        }
+        private Queue<CheckerElement> GetAllElementsInRightDownDiagonal(CheckerElement checker)
+        {
+            var checkerRowDown = checker.Row;
+            var elements = new Queue<CheckerElement>();
+            for (int col = checker.Column + 1; col < 8; col++)
+            {
+                if (checkerRowDown - 1 >= 0 )
+                {
+                    var element = _dataProvider.GetElementAtPosition(col, checkerRowDown - 1);
+                    elements.Enqueue(element);
+                    checkerRowDown--;
+                }
+            }
+
+            return elements;
+        }
+        private Queue<CheckerElement> GetAllElementsInLeftUpDiagonal(CheckerElement checker)
+        {
+            int checkerRowUp = checker.Row;
+            var elements = new Queue<CheckerElement>();
+            for (int col = checker.Column - 1; col >= 0; col--)
+            {
+                if (checkerRowUp + 1 < 8)
+                {
+                    var element = _dataProvider.GetElementAtPosition(col, checkerRowUp + 1);
+                    elements.Enqueue(element);
+                    checkerRowUp++;
+                }
+            }
+
+            return elements;
+        }
+
+        private List<CheckerElement> GetNextElementsInDiagonal(CheckerElement playerChecker,
+            CheckerElement otherSideNeighbor)
+        {
+            Diagonal diagonal;
+            if (playerChecker.Column - otherSideNeighbor.Column > 0)
+            {
+                diagonal = playerChecker.Row - otherSideNeighbor.Row > 0 ? Diagonal.LeftDown : Diagonal.LeftUp;
+            }
+            else
+            {
+                diagonal = playerChecker.Row - otherSideNeighbor.Row > 0 ? Diagonal.RightDown : Diagonal.RightUp;
+            }
+
+            Queue<CheckerElement> allElementsInDiagonalFromCurrent = GetAllElementsInDiagonalFromCurrent(otherSideNeighbor, diagonal);
+            if (allElementsInDiagonalFromCurrent.Count == 0 )
+            {
+                return new List<CheckerElement>();
+            }
+            var header = allElementsInDiagonalFromCurrent.Dequeue();
+            var emptyElementsAfterOtherChecker = new List<CheckerElement>();
+            while (header.Side == Side.Empty && allElementsInDiagonalFromCurrent.Count > 0)
+            {
+                emptyElementsAfterOtherChecker.Add(header);
+                header = allElementsInDiagonalFromCurrent.Dequeue();
+            }
+            return emptyElementsAfterOtherChecker;
+        }
+
         public void RemoveCheckers(List<CheckerElement> itemsTakeByOtherUser)
         {
             foreach (var checkerElement in itemsTakeByOtherUser)
@@ -519,5 +634,13 @@ namespace RussianCheckers.Game
                 PlayerPositions.Remove(checkerElement);
             }
         }
+    }
+
+    public enum Diagonal
+    {
+        LeftDown,
+        LeftUp,
+        RightUp,
+        RightDown
     }
 }

@@ -281,5 +281,133 @@ namespace RussianCheckers.Game.Tests
             Assert.AreEqual(7, actualNeighbors.Count);
         }
 
+
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_LeftDownInCorner_Returns_0()
+        {
+            //  Arrange
+            var checker = new CheckerElement(0, 0, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElement>() {checker};
+            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
+
+            //  Act
+            var queueOfDiagonalElements = playerOne.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.LeftDown);
+            //  Assert
+            Assert.AreEqual(0, queueOfDiagonalElements.Count);
+        }
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_LeftUpInCorner_Returns_0()
+        {
+            //  Arrange
+            var checker = new CheckerElement(0, 0, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElement>() {checker};
+            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
+
+            //  Act
+            var queueOfDiagonalElements = playerOne.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.LeftUp);
+            //  Assert
+            Assert.AreEqual(0, queueOfDiagonalElements.Count);
+        }
+
+
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_RightUpInCorner_Returns_7()
+        {
+            //  Arrange
+            var checker = new CheckerElement(0, 0, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElement>() {checker};
+            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
+
+            //  Act
+            var queueOfDiagonalElements = playerOne.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.RightUp);
+            //  Assert
+            Assert.AreEqual(7, queueOfDiagonalElements.Count);
+        }
+
+
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_RightDownInCorner_Returns_6()
+        {
+            //  Arrange
+            var checker = new CheckerElement(0, 6, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElement>() {checker};
+            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
+
+            //  Act
+            var queueOfDiagonalElements = playerOne.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.RightDown);
+            //  Assert
+            Assert.AreEqual(6 , queueOfDiagonalElements.Count);
+        }
+
+
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_InTheBoard_LeftUp_Returns()
+        {
+            //  Arrange
+            var checker = new CheckerElement(3, 3, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElement>() {checker};
+            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
+
+            //  Act
+            var queueOfDiagonalElements = playerOne.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.LeftUp);
+            //  Assert
+            Assert.AreEqual(3 , queueOfDiagonalElements.Count);
+        }
+
+
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_InTheBoard_LeftDown_Returns_2()
+        {
+            //  Arrange
+            var checker = new CheckerElement(2, 4, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElement>() {checker};
+            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
+
+            //  Act
+            var queueOfDiagonalElements = playerOne.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.LeftDown);
+            //  Assert
+            Assert.AreEqual(2 , queueOfDiagonalElements.Count);
+        }
+
+
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_InTheBoard_RightUp_Returns_3()
+        {
+            //  Arrange
+            var checker = new CheckerElement(2, 4, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElement>() {checker};
+            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
+
+            //  Act
+            var queueOfDiagonalElements = playerOne.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.RightUp);
+            //  Assert
+            Assert.AreEqual(3 , queueOfDiagonalElements.Count);
+        }
+
+
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_InTheBoard_RightDown_Returns()
+        {
+            //  Arrange
+            var checker = new CheckerElement(2, 4, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElement>() {checker};
+            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
+
+            //  Act
+            var queueOfDiagonalElements = playerOne.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.RightDown);
+            //  Assert
+            Assert.AreEqual(4 , queueOfDiagonalElements.Count);
+        }
+
+
+
     }
 }

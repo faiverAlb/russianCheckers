@@ -217,7 +217,15 @@ namespace RussianCheckers.Game
                 {
                     if (max.Count == 1)
                     {
-                        possibleMovements.AddRange(GetSimpleEmptyMoves(max.Last.Value));
+                        if (playerPosition.Type == PieceType.Checker)
+                        {
+                            possibleMovements.AddRange(GetSimpleEmptyMoves(max.Last.Value));
+                        }
+                        else
+                        {
+                            possibleMovements.AddRange(GetSimpleEmptyMovesForQueen(playerPosition));
+
+                        }
                     }
                     else
                     {
@@ -235,6 +243,23 @@ namespace RussianCheckers.Game
             }
         }
 
+        private IEnumerable<CheckerElement> GetSimpleEmptyMovesForQueen(CheckerElement queen)
+        {
+            return queen.Neighbors;
+        }
+
+        private List<CheckerElement> GetSimpleEmptyMoves(CheckerElement initialChecker)
+        {
+            List<CheckerElement> moves = initialChecker.Neighbors.Where(x => x.Side == Side.Empty).ToList();
+            if (IsMainPLayer)
+            {
+                return moves.Where(x => x.Row > initialChecker.Row).ToList();
+            }
+            return moves.Where(x => x.Row < initialChecker.Row).ToList();
+
+        }
+
+
         public List<LinkedList<CheckerElement>> GetPossiblePaths(CheckerElement playerPosition)
         {
             var paths = new List<LinkedList<CheckerElement>>();
@@ -244,7 +269,17 @@ namespace RussianCheckers.Game
             }
             else
             {
-                SetPossibleMovementsForQueenRecursive(playerPosition, new LinkedList<CheckerElement>(), new List<CheckerElement>(),playerPosition.Side, paths);
+                if (playerPosition.Neighbors.All(x => x.Side == Side.Empty))
+                {
+                    foreach (var neighbor in playerPosition.Neighbors)
+                    {
+                        paths.Add(new LinkedList<CheckerElement>(new List<CheckerElement>(){ neighbor }));
+                    }
+                }
+                else
+                {
+                    SetPossibleMovementsForQueenRecursive(playerPosition, new LinkedList<CheckerElement>(), new List<CheckerElement>(),playerPosition.Side, paths);
+                }
 
             }
             return paths;
@@ -260,9 +295,8 @@ namespace RussianCheckers.Game
             path.AddLast(currentChecker);
             paths.Add(new LinkedList<CheckerElement>(path));
             visited.Add(currentChecker);
-            var otherSideNeighbors = currentChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != checkerSide);
-
-            foreach (CheckerElement otherSideNeighbor in otherSideNeighbors)
+            
+            foreach (CheckerElement otherSideNeighbor in currentChecker.Neighbors)
             {
                 CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(currentChecker, otherSideNeighbor);
                 if (positionAfterNextChecker != null
@@ -453,17 +487,6 @@ namespace RussianCheckers.Game
             return true;
         }
 
-
-        private List<CheckerElement> GetSimpleEmptyMoves(CheckerElement initialChecker)
-        {
-            List<CheckerElement> moves = initialChecker.Neighbors.Where(x => x.Side == Side.Empty).ToList();
-            if (IsMainPLayer)
-            {
-                return moves.Where(x => x.Row > initialChecker.Row).ToList();
-            }
-            return moves.Where(x => x.Row < initialChecker.Row).ToList();
-
-        }
 
         private CheckerElement GetNextElementInDiagonal(CheckerElement playerChecker, CheckerElement otherSideNeighbor)
         {

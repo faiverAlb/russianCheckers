@@ -90,8 +90,6 @@ namespace RussianCheckers.Game.Tests
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
 
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
-            var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
 
             //  Act
             playerOne.CalculateNeighbors();
@@ -135,11 +133,7 @@ namespace RussianCheckers.Game.Tests
             {
                 new CheckerElement(1, 3, PieceType.Checker, Side.Black),
             };
-            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-
-            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
-            var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
             playerOne.CalculateNeighbors();
@@ -162,9 +156,7 @@ namespace RussianCheckers.Game.Tests
             {
                 new CheckerElement(1, 3, PieceType.Checker, Side.Black),
             };
-            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-
-            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
             playerOne.CalculateNeighbors();
@@ -187,8 +179,8 @@ namespace RussianCheckers.Game.Tests
                 new CheckerElement(1, 3, PieceType.Checker, Side.Black),
                 new CheckerElement(5, 5, PieceType.Checker, Side.Black),
             };
-            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+
+            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
             playerOne.CalculateNeighbors();
@@ -212,8 +204,7 @@ namespace RussianCheckers.Game.Tests
                 new CheckerElement(1, 3, PieceType.Checker, Side.Black),
                 new CheckerElement(5, 5, PieceType.Checker, Side.Black),
             };
-            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
             playerOne.CalculateNeighbors();
@@ -236,9 +227,8 @@ namespace RussianCheckers.Game.Tests
             {
                 new CheckerElement(3, 5, PieceType.Checker, Side.Black),
                 new CheckerElement(5, 5, PieceType.Checker, Side.Black),
-            };
-            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+            };            
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
             playerOne.CalculateNeighbors();
@@ -261,8 +251,8 @@ namespace RussianCheckers.Game.Tests
             {
                 new CheckerElement(1, 1, PieceType.Checker, Side.Black),
             };
-            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
             playerOne.CalculateNeighbors();
@@ -280,11 +270,8 @@ namespace RussianCheckers.Game.Tests
             {
                 new CheckerElement(0, 0, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
-            {
-            };
-            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+
+            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, new List<CheckerElement>()));
 
             //  Act
             playerOne.CalculateNeighbors();

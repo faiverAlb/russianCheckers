@@ -599,7 +599,7 @@ namespace RussianCheckers.Game
             return elements;
         }
 
-        private List<CheckerElement> GetNextElementsInDiagonal(CheckerElement playerChecker,
+        public List<CheckerElement> GetNextElementsInDiagonal(CheckerElement playerChecker,
             CheckerElement otherSideNeighbor)
         {
             Diagonal diagonal;
@@ -617,12 +617,15 @@ namespace RussianCheckers.Game
             {
                 return new List<CheckerElement>();
             }
-            var header = allElementsInDiagonalFromCurrent.Dequeue();
             var emptyElementsAfterOtherChecker = new List<CheckerElement>();
-            while (header.Side == Side.Empty && allElementsInDiagonalFromCurrent.Count > 0)
+            while (allElementsInDiagonalFromCurrent.Count > 0)
             {
-                emptyElementsAfterOtherChecker.Add(header);
-                header = allElementsInDiagonalFromCurrent.Dequeue();
+                var value = allElementsInDiagonalFromCurrent.Dequeue();
+                if (value.Side != Side.Empty)
+                {
+                    break;
+                }
+                emptyElementsAfterOtherChecker.Add(value);
             }
             return emptyElementsAfterOtherChecker;
         }

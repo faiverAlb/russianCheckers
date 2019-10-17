@@ -393,7 +393,7 @@ namespace RussianCheckers.Game.Tests
 
 
         [TestMethod()]
-        public void GetAllElementsInDiagonalFromCurrent_InTheBoard_RightDown_Returns()
+        public void GetAllElementsInDiagonalFromCurrent_InTheBoard_RightDown_Returns_4()
         {
             //  Arrange
             var checker = new CheckerElement(2, 4, PieceType.Checker, Side.White);
@@ -405,6 +405,40 @@ namespace RussianCheckers.Game.Tests
             var queueOfDiagonalElements = playerOne.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.RightDown);
             //  Assert
             Assert.AreEqual(4 , queueOfDiagonalElements.Count);
+        }
+
+
+        [TestMethod()]
+        public void GetNextElementsInDiagonal_Returns_2()
+        {
+            //  Arrange
+            var mainPlayCheckers = new List<CheckerElement>() { new CheckerElement(4, 6, PieceType.Checker, Side.White) };
+            var secondPlayerCheckers = new List<CheckerElement>(){ new CheckerElement(2, 4, PieceType.Checker, Side.Black) };
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
+
+            //  Act
+            var queueOfDiagonalElements = playerOne.GetNextElementsInDiagonal(mainPlayCheckers.Single(), secondPlayerCheckers.Single());
+            //  Assert
+            Assert.AreEqual(2 , queueOfDiagonalElements.Count);
+        }
+
+
+        [TestMethod()]
+        public void GetNextElementsInDiagonal_Returns_1()
+        {
+            //  Arrange
+            var mainPlayCheckers = new List<CheckerElement>() { new CheckerElement(4, 6, PieceType.Checker, Side.White) };
+            var secondPlayerCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(2, 4, PieceType.Checker, Side.Black),
+                new CheckerElement(0, 2, PieceType.Checker, Side.Black),
+            };
+            var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
+
+            //  Act
+            var queueOfDiagonalElements = playerOne.GetNextElementsInDiagonal(mainPlayCheckers.First(), secondPlayerCheckers.First());
+            //  Assert
+            Assert.AreEqual(1 , queueOfDiagonalElements.Count);
         }
 
 

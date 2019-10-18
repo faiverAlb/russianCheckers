@@ -291,9 +291,7 @@ namespace RussianCheckers.Game
             , LinkedList<CheckerElement> path
             , List<CheckerElement> visited
             , Side checkerSide
-            , List<LinkedList<CheckerElement>> paths
-            , LinkedList<CheckerElement> outerCycle = null
-            , Diagonal fromDiagonal = Diagonal.Initial)
+            , List<LinkedList<CheckerElement>> paths, Diagonal fromDiagonal = Diagonal.Initial)
         {
             path.AddLast(currentChecker);
             paths.Add(new LinkedList<CheckerElement>(path));
@@ -314,11 +312,6 @@ namespace RussianCheckers.Game
                 foreach (CheckerElement positionAfterNextChecker in elementsAfterOpponent)
                 {
                     if (positionAfterNextChecker == null || (positionAfterNextChecker.Side != Side.Empty && !path.Contains(positionAfterNextChecker)))
-                    {
-                        continue;
-                    }
-
-                    if (outerCycle != null && outerCycle.Contains(positionAfterNextChecker))
                     {
                         continue;
                     }
@@ -363,19 +356,16 @@ namespace RussianCheckers.Game
                             }
 
                             path.AddLast(otherSideNeighbor);
-                            SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited, checkerSide, paths,cycle, diagonal);
+                            SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, diagonal);
                             path.RemoveLast();
                         }
                     }
 
                     bool notContainsInCycle = !cycle.Contains(positionAfterNextChecker);
-                    //                    bool inVisitedArray = !visited.Contains(positionAfterNextChecker);
-                    //                    bool isVisitedInPast = !IsVisitedAsPartOfSomePath(path, positionAfterNextChecker, paths); 
-
-                    if ( /*(inVisitedArray || isVisitedInPast) && */notContainsInCycle)
+                    if (notContainsInCycle)
                     {
                         path.AddLast(otherSideNeighbor);
-                        SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, cycle, diagonal);
+                        SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, diagonal);
                         path.RemoveLast();
                     }
                 }
@@ -401,88 +391,6 @@ namespace RussianCheckers.Game
                 default:
                     throw new ArgumentOutOfRangeException(nameof(fromDiagonal), fromDiagonal, null);
             }
-        }
-
-        private void SetPossibleMovementsRecursive(CheckerElement currentChecker
-            , LinkedList<CheckerElement> path
-            , List<CheckerElement> visited
-            , Side checkerSide
-            , List<LinkedList<CheckerElement>> paths
-            , LinkedList<CheckerElement> outerCycle = null)
-        {
-            path.AddLast(currentChecker);
-            paths.Add(new LinkedList<CheckerElement>(path));
-            visited.Add(currentChecker);
-            var otherSideNeighbors = currentChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != checkerSide);
-
-            foreach (CheckerElement otherSideNeighbor in otherSideNeighbors)
-            {
-                CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(currentChecker, otherSideNeighbor);
-                if (positionAfterNextChecker != null 
-                    && (   positionAfterNextChecker.Side == Side.Empty 
-                        || path.Contains(positionAfterNextChecker)))
-                {
-                    if (outerCycle != null && outerCycle.Contains(positionAfterNextChecker))
-                    {
-                        continue;
-                    }
-
-                    var cycle = new LinkedList<CheckerElement>();
-                    if (path.Contains(positionAfterNextChecker)) // Cycle here
-                    {
-                        int indexOfChecker = 0;
-                        int index = 0;
-                        foreach (var checkerElement in path)
-                        {
-                            cycle.AddLast(checkerElement);
-                            if (checkerElement == positionAfterNextChecker)
-                            {
-                                indexOfChecker = index;
-                            }
-
-                            index++;
-                        }
-
-                        int len = index - indexOfChecker;
-                        if (len > 3)
-                        {
-
-                            foreach (CheckerElement checkerElement in positionAfterNextChecker.Neighbors.Where(x => x.Side != Side.Empty))
-                            {
-                                CheckerElement tempToDelete = GetNextElementInDiagonal(positionAfterNextChecker, checkerElement);
-                                CheckerElement firstToNotDelete = path.Last.Value;
-                                CheckerElement secondToNotDelete = path.Find(positionAfterNextChecker).Next.Value;
-                                if (tempToDelete != null 
-                                    && (tempToDelete.Side == Side.Empty) 
-                                    && tempToDelete != firstToNotDelete 
-                                    && tempToDelete != secondToNotDelete)
-                                {
-                                    visited.Remove(tempToDelete);
-                                }
-
-                            }
-
-                            path.AddLast(otherSideNeighbor);
-                            SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, cycle);
-                            path.RemoveLast();
-                        }
-                    }
-
-                    bool notContainsInCycle = !cycle.Contains(positionAfterNextChecker);
-//                    bool inVisitedArray = !visited.Contains(positionAfterNextChecker);
-//                    bool isVisitedInPast = !IsVisitedAsPartOfSomePath(path, positionAfterNextChecker, paths); 
-
-                    if (/*(inVisitedArray || isVisitedInPast) && */notContainsInCycle)
-                    {
-                        path.AddLast(otherSideNeighbor);
-                        SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
-                        path.RemoveLast();
-                    }
-
-                }
-            }
-
-            path.RemoveLast();
         }
 
         private bool IsVisitedAsPartOfSomePath(LinkedList<CheckerElement> currentPath, CheckerElement positionAfterNextChecker, List<LinkedList<CheckerElement>> paths)
@@ -600,6 +508,104 @@ namespace RussianCheckers.Game
 
             return elements;
         }
+
+        private void SetPossibleMovementsRecursive(CheckerElement currentChecker
+            , LinkedList<CheckerElement> path
+            , List<CheckerElement> visited
+            , Side checkerSide
+            , List<LinkedList<CheckerElement>> paths
+            , LinkedList<CheckerElement> outerCycle = null)
+        {
+            path.AddLast(currentChecker);
+            paths.Add(new LinkedList<CheckerElement>(path));
+            visited.Add(currentChecker);
+            var otherSideNeighbors = currentChecker.Neighbors.Where(x => x.Side != Side.Empty && x.Side != checkerSide);
+
+            foreach (CheckerElement otherSideNeighbor in otherSideNeighbors)
+            {
+                CheckerElement positionAfterNextChecker = GetNextElementInDiagonal(currentChecker, otherSideNeighbor);
+                if (positionAfterNextChecker != null 
+                    && (   positionAfterNextChecker.Side == Side.Empty 
+                           || path.Contains(positionAfterNextChecker)))
+                {
+                    if (outerCycle != null && outerCycle.Contains(positionAfterNextChecker))
+                    {
+                        continue;
+                    }
+
+                    var cycle = new LinkedList<CheckerElement>();
+                    if (path.Contains(positionAfterNextChecker)) // Cycle here
+                    {
+                        int indexOfChecker = 0;
+                        int index = 0;
+                        foreach (var checkerElement in path)
+                        {
+                            cycle.AddLast(checkerElement);
+                            if (checkerElement == positionAfterNextChecker)
+                            {
+                                indexOfChecker = index;
+                            }
+
+                            index++;
+                        }
+
+                        int len = index - indexOfChecker;
+                        if (len > 3)
+                        {
+
+                            foreach (CheckerElement checkerElement in positionAfterNextChecker.Neighbors.Where(x => x.Side != Side.Empty))
+                            {
+                                CheckerElement tempToDelete = GetNextElementInDiagonal(positionAfterNextChecker, checkerElement);
+                                CheckerElement firstToNotDelete = path.Last.Value;
+                                CheckerElement secondToNotDelete = path.Find(positionAfterNextChecker).Next.Value;
+                                if (tempToDelete != null 
+                                    && (tempToDelete.Side == Side.Empty) 
+                                    && tempToDelete != firstToNotDelete 
+                                    && tempToDelete != secondToNotDelete)
+                                {
+                                    visited.Remove(tempToDelete);
+                                }
+
+                            }
+
+                            path.AddLast(otherSideNeighbor);
+                            if ((IsMainPLayer && positionAfterNextChecker.Row == 7) || (IsMainPLayer && positionAfterNextChecker.Row == 0))
+                            {
+                                
+                              SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
+                            }
+                            else
+                            {
+                             SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, cycle);
+                            }
+                            path.RemoveLast();
+                        }
+                    }
+
+                    bool notContainsInCycle = !cycle.Contains(positionAfterNextChecker);
+
+                    if (notContainsInCycle)
+                    {
+                        path.AddLast(otherSideNeighbor);
+
+                        if ((IsMainPLayer && positionAfterNextChecker.Row == 7) || (IsMainPLayer && positionAfterNextChecker.Row == 0))
+                        {
+
+                            SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
+                        }
+                        else
+                        {
+                            SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, cycle);
+                        }
+                        path.RemoveLast();
+                    }
+
+                }
+            }
+
+            path.RemoveLast();
+        }
+
         private Queue<CheckerElement> GetAllElementsInRightDownDiagonal(CheckerElement checker)
         {
             var checkerRowDown = checker.Row;

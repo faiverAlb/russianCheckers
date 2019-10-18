@@ -34,11 +34,12 @@ namespace RussianCheckers.Game
 
             
             CheckerElement oldPositionedChecker = _dataProvider.GetElementAtPosition(currentCol, currentRow);
-            bool shouldTransferToQueen = newPosition.Row == 7;
-            if (shouldTransferToQueen)
+            if ((IsMainPLayer && newPosition.Row == 7) || (!IsMainPLayer && newPosition.Row == 0))
             {
                 oldPositionedChecker.Type = PieceType.Queen;
             }
+
+
             _dataProvider.MoveCheckerToNewPosition(oldPositionedChecker, nextCol, nextRow);
 
             CheckerElement existingPlayerChecker = PlayerPositions.Single(x => x == checker);

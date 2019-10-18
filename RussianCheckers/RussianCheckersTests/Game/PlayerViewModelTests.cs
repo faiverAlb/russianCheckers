@@ -717,6 +717,36 @@ namespace RussianCheckers.Game.Tests
             Assert.AreEqual(2, playerOne.AvailablePaths.Count);
         }
 
+        [TestMethod()]
+        public void Checker_ConvertsTakeCheckerAndActsAsQueen_ShouldTakeSecondChecker()
+        {
+            //  Arrange
+            var mainPlayCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(5, 5, PieceType.Checker, Side.White),
+            };
+            var secondPlayerCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(4, 6, PieceType.Checker, Side.Black),
+                new CheckerElement(1, 5, PieceType.Checker, Side.Black),
+            };
+            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
+
+            //  Act
+            emptyCellsPlayer.CalculateNeighbors();
+            playerOne.CalculateNeighbors();
+            playerTwo.CalculateNeighbors();
+
+            //  Assert
+            playerOne.CalculateAvailablePaths();
+            int actualColumn = playerOne.AvailablePaths.Single().Last.Value.Column;
+            int actualRow = playerOne.AvailablePaths.Single().Last.Value.Row;
+            Assert.IsTrue(actualColumn == 0 && actualRow == 4);
+        }
+
 
     }
 }

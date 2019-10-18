@@ -21,17 +21,17 @@ namespace RussianCheckers
 
             var mainPlayCheckers = new List<CheckerElement>()
             {
-                new CheckerElement(3, 3, PieceType.Queen, Side.White),
+                new CheckerElement(4, 2, PieceType.Queen, Side.White),
             };
             var secondPlayerCheckers = new List<CheckerElement>()
             {
-                new CheckerElement(2, 4, PieceType.Checker, Side.Black),
-                new CheckerElement(2, 6, PieceType.Checker, Side.Black),
-                new CheckerElement(4, 4, PieceType.Checker, Side.Black),
-                new CheckerElement(4, 6, PieceType.Checker, Side.Black),
+                new CheckerElement(3, 3, PieceType.Checker, Side.Black),
+                new CheckerElement(5, 3, PieceType.Checker, Side.Black),
+                new CheckerElement(3, 5, PieceType.Checker, Side.Black),
+                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
+                new CheckerElement(1, 5, PieceType.Checker, Side.Black),
+                new CheckerElement(5, 1, PieceType.Checker, Side.Black),
 
-                new CheckerElement(2, 2, PieceType.Checker, Side.Black),
-                new CheckerElement(4, 2, PieceType.Checker, Side.Black),
 
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);

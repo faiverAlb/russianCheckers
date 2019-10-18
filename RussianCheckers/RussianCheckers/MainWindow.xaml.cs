@@ -26,6 +26,7 @@ namespace RussianCheckers
             var secondPlayerCheckers = new List<CheckerElement>()
             {
                 new CheckerElement(2, 4, PieceType.Checker, Side.Black),
+                new CheckerElement(1, 1, PieceType.Checker, Side.Black),
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
 //            var dataProvider = new DataProvider(mainPlayerSide);

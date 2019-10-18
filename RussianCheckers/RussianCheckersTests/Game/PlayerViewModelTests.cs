@@ -560,5 +560,35 @@ namespace RussianCheckers.Game.Tests
         }
 
 
+        [TestMethod()]
+        public void CalculateAvailableForQueen_ThreeBlackCheckers_Should_Have_4_Paths()
+        {
+            //  Arrange
+            var mainPlayCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+            };
+            var secondPlayerCheckers = new List<CheckerElement>()
+            {
+                new CheckerElement(2, 4, PieceType.Checker, Side.Black),
+                new CheckerElement(1, 1, PieceType.Checker, Side.Black),
+                new CheckerElement(3, 1, PieceType.Checker, Side.Black),
+            };
+            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
+            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
+
+            //  Act
+            emptyCellsPlayer.CalculateNeighbors();
+            playerOne.CalculateNeighbors();
+            playerTwo.CalculateNeighbors();
+
+            //  Assert
+            playerOne.CalculateAvailablePaths();
+            Assert.AreEqual(4, playerOne.AvailablePaths.Count);
+        }
+
+
     }
 }

@@ -303,6 +303,10 @@ namespace RussianCheckers.Game
             var otherSideNeighbors = neighborsForQueen.Where(x => x.Value.Side != Side.Empty && x.Value.Side != checkerSide);
             foreach (KeyValuePair<Diagonal, CheckerElement> otherSideNeighborPair in otherSideNeighbors)
             {
+                if (path.Contains(otherSideNeighborPair.Value))
+                {
+                    continue;
+                }
                 Diagonal diagonal = otherSideNeighborPair.Key;
                 CheckerElement otherSideNeighbor = otherSideNeighborPair.Value;
                 List<CheckerElement> elementsAfterOpponent = GetNextElementsInDiagonal(currentChecker, otherSideNeighbor);

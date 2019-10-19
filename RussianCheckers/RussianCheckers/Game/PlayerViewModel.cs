@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace RussianCheckers.Game
 {
@@ -29,12 +30,15 @@ namespace RussianCheckers.Game
             int currentCol = checker.Column;
             int currentRow = checker.Row;
 
+            var path = AvailablePaths.FirstOrDefault(x =>x.Last.Value.Column == nextCol && x.Last.Value.Row == nextRow);
+            if (ShouldConvertToQueenByPathDuringTaking(path))
+            {
+                checker.Type = PieceType.Queen;
+            }
 
             CheckerElement newPosition = _dataProvider.GetElementAtPosition(nextCol, nextRow);
-
-            
             CheckerElement oldPositionedChecker = _dataProvider.GetElementAtPosition(currentCol, currentRow);
-            if ((IsMainPLayer && newPosition.Row == 7) || (!IsMainPLayer && newPosition.Row == 0))
+            if (IsTouchedBorder(newPosition))
             {
                 oldPositionedChecker.Type = PieceType.Queen;
             }
@@ -57,6 +61,23 @@ namespace RussianCheckers.Game
             
             existingPlayerChecker.DeSelectPossibleMovement();
             return itemsToTake;
+        }
+
+        private bool ShouldConvertToQueenByPathDuringTaking(LinkedList<CheckerElement> path)
+        {
+            if (path == null)
+            {
+                return false;
+            }
+            foreach (CheckerElement checkerElement in path)
+            {
+                if (IsTouchedBorder(checkerElement))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private List<CheckerElement> TakeCheckers(List<LinkedList<CheckerElement>> availablePaths, int column, int row, CheckerElement checker)
@@ -569,7 +590,7 @@ namespace RussianCheckers.Game
                             }
 
                             path.AddLast(otherSideNeighbor);
-                            if ((IsMainPLayer && positionAfterNextChecker.Row == 7) || (IsMainPLayer && positionAfterNextChecker.Row == 0))
+                            if (IsTouchedBorder(positionAfterNextChecker))
                             {
                                 
                               SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
@@ -588,15 +609,16 @@ namespace RussianCheckers.Game
                     {
                         path.AddLast(otherSideNeighbor);
 
-                        if ((IsMainPLayer && positionAfterNextChecker.Row == 7) || (IsMainPLayer && positionAfterNextChecker.Row == 0))
+                        if (IsTouchedBorder(positionAfterNextChecker))
                         {
 
-                            SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited, checkerSide, paths);
+                            SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited, checkerSide,paths);
                         }
                         else
                         {
                             SetPossibleMovementsRecursive(positionAfterNextChecker, path, visited, checkerSide, paths, cycle);
                         }
+
                         path.RemoveLast();
                     }
 
@@ -604,6 +626,11 @@ namespace RussianCheckers.Game
             }
 
             path.RemoveLast();
+        }
+
+        private bool IsTouchedBorder(CheckerElement positionAfterNextChecker)
+        {
+            return (IsMainPLayer && positionAfterNextChecker.Row == 7) || (!IsMainPLayer && positionAfterNextChecker.Row == 0);
         }
 
         private Queue<CheckerElement> GetAllElementsInRightDownDiagonal(CheckerElement checker)

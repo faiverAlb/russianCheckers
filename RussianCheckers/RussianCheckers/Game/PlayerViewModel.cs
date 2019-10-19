@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace RussianCheckers.Game
 {
@@ -13,6 +12,11 @@ namespace RussianCheckers.Game
         protected readonly DataProvider _dataProvider;
         public  ObservableCollection<CheckerElement> PlayerPositions { get; protected set; }
         public List<LinkedList<CheckerElement>> AvailablePaths { get;private set; }
+
+        public int GetPossibleMovementsCount()
+        {
+            return PlayerPositions.Sum(position => position.PossibleMovementElements.Count());
+        }
 
         protected PlayerViewModel(Side side, DataProvider dataProvider, bool isMainPLayer)
         {

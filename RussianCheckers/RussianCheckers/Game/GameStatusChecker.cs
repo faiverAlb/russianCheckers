@@ -35,7 +35,25 @@ namespace RussianCheckers.Game
                 }
 
                 return GameStatus.WhiteWin;
-                
+            }
+
+            if (_playerOne.GetPossibleMovementsCount() == 0)
+            {
+                if (_playerOne.Side == Side.White)
+                {
+                    return GameStatus.BlackWin;
+                }
+
+                return GameStatus.WhiteWin;
+            }
+            if (_playerTwo.GetPossibleMovementsCount() == 0)
+            {
+                if (_playerTwo.Side == Side.White)
+                {
+                    return GameStatus.BlackWin;
+                }
+
+                return GameStatus.WhiteWin;
             }
 
             return GameStatus.InProgress;

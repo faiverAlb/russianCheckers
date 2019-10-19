@@ -5,15 +5,39 @@ namespace RussianCheckers.Game
     internal class GameStatusChecker
     {
         private readonly DataProvider _dataProvider;
+        private readonly PlayerViewModel _playerOne;
+        private readonly PlayerViewModel _playerTwo;
 
-        public GameStatusChecker(DataProvider dataProvider)
+        public GameStatusChecker(DataProvider dataProvider, PlayerViewModel playerOne, PlayerViewModel playerTwo)
         {
             _dataProvider = dataProvider;
+            _playerOne = playerOne;
+            _playerTwo = playerTwo;
         }
 
         public GameStatus GetGameStatus()
         {
-            //TODO: to do :)
+            if (_playerOne.PlayerPositions.Count == 0)
+            {
+                if (_playerOne.Side == Side.White)
+                {
+                    return GameStatus.BlackWin;
+                }
+
+                return GameStatus.WhiteWin;
+            }
+
+            if (_playerTwo.PlayerPositions.Count == 0)
+            {
+                if (_playerTwo.Side == Side.White)
+                {
+                    return GameStatus.BlackWin;
+                }
+
+                return GameStatus.WhiteWin;
+                
+            }
+
             return GameStatus.InProgress;
         }
     }

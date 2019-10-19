@@ -96,7 +96,7 @@ namespace RussianCheckers.Game
 
             NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
 
-            var gameStatusChecker = new GameStatusChecker(_dataProvider);
+            var gameStatusChecker = new GameStatusChecker(_dataProvider,_playerOne,_playerTwo);
             GameStatus gameStatus = gameStatusChecker.GetGameStatus();
             if (gameStatus != GameStatus.InProgress)
             {

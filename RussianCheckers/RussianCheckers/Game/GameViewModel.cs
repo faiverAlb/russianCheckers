@@ -11,11 +11,11 @@ namespace RussianCheckers.Game
     public class GameViewModel : ObservableObject
     {
 
-        private readonly PlayerViewModel _playerTwo;
+        private readonly RobotPlayer _playerTwo;
         private readonly IDialogService _notificationDialog;
         private readonly CompositeCollection _positions = new CompositeCollection();
         public GameViewModel(PlayerViewModel playerOne
-            , PlayerViewModel playerTwo
+            , RobotPlayer playerTwo
             , EmptyCellsPlayer emptyCellsPlayer
             , DataProvider dataProvider
             , IDialogService notificationDialog)
@@ -41,8 +41,31 @@ namespace RussianCheckers.Game
             _positions.Add(playerOneCollectionContainer);
             _positions.Add(playerTwoCollectionContainer);
             _positions.Add(emptyCollectionContainer);
+
+            WaitMove();
         }
 
+        private void WaitMove()
+        {
+            if (_playerOne.Side == NextMoveSide)
+            {
+                return;
+            }
+
+            MakeMoveBySecondUser();
+        }
+
+        private void MakeMoveBySecondUser()
+        {
+            var move = _playerTwo.GetOptimalMove();
+            if (move.Value != null)
+            {
+                CheckerElement fromChecker = move.Key;
+                CheckerElement toPlace = move.Value;
+                _selectedChecker = fromChecker;
+                MoveChecker(toPlace);
+            }
+        }
 
 
         public Side NextMoveSide
@@ -67,13 +90,17 @@ namespace RussianCheckers.Game
 
         private void OnTryMakeMove(object obj)
         {
+            MoveChecker((CheckerElement)obj);
+        }
+
+        private void MoveChecker(CheckerElement newSelectedChecker)
+        {
             if (IsGameFinished)
             {
                 ShowNotificationMessage("Game is over!");
                 return;
             }
             PlayerViewModel player = _playerOne.Side == NextMoveSide ? _playerOne : _playerTwo;
-            CheckerElement newSelectedChecker = (CheckerElement)obj;
             var validationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide, player);
 
             MoveValidationResult preValidationMoveValidationResult = validationManager.GetPreValidationResult();
@@ -96,14 +123,19 @@ namespace RussianCheckers.Game
 
             NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
 
-            var gameStatusChecker = new GameStatusChecker(_dataProvider,_playerOne,_playerTwo);
+            var gameStatusChecker = new GameStatusChecker(_dataProvider, _playerOne, _playerTwo);
             GameStatus gameStatus = gameStatusChecker.GetGameStatus();
             if (gameStatus != GameStatus.InProgress)
             {
                 IsGameFinished = true;
-                string pleaseSelectCheckerFirst = gameStatus == GameStatus.BlackWin? "Black win!":"White win!";
+                string pleaseSelectCheckerFirst = gameStatus == GameStatus.BlackWin ? "Black win!" : "White win!";
                 ShowNotificationMessage(pleaseSelectCheckerFirst);
             }
+            else
+            {
+                WaitMove();
+            }
+
         }
 
         public bool IsGameFinished

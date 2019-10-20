@@ -707,6 +707,7 @@ namespace RussianCheckers.Game
                 PlayerPositions.Remove(checkerElement);
             }
         }
+
     }
 
     public enum Diagonal

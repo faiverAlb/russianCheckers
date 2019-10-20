@@ -19,21 +19,21 @@ namespace RussianCheckers
             Side mainPlayerSide = Side.White;
 
 
-            var mainPlayCheckers = new List<CheckerElement>()
-            {
-                new CheckerElement(6, 0, PieceType.Checker, Side.White),
-                new CheckerElement(5, 1, PieceType.Checker, Side.White),
-                new CheckerElement(4, 0, PieceType.Checker, Side.White),
-                new CheckerElement(7, 3, PieceType.Checker, Side.White),
-            };
-            var secondPlayerCheckers = new List<CheckerElement>()
-            {
-                new CheckerElement(6, 2, PieceType.Checker, Side.Black),
-
-
-            };
-            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-//            var dataProvider = new DataProvider(mainPlayerSide);
+//            var mainPlayCheckers = new List<CheckerElement>()
+//            {
+//                new CheckerElement(6, 0, PieceType.Checker, Side.White),
+//                new CheckerElement(5, 1, PieceType.Checker, Side.White),
+//                new CheckerElement(4, 0, PieceType.Checker, Side.White),
+//                new CheckerElement(7, 3, PieceType.Checker, Side.White),
+//            };
+//            var secondPlayerCheckers = new List<CheckerElement>()
+//            {
+//                new CheckerElement(6, 2, PieceType.Checker, Side.Black),
+//
+//
+//            };
+//            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            var dataProvider = new DataProvider(mainPlayerSide);
 
             var mainHumanPlayer = new MainHumanPlayer(mainPlayerSide, dataProvider);
             var playerViewModel = new RobotPlayer(Side.Black, dataProvider);

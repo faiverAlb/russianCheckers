@@ -47,12 +47,12 @@ namespace RussianCheckers.Game
 
         private void WaitMove()
         {
-            if (_playerOne.Side == NextMoveSide)
-            {
-                return;
-            }
-
-            MakeMoveBySecondUser();
+//            if (_playerOne.Side == NextMoveSide)
+//            {
+//                return;
+//            }
+//
+//            MakeMoveBySecondUser();
         }
 
         private void MakeMoveBySecondUser()

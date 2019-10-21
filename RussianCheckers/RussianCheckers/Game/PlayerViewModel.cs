@@ -34,7 +34,7 @@ namespace RussianCheckers.Game
             int currentCol = checker.Column;
             int currentRow = checker.Row;
 
-            var path = AvailablePaths.FirstOrDefault(x =>x.Last.Value.Column == nextCol && x.Last.Value.Row == nextRow);
+            var path = AvailablePaths.Where(x =>x.Last.Value.Column == nextCol && x.Last.Value.Row == nextRow).OrderByDescending(x => x.Count).FirstOrDefault();
             if (ShouldConvertToQueenByPathDuringTaking(path))
             {
                 checker.Type = PieceType.Queen;
@@ -91,7 +91,7 @@ namespace RussianCheckers.Game
                 return new List<CheckerElement>();
             }
 
-            LinkedList<CheckerElement> neededPath = availablePaths.FirstOrDefault(x => x.Last.Value.Column == column && x.Last.Value.Row == row);
+            LinkedList<CheckerElement> neededPath = availablePaths.Where(x => x.Last.Value.Column == column && x.Last.Value.Row == row).OrderByDescending(x => x.Count).FirstOrDefault();
             if (neededPath == null)
             {
                 return new List<CheckerElement>();
@@ -239,30 +239,26 @@ namespace RussianCheckers.Game
 
                 List<LinkedList<CheckerElement>> paths = GetPossiblePaths(playerPosition);
                 var possibleMovements = new List<CheckerElement>();
-                IGrouping<int, LinkedList<CheckerElement>> maxValues = paths.GroupBy(x => x.Count).OrderByDescending(x => x.Key).FirstOrDefault();
-                foreach (LinkedList<CheckerElement> max in maxValues)
+                
+                foreach (LinkedList<CheckerElement> max in paths)
                 {
                     if (max.Count == 1)
                     {
-                        if (playerPosition.Type == PieceType.Checker)
-                        {
-                            possibleMovements.AddRange(GetSimpleEmptyMoves(max.Last.Value));
-                        }
-                        else
-                        {
-                            possibleMovements.AddRange(GetSimpleEmptyMovesForQueen(playerPosition));
-
-                        }
+                        continue;
                     }
-                    else
-                    {
-                        possibleMovements.Add(max.Last.Value);
-                        if (AvailablePaths.Count > 0 && AvailablePaths.Max(x => x.Count) > max.Count)
-                        {
-                            continue;
-                        }
 
-                        AvailablePaths.Add(max);
+                    possibleMovements.Add(max.Last.Value);
+                    AvailablePaths.Add(max);
+
+                }
+
+                if (possibleMovements.Count == 0)
+                {
+                    foreach (LinkedList<CheckerElement> path in paths)
+                    {
+                        possibleMovements.AddRange(playerPosition.Type == PieceType.Checker
+                            ? GetSimpleEmptyMoves(path.Last.Value)
+                            : GetSimpleEmptyMovesForQueen(playerPosition));
                     }
                 }
 
@@ -708,14 +704,5 @@ namespace RussianCheckers.Game
             }
         }
 
-    }
-
-    public enum Diagonal
-    {
-        LeftDown,
-        LeftUp,
-        RightUp,
-        RightDown,
-        Initial
     }
 }

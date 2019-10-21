@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using RussianCheckers.Game;
 
-namespace RussianCheckers
+namespace RussianCheckers.Game
 {
     public class RobotPlayer: PlayerViewModel
     {

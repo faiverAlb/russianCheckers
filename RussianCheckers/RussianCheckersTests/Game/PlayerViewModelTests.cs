@@ -71,7 +71,7 @@ namespace RussianCheckers.Game.Tests
 
             //  Assert
             playerOne.CalculateAvailablePaths();
-            Assert.AreEqual(3, playerOne.AvailablePaths.Count);
+            Assert.AreEqual(10, playerOne.AvailablePaths.Count);
         }
 
 
@@ -503,7 +503,7 @@ namespace RussianCheckers.Game.Tests
         }
 
         [TestMethod()]
-        public void CalculateAvailableForQueen_TwoBlackCheckers_Should_Have_1_Path()
+        public void CalculateAvailableForQueen_TwoBlackCheckers_Should_Have_3_Path()
         {
             //  Arrange
             var mainPlayCheckers = new List<CheckerElement>()
@@ -527,11 +527,11 @@ namespace RussianCheckers.Game.Tests
 
             //  Assert
             playerOne.CalculateAvailablePaths();
-            Assert.AreEqual(1, playerOne.AvailablePaths.Count);
+            Assert.AreEqual(3, playerOne.AvailablePaths.Count);
         }
 
         [TestMethod()]
-        public void CalculateAvailableForQueen_ThreeBlackCheckers_Should_Have_1_Paths()
+        public void CalculateAvailableForQueen_ThreeBlackCheckers_Should_Have_5_Paths()
         {
             //  Arrange
             var mainPlayCheckers = new List<CheckerElement>()
@@ -556,12 +556,12 @@ namespace RussianCheckers.Game.Tests
 
             //  Assert
             playerOne.CalculateAvailablePaths();
-            Assert.AreEqual(1, playerOne.AvailablePaths.Count);
+            Assert.AreEqual(5, playerOne.AvailablePaths.Count);
         }
 
 
         [TestMethod()]
-        public void CalculateAvailableForQueen_ThreeBlackCheckers_Should_Have_4_Paths()
+        public void CalculateAvailableForQueen_ThreeBlackCheckers_Should_Have_8_Paths()
         {
             //  Arrange
             var mainPlayCheckers = new List<CheckerElement>()
@@ -586,11 +586,11 @@ namespace RussianCheckers.Game.Tests
 
             //  Assert
             playerOne.CalculateAvailablePaths();
-            Assert.AreEqual(4, playerOne.AvailablePaths.Count);
+            Assert.AreEqual(8, playerOne.AvailablePaths.Count);
         }
 
         [TestMethod()]
-        public void CalculateAvailableForQueen_FourBlackCheckers_Should_Have_5_Paths()
+        public void CalculateAvailableForQueen_FourBlackCheckers_Should_Have_18_Paths()
         {
             //  Arrange
             var mainPlayCheckers = new List<CheckerElement>()
@@ -616,12 +616,12 @@ namespace RussianCheckers.Game.Tests
 
             //  Assert
             playerOne.CalculateAvailablePaths();
-            Assert.AreEqual(5, playerOne.AvailablePaths.Count);
+            Assert.AreEqual(18, playerOne.AvailablePaths.Count);
         }
 
 
         [TestMethod()]
-        public void CalculateAvailableForQueen_SixBlackCheckers_Should_Have_13_Paths()
+        public void CalculateAvailableForQueen_SixBlackCheckers_Should_Have_35_Paths()
         {
             //  Arrange
             var mainPlayCheckers = new List<CheckerElement>()
@@ -650,12 +650,12 @@ namespace RussianCheckers.Game.Tests
 
             //  Assert
             playerOne.CalculateAvailablePaths();
-            Assert.AreEqual(13, playerOne.AvailablePaths.Count);
+            Assert.AreEqual(35, playerOne.AvailablePaths.Count);
         }
 
 
         [TestMethod()]
-        public void CalculateAvailableForQueen_SameBehaviorAsChecker_ShoudBe()
+        public void CalculateAvailableForQueen_SameBehaviorAsChecker_ShouldBe_21()
         {
             //  Arrange
             var mainPlayCheckers = new List<CheckerElement>()
@@ -682,11 +682,11 @@ namespace RussianCheckers.Game.Tests
 
             //  Assert
             playerOne.CalculateAvailablePaths();
-            Assert.AreEqual(7, playerOne.AvailablePaths.Count);
+            Assert.AreEqual(21, playerOne.AvailablePaths.Count);
         }
 
         [TestMethod()]
-        public void CalculateAvailableForQueen_SameBehaviorAsChecker_ShouldBe_2()
+        public void CalculateAvailableForQueen_SameBehaviorAsChecker_ShouldBe_23()
         {
             //  Arrange
             var mainPlayCheckers = new List<CheckerElement>()
@@ -714,7 +714,7 @@ namespace RussianCheckers.Game.Tests
 
             //  Assert
             playerOne.CalculateAvailablePaths();
-            Assert.AreEqual(2, playerOne.AvailablePaths.Count);
+            Assert.AreEqual(23, playerOne.AvailablePaths.Count);
         }
 
         [TestMethod()]
@@ -739,12 +739,10 @@ namespace RussianCheckers.Game.Tests
             emptyCellsPlayer.CalculateNeighbors();
             playerOne.CalculateNeighbors();
             playerTwo.CalculateNeighbors();
+            playerOne.CalculateAvailablePaths();
 
             //  Assert
-            playerOne.CalculateAvailablePaths();
-            int actualColumn = playerOne.AvailablePaths.Single().Last.Value.Column;
-            int actualRow = playerOne.AvailablePaths.Single().Last.Value.Row;
-            Assert.IsTrue(actualColumn == 0 && actualRow == 4);
+            Assert.IsTrue(playerOne.AvailablePaths.Any(x => x.Last.Value.Column == 0 && x.Last.Value.Row == 4));
         }
 
 

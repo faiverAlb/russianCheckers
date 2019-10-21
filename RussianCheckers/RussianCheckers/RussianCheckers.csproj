@@ -79,6 +79,9 @@
     <Compile Include="NotificationDialog.xaml.cs">
       <DependentUpon>NotificationDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Strategy\DummyStrategy.cs" />
+    <Compile Include="Strategy\MinMaxStrategy.cs" />
+    <Compile Include="Strategy\RobotStrategy.cs" />
     <Compile Include="TextConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

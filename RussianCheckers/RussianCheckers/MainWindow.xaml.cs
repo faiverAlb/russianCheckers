@@ -2,6 +2,7 @@
 using System.Windows;
 using RussianCheckers.Game;
 using RussianCheckers.Infrastructure;
+using RussianCheckers.Strategy;
 
 namespace RussianCheckers
 {
@@ -21,11 +22,7 @@ namespace RussianCheckers
 
             var mainPlayCheckers = new List<CheckerElement>()
             {
-                new CheckerElement(3, 3, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 3, PieceType.Checker, Side.Black),
-                new CheckerElement(3, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(1, 5, PieceType.Checker, Side.Black),
+                new CheckerElement(0, 2, PieceType.Checker, Side.Black),
             };
             var secondPlayerCheckers = new List<CheckerElement>()
             {
@@ -37,7 +34,7 @@ namespace RussianCheckers
 //            var dataProvider = new DataProvider(mainPlayerSide);
 
             var mainHumanPlayer = new MainHumanPlayer(mainPlayerSide, dataProvider);
-            var playerViewModel = new RobotPlayer(Side.Black, dataProvider);
+            var playerViewModel = new RobotPlayer(Side.Black, dataProvider, new DummyStrategy());
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
             this.DataContext = new GameViewModel(
                 mainHumanPlayer

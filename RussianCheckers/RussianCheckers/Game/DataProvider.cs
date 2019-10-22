@@ -8,6 +8,10 @@ namespace RussianCheckers.Game
     {
         private readonly CheckerElement[,] _data;
 
+        public DataProvider(CheckerElement[,] data)
+        {
+            _data = data;
+        }
         public DataProvider(List<CheckerElement> mainPlayerCheckers, List<CheckerElement> secondPlayerCheckers)
         {
             List<CheckerElement> emptyCheckers = GetEmptyCheckersPositions(mainPlayerCheckers, secondPlayerCheckers);
@@ -150,6 +154,19 @@ namespace RussianCheckers.Game
         public void MoveCheckerToNewPosition(CheckerElement element, int checkerElementColumn, int checkerElementRow)
         {
             _data[checkerElementColumn, checkerElementRow] = element;
+        }
+
+        public DataProvider Clone()
+        {
+            var clonedCheckers = new CheckerElement[8,8];
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    clonedCheckers[j, i] = _data[j, i] == null? null: _data[j, i].Clone();
+                }
+            }
+            return new DataProvider(clonedCheckers);
         }
     }
 }

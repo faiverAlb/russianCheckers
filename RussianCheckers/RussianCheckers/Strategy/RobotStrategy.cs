@@ -6,6 +6,6 @@ namespace RussianCheckers.Strategy
 {
     public abstract class RobotStrategy
     {
-        public abstract KeyValuePair<CheckerElement, CheckerElement> GetSuggestedMove(List<LinkedList<CheckerElement>> availableTakes, ObservableCollection<CheckerElement> playerPositions);
+        public abstract KeyValuePair<CheckerElement, CheckerElement> GetSuggestedMove(GameViewModel initialGameViewModel);
     }
 }

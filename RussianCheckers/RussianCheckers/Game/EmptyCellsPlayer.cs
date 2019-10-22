@@ -17,5 +17,10 @@ namespace RussianCheckers.Game
             }
 
         }
+
+        public override PlayerViewModel Clone(DataProvider dataProvider)
+        {
+            return new EmptyCellsPlayer(this.Side, dataProvider);
+        }
     }
 }

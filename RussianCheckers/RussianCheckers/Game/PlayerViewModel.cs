@@ -28,6 +28,20 @@ namespace RussianCheckers.Game
             AvailablePaths = new List<LinkedList<CheckerElement>>();
         }
 
+        public IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> GetLegalMovements()
+        {
+            if (AvailablePaths.Any())
+            {
+                return AvailablePaths.Select(x => new KeyValuePair<CheckerElement, CheckerElement>(x.First.Value, x.Last.Value));
+            }
+
+            var resultList = new List<KeyValuePair<CheckerElement, CheckerElement>>();
+            foreach (var playerPosition in PlayerPositions)
+            {
+                resultList.AddRange(playerPosition.PossibleMovementElements.Select(playerPositionPossibleMovementElement => new KeyValuePair<CheckerElement, CheckerElement>(playerPosition, playerPositionPossibleMovementElement)));
+            }
+            return resultList;
+        }
 
         public List<CheckerElement> MoveCheckerToNewPlace(CheckerElement checker, int nextCol, int nextRow)
         {
@@ -703,6 +717,8 @@ namespace RussianCheckers.Game
                 PlayerPositions.Remove(checkerElement);
             }
         }
+
+        public abstract PlayerViewModel Clone(DataProvider dataProvider);
 
     }
 }

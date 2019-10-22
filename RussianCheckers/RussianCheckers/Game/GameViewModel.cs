@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Windows.Data;
 using System.Windows.Input;
 using RussianCheckers.Game.GameInfrastructure;
@@ -11,14 +12,16 @@ namespace RussianCheckers.Game
     public class GameViewModel : ObservableObject
     {
 
-        private readonly RobotPlayer _playerTwo;
         private readonly IDialogService _notificationDialog;
+        private readonly bool _isPlayingAutomatically;
         private readonly CompositeCollection _positions = new CompositeCollection();
+
         public GameViewModel(PlayerViewModel playerOne
             , RobotPlayer playerTwo
             , EmptyCellsPlayer emptyCellsPlayer
             , DataProvider dataProvider
-            , IDialogService notificationDialog)
+            , IDialogService notificationDialog = null
+            , bool isPlayingAutomatically = true)
         {
             _playerOne = playerOne;
             _playerTwo = playerTwo;
@@ -26,6 +29,7 @@ namespace RussianCheckers.Game
             _dataProvider = dataProvider;
 
             _notificationDialog = notificationDialog;
+            _isPlayingAutomatically = isPlayingAutomatically;
             NextMoveSide = Side.White;
 
             _emptyCellsPlayer.CalculateNeighbors();
@@ -47,6 +51,11 @@ namespace RussianCheckers.Game
 
         private void WaitMove()
         {
+            if (!_isPlayingAutomatically)
+            {
+                return;
+            }
+            
             if (_playerOne.Side == NextMoveSide)
             {
                 return;
@@ -57,7 +66,7 @@ namespace RussianCheckers.Game
 
         private void MakeMoveBySecondUser()
         {
-            var move = _playerTwo.GetOptimalMove();
+            var move = _playerTwo.GetOptimalMove(this);
             if (move.Value != null)
             {
                 CheckerElement fromChecker = move.Key;
@@ -87,10 +96,25 @@ namespace RussianCheckers.Game
         private readonly PlayerViewModel _playerOne;
         private readonly EmptyCellsPlayer _emptyCellsPlayer;
         private readonly DataProvider _dataProvider;
+        private readonly RobotPlayer _playerTwo;
 
         private void OnTryMakeMove(object obj)
         {
             MoveChecker((CheckerElement)obj);
+        }
+
+        public void MoveChecker(CheckerElement fromPlace, CheckerElement toPlace)
+        {
+            CheckerElement foundChecker = _playerOne.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
+            NextMoveSide = _playerOne.Side;
+            if (foundChecker == null)
+            {
+                foundChecker = _playerTwo.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
+                NextMoveSide = _playerTwo.Side;
+            }
+            _selectedChecker = foundChecker;
+            CheckerElement emptyChecker = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+            MoveChecker(emptyChecker);
         }
 
         private void MoveChecker(CheckerElement newSelectedChecker)
@@ -222,6 +246,10 @@ namespace RussianCheckers.Game
 
         private void ShowNotificationMessage(string message)
         {
+            if (_notificationDialog == null)
+            {
+                return;
+            }
             var notificationDialogViewModel = new NotificationDialogViewModel(message);
             bool? result = _notificationDialog.ShowDialog(notificationDialogViewModel);
 
@@ -244,6 +272,23 @@ namespace RussianCheckers.Game
             {
                 return _positions;
             }
+        }
+
+        public IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> GetAllAvailableMoves()
+        {
+            var allAvailableMoves = new List<KeyValuePair<CheckerElement, CheckerElement>>();
+            allAvailableMoves.AddRange(_playerOne.GetLegalMovements());
+            allAvailableMoves.AddRange(_playerTwo.GetLegalMovements());
+            return allAvailableMoves;
+        }
+
+        public GameViewModel CreateGame()
+        {
+            DataProvider newDataProvider = _dataProvider.Clone();
+            PlayerViewModel newPlayerOne = _playerOne.Clone(newDataProvider);
+            RobotPlayer newPlayerTwo = (RobotPlayer) _playerTwo.Clone(newDataProvider);
+            EmptyCellsPlayer  newEmptyCellsPlayer = (EmptyCellsPlayer) _emptyCellsPlayer.Clone(newDataProvider);
+            return new GameViewModel(newPlayerOne, newPlayerTwo, newEmptyCellsPlayer, newDataProvider, null, false);
         }
     }
 

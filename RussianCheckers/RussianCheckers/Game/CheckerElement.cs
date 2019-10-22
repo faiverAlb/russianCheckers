@@ -121,5 +121,10 @@ namespace RussianCheckers.Game
               possibleMovementElement.SelfAsPossible = false;
             }
         }
+
+        public CheckerElement Clone()
+        {
+            return new CheckerElement(Column, Row, Type, Side);
+        }
     }
 }

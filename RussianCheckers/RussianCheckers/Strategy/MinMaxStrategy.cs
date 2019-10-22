@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using RussianCheckers.Game;
 
 namespace RussianCheckers.Strategy
 {
-    public class MinMaxStrategy
+    public class MinMaxStrategy:RobotStrategy
     {
         public MinMaxStrategy()
         {
@@ -13,24 +14,21 @@ namespace RussianCheckers.Strategy
         }
 
         //TODO: Move to library 
-        public KeyValuePair<CheckerElement, CheckerElement> GetSuggestedMove(List<LinkedList<CheckerElement>> availableTakes, ObservableCollection<CheckerElement> playerPositions)
+        public override KeyValuePair<CheckerElement, CheckerElement> GetSuggestedMove(GameViewModel initialGameViewModel)
         {
-            if (availableTakes.Any())
+            var resultMove =  new KeyValuePair<CheckerElement, CheckerElement>();
+            
+            const int minValue = int.MaxValue;
+            int maxValue = int.MinValue;
+            IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> allAvailableMoves = initialGameViewModel.GetAllAvailableMoves().ToList();
+            GameViewModel newGameModel = initialGameViewModel;
+            foreach (KeyValuePair<CheckerElement, CheckerElement> availableMove in allAvailableMoves)
             {
-                var checkerToMove = availableTakes.First().First.Value;
-                var toMove = availableTakes.First().Last.Value;
-                return new KeyValuePair<CheckerElement, CheckerElement>(checkerToMove, toMove);
+                newGameModel = newGameModel.CreateGame();
+                newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
             }
-
-            var playerPosition = playerPositions.FirstOrDefault(x => x.PossibleMovementElements.Any());
-            CheckerElement possibleMove = null;
-            if (playerPosition != null)
-            {
-//                playerPosition.IsSelected = true;
-                possibleMove = playerPosition.PossibleMovementElements.First();
-            }
-
-            return new KeyValuePair<CheckerElement, CheckerElement>(playerPosition, possibleMove);
+            return resultMove;
         }
+
     }
 }

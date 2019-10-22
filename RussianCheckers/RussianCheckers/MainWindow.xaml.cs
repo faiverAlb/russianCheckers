@@ -34,7 +34,7 @@ namespace RussianCheckers
 //            var dataProvider = new DataProvider(mainPlayerSide);
 
             var mainHumanPlayer = new MainHumanPlayer(mainPlayerSide, dataProvider);
-            var playerViewModel = new RobotPlayer(Side.Black, dataProvider, new DummyStrategy());
+            var playerViewModel = new RobotPlayer(Side.Black, dataProvider, new MinMaxStrategy());
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
             this.DataContext = new GameViewModel(
                 mainHumanPlayer

@@ -32,5 +32,9 @@ namespace RussianCheckers
 //            };
 //        }
 
+        public override PlayerViewModel Clone(DataProvider dataProvider)
+        {
+            return new MainHumanPlayer(this.Side, dataProvider);
+        }
     }
 }

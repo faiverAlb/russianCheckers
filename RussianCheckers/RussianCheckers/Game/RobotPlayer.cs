@@ -17,10 +17,15 @@ namespace RussianCheckers.Game
         {
         }
 
-        public KeyValuePair<CheckerElement, CheckerElement> GetOptimalMove()
+        public KeyValuePair<CheckerElement, CheckerElement> GetOptimalMove(GameViewModel gameViewModel)
         {
-            var result = _robotStrategy.GetSuggestedMove(AvailablePaths.ToList(), PlayerPositions);
+            var result = _robotStrategy.GetSuggestedMove(gameViewModel);
             return result;
+        }
+
+        public override PlayerViewModel Clone(DataProvider dataProvider)
+        {
+            return new RobotPlayer(this.Side, dataProvider);
         }
     }
 }

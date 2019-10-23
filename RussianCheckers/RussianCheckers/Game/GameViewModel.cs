@@ -33,7 +33,7 @@ namespace RussianCheckers.Game
             _notificationDialog = notificationDialog;
             _isPlayingAutomatically = isPlayingAutomatically;
             NextMoveSide = Side.White;
-            NextMovePlayer = _playerOne.Side == NextMoveSide ? _playerOne : _playerTwo;
+            
 
             _emptyCellsPlayer.CalculateNeighbors();
             playerOne.CalculateNeighbors();
@@ -86,6 +86,7 @@ namespace RussianCheckers.Game
             set
             {
                 _nextMoveSide = value;
+                NextMovePlayer = _playerOne.Side == _nextMoveSide ? _playerOne : _playerTwo;
                 RaisePropertyChangedEvent(nameof(NextMoveSide));
             }
         }
@@ -117,17 +118,25 @@ namespace RussianCheckers.Game
 
         public void MoveChecker(CheckerElement fromPlace, CheckerElement toPlace)
         {
-            CheckerElement foundChecker = _playerOne.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
-            NextMoveSide = _playerOne.Side;
+            CheckerElement foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
+//            NextMoveSide = _playerOne.Side;
+//            NextMovePlayer = _playerOne;
             if (foundChecker == null)
             {
                 foundChecker = _playerTwo.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
-                NextMoveSide = _playerTwo.Side;
+//                NextMoveSide = _playerTwo.Side;
+//                NextMovePlayer = _playerTwo;
             }
             _selectedChecker = foundChecker;
             CheckerElement emptyChecker = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
             MoveChecker(emptyChecker);
         }
+
+//        private void ChangeTurn()
+//        {
+//            NextMoveSide = _playerOne.Side;
+//
+//        }
 
         private void MoveChecker(CheckerElement newSelectedChecker)
         {
@@ -136,8 +145,8 @@ namespace RussianCheckers.Game
                 ShowNotificationMessage("Game is over!");
                 return;
             }
-            PlayerViewModel player = _playerOne.Side == NextMoveSide ? _playerOne : _playerTwo;
-            var validationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide, player);
+//            PlayerViewModel player = _playerOne.Side == NextMoveSide ? _playerOne : _playerTwo;
+            var validationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide, NextMovePlayer);
 
             MoveValidationResult preValidationMoveValidationResult = validationManager.GetPreValidationResult();
             if (preValidationMoveValidationResult.Status == MoveValidationStatus.Error)
@@ -151,7 +160,7 @@ namespace RussianCheckers.Game
                 return;
             }
 
-            bool makeMoveStatus = IsCheckerMoved(newSelectedChecker, player);
+            bool makeMoveStatus = IsCheckerMoved(newSelectedChecker, NextMovePlayer);
             if (makeMoveStatus == false)
             {
                 return;
@@ -163,7 +172,7 @@ namespace RussianCheckers.Game
             if (gameStatus == GameStatus.InProgress)
             {
                 NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
-                NextMovePlayer = NextMovePlayer == _playerOne ? _playerTwo : _playerOne;
+                
                 WaitMove();
                 return;
             }
@@ -289,10 +298,11 @@ namespace RussianCheckers.Game
 
         public IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> GetAllAvailableMoves()
         {
-            var allAvailableMoves = new List<KeyValuePair<CheckerElement, CheckerElement>>();
-            allAvailableMoves.AddRange(_playerOne.GetLegalMovements());
-            allAvailableMoves.AddRange(_playerTwo.GetLegalMovements());
-            return allAvailableMoves;
+//            var allAvailableMoves = new List<KeyValuePair<CheckerElement, CheckerElement>>();
+            return NextMovePlayer.GetLegalMovements();
+//            allAvailableMoves.AddRange(_playerOne.GetLegalMovements());
+//            allAvailableMoves.AddRange(_playerTwo.GetLegalMovements());
+//            return allAvailableMoves;
         }
 
         public GameViewModel CreateGame()
@@ -301,7 +311,9 @@ namespace RussianCheckers.Game
             PlayerViewModel newPlayerOne = _playerOne.Clone(newDataProvider);
             RobotPlayer newPlayerTwo = (RobotPlayer) _playerTwo.Clone(newDataProvider);
             EmptyCellsPlayer  newEmptyCellsPlayer = (EmptyCellsPlayer) _emptyCellsPlayer.Clone(newDataProvider);
-            return new GameViewModel(newPlayerOne, newPlayerTwo, newEmptyCellsPlayer, newDataProvider, null, false);
+            var gameViewModel = new GameViewModel(newPlayerOne, newPlayerTwo, newEmptyCellsPlayer, newDataProvider, null, false);
+            gameViewModel.NextMoveSide = NextMoveSide;
+            return gameViewModel;
         }
 
         private PlayerViewModel GetPlayer(bool isMain)

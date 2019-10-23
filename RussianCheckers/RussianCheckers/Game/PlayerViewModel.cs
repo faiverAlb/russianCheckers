@@ -282,14 +282,13 @@ namespace RussianCheckers.Game
                         possibleMovements.AddRange(GetSimpleEmptyMovesForQueen(playerPosition));
                     }
                 }
-
                 playerPosition.SetPossibleMovementElements(possibleMovements);
             }
         }
 
         private IEnumerable<CheckerElement> GetSimpleEmptyMovesForQueen(CheckerElement queen)
         {
-            return queen.Neighbors;
+            return queen.Neighbors.Where(x => x.Side == Side.Empty);
         }
 
         private List<CheckerElement> GetSimpleEmptyMoves(CheckerElement initialChecker)

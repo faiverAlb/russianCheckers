@@ -12,7 +12,7 @@ namespace RussianCheckers.Strategy
 
         public MinMaxStrategy()
         {
-            _searchDepth = 10;
+            _searchDepth = 3;
         }
 
         //TODO: Move to library 
@@ -123,7 +123,7 @@ namespace RussianCheckers.Strategy
             //                int factor = (int)Math.Log(curGame.GetRemainingCount(), 3), mfactor = (int)Math.Log(totalPieces, 3);
             //                curSearchDepth += (mfactor - factor);
             //            }
-            if ((depth >= 0) && (depth > curSearchDepth))
+            if ((depth >= 0) && (depth >= curSearchDepth))
                 return true;
 
             return CutOff(initialGameViewModel, curGameModel, depth);
@@ -139,9 +139,13 @@ namespace RussianCheckers.Strategy
         private int MaxMove(GameViewModel initialGameViewModel, GameViewModel curGameModel, int depth, int alpha, int beta)
         {
             // Check algorithm limits..end prematurely, but with an educated approximation
-            //            if (doCutOff(initGame, curGame, depth))
-            //                return doCalculateStrength(initGame, curGame);
-            foreach (var availableMove in curGameModel.GetAllAvailableMoves())
+            if (DoCutOff(initialGameViewModel, curGameModel, depth))
+            {
+                return DoCalculateStrength(initialGameViewModel, curGameModel);
+            }
+
+            var allAvailableMoves = curGameModel.GetAllAvailableMoves();
+            foreach (var availableMove in allAvailableMoves)
             {
                 GameViewModel newGameModel = curGameModel.CreateGame();
                 newGameModel.MoveChecker(availableMove.Key, availableMove.Value);

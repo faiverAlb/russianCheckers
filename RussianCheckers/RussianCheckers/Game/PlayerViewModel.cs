@@ -268,11 +268,18 @@ namespace RussianCheckers.Game
 
                 if (possibleMovements.Count == 0)
                 {
-                    foreach (LinkedList<CheckerElement> path in paths)
+                    if (playerPosition.Type == PieceType.Checker)
                     {
-                        possibleMovements.AddRange(playerPosition.Type == PieceType.Checker
-                            ? GetSimpleEmptyMoves(path.Last.Value)
-                            : GetSimpleEmptyMovesForQueen(playerPosition));
+                        foreach (LinkedList<CheckerElement> path in paths)
+                        {
+                            possibleMovements.AddRange(playerPosition.Type == PieceType.Checker
+                                ? GetSimpleEmptyMoves(path.Last.Value)
+                                : GetSimpleEmptyMovesForQueen(playerPosition));
+                        }
+                    }
+                    else
+                    {
+                        possibleMovements.AddRange(GetSimpleEmptyMovesForQueen(playerPosition));
                     }
                 }
 

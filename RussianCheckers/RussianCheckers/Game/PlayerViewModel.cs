@@ -720,5 +720,17 @@ namespace RussianCheckers.Game
 
         public abstract PlayerViewModel Clone(DataProvider dataProvider);
 
+        public int GetSimpleCheckersCount()
+        {
+            int counter = PlayerPositions.Count(playerPosition => playerPosition.Type == PieceType.Checker);
+            return counter;
+        }
+
+        public int GetQueensCount()
+        {
+            int counter = PlayerPositions.Count(playerPosition => playerPosition.Type == PieceType.Queen);
+            return counter;
+
+        }
     }
 }

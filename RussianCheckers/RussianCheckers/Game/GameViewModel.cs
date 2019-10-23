@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows.Data;
 using System.Windows.Input;
 using RussianCheckers.Game.GameInfrastructure;
@@ -15,6 +16,7 @@ namespace RussianCheckers.Game
         private readonly IDialogService _notificationDialog;
         private readonly bool _isPlayingAutomatically;
         private readonly CompositeCollection _positions = new CompositeCollection();
+        public Side WinnerSide { get; set; }
 
         public GameViewModel(PlayerViewModel playerOne
             , RobotPlayer playerTwo
@@ -31,6 +33,7 @@ namespace RussianCheckers.Game
             _notificationDialog = notificationDialog;
             _isPlayingAutomatically = isPlayingAutomatically;
             NextMoveSide = Side.White;
+            NextMovePlayer = _playerOne.Side == NextMoveSide ? _playerOne : _playerTwo;
 
             _emptyCellsPlayer.CalculateNeighbors();
             playerOne.CalculateNeighbors();
@@ -86,6 +89,14 @@ namespace RussianCheckers.Game
                 RaisePropertyChangedEvent(nameof(NextMoveSide));
             }
         }
+        public PlayerViewModel NextMovePlayer
+        {
+            get { return _nextMovePlayer; }
+            private set
+            {
+                _nextMovePlayer = value;
+            }
+        }
 
 
         public ICommand SelectCheckerCommand { get { return new ActionCommand(OnTryMakeMove); } }
@@ -97,6 +108,7 @@ namespace RussianCheckers.Game
         private readonly EmptyCellsPlayer _emptyCellsPlayer;
         private readonly DataProvider _dataProvider;
         private readonly RobotPlayer _playerTwo;
+        private PlayerViewModel _nextMovePlayer;
 
         private void OnTryMakeMove(object obj)
         {
@@ -145,22 +157,23 @@ namespace RussianCheckers.Game
                 return;
             }
 
-            NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
 
             var gameStatusChecker = new GameStatusChecker(_dataProvider, _playerOne, _playerTwo);
             GameStatus gameStatus = gameStatusChecker.GetGameStatus();
-            if (gameStatus != GameStatus.InProgress)
+            if (gameStatus == GameStatus.InProgress)
             {
-                IsGameFinished = true;
-                string pleaseSelectCheckerFirst = gameStatus == GameStatus.BlackWin ? "Black win!" : "White win!";
-                ShowNotificationMessage(pleaseSelectCheckerFirst);
-            }
-            else
-            {
+                NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
+                NextMovePlayer = NextMovePlayer == _playerOne ? _playerTwo : _playerOne;
                 WaitMove();
+                return;
             }
 
+            IsGameFinished = true;
+            WinnerSide = gameStatus == GameStatus.BlackWin ? Side.Black : Side.White;
+            string pleaseSelectCheckerFirst = gameStatus == GameStatus.BlackWin ? "Black win!" : "White win!";
+            ShowNotificationMessage(pleaseSelectCheckerFirst);
         }
+
 
         public bool IsGameFinished
         {
@@ -289,6 +302,29 @@ namespace RussianCheckers.Game
             RobotPlayer newPlayerTwo = (RobotPlayer) _playerTwo.Clone(newDataProvider);
             EmptyCellsPlayer  newEmptyCellsPlayer = (EmptyCellsPlayer) _emptyCellsPlayer.Clone(newDataProvider);
             return new GameViewModel(newPlayerOne, newPlayerTwo, newEmptyCellsPlayer, newDataProvider, null, false);
+        }
+
+        private PlayerViewModel GetPlayer(bool isMain)
+        {
+            if (isMain)
+            {
+                return _playerOne.IsMainPLayer ? _playerOne : _playerTwo;
+            }
+
+            return _playerOne.IsMainPLayer ? _playerTwo : _playerOne;
+
+        }
+
+        public int GetSimpleCheckersCount(bool isForMainPlayer)
+        {
+            PlayerViewModel player = GetPlayer(isForMainPlayer);
+            return player.GetSimpleCheckersCount();
+        }
+
+        public int GetQueensCount(bool isForMainPlayer)
+        {
+            PlayerViewModel player = GetPlayer(isForMainPlayer);
+            return player.GetQueensCount();
         }
     }
 

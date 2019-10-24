@@ -12,7 +12,7 @@ namespace RussianCheckers.Strategy
 
         public MinMaxStrategy()
         {
-            _searchDepth = 3;
+            _searchDepth = 5;
         }
 
         //TODO: Move to library 
@@ -23,10 +23,9 @@ namespace RussianCheckers.Strategy
             const int minValue = int.MaxValue;
             int maxValue = int.MinValue;
             IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> allAvailableMoves = initialGameViewModel.GetAllAvailableMoves().ToList();
-            GameViewModel newGameModel = initialGameViewModel;
             foreach (KeyValuePair<CheckerElement, CheckerElement> availableMove in allAvailableMoves)
             {
-                newGameModel = newGameModel.CreateGame();
+                GameViewModel newGameModel = initialGameViewModel.CreateGame();
                 newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
                 int curValue =  MinMove(initialGameViewModel, newGameModel, 1, maxValue, minValue);
                 if ((curValue > maxValue) || (resultMove.Value == null))

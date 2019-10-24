@@ -32,7 +32,8 @@ namespace RussianCheckers.Game
         {
             if (AvailablePaths.Any())
             {
-                return AvailablePaths.Select(x => new KeyValuePair<CheckerElement, CheckerElement>(x.First.Value, x.Last.Value));
+                var keyValuePairs = AvailablePaths.Select(x => new KeyValuePair<CheckerElement, CheckerElement>(x.First.Value, x.Last.Value));
+                return keyValuePairs;
             }
 
             var resultList = new List<KeyValuePair<CheckerElement, CheckerElement>>();

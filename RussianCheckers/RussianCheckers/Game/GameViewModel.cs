@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -123,20 +124,17 @@ namespace RussianCheckers.Game
 //            NextMovePlayer = _playerOne;
             if (foundChecker == null)
             {
-                foundChecker = _playerTwo.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
-//                NextMoveSide = _playerTwo.Side;
-//                NextMovePlayer = _playerTwo;
+                throw new Exception("How it happened? Null from checker");
             }
             _selectedChecker = foundChecker;
             CheckerElement emptyChecker = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+            if (toPlace.Side == fromPlace.Side)
+            {
+                emptyChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+            }
             MoveChecker(emptyChecker);
         }
 
-//        private void ChangeTurn()
-//        {
-//            NextMoveSide = _playerOne.Side;
-//
-//        }
 
         private void MoveChecker(CheckerElement newSelectedChecker)
         {
@@ -298,11 +296,7 @@ namespace RussianCheckers.Game
 
         public IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> GetAllAvailableMoves()
         {
-//            var allAvailableMoves = new List<KeyValuePair<CheckerElement, CheckerElement>>();
             return NextMovePlayer.GetLegalMovements();
-//            allAvailableMoves.AddRange(_playerOne.GetLegalMovements());
-//            allAvailableMoves.AddRange(_playerTwo.GetLegalMovements());
-//            return allAvailableMoves;
         }
 
         public GameViewModel CreateGame()

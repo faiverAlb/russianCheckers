@@ -120,19 +120,13 @@ namespace RussianCheckers.Game
         public void MoveChecker(CheckerElement fromPlace, CheckerElement toPlace)
         {
             CheckerElement foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
-//            NextMoveSide = _playerOne.Side;
-//            NextMovePlayer = _playerOne;
-            if (foundChecker == null)
-            {
-                throw new Exception("How it happened? Null from checker");
-            }
             _selectedChecker = foundChecker;
-            CheckerElement emptyChecker = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+            CheckerElement toPosition = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
             if (toPlace.Side == fromPlace.Side)
             {
-                emptyChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+                toPosition = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
             }
-            MoveChecker(emptyChecker);
+            MoveChecker(toPosition);
         }
 
 

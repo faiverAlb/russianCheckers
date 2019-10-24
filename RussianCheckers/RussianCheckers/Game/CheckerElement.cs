@@ -13,7 +13,11 @@ namespace RussianCheckers.Game
             _side = side;
             PossibleMovementElements = new List<CheckerElement>();
             Neighbors = new List<CheckerElement>();
+            IsAtInitialPosition = true;
         }
+
+        public bool IsAtInitialPosition { get; private set; }
+
         private Point _pos;
         public Point Pos
         {
@@ -94,6 +98,7 @@ namespace RussianCheckers.Game
             Column = column;
             Row = row;
             _pos.ChangePosition(column, row);
+            IsAtInitialPosition = false;
         }
 
         public override string ToString()

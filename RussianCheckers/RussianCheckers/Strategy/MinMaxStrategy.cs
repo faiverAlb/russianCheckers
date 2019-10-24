@@ -103,9 +103,55 @@ namespace RussianCheckers.Strategy
             strength -= 2 * ((initGame.GetSimpleCheckersCount(false) - curGame.GetSimpleCheckersCount(false)));
             strength -= 5 * (initGame.GetQueensCount(false) - curGame.GetQueensCount(false));
 
-            // Return the difference of strengths
+
+            PlayerViewModel currentPlayer = curGame.NextMovePlayer.IsMainPLayer ? curGame.GetPlayer(true) : curGame.GetPlayer(false);
+            if (currentPlayer.IsMainPLayer)
+            {
+                foreach (var checkerElement in currentPlayer.PlayerPositions)
+                {
+                    strength -= CalculatePieceStrength(checkerElement);
+                }
+            }
+            else
+            {
+                foreach (var checkerElement in currentPlayer.PlayerPositions)
+                {
+                    strength += CalculatePieceStrength(checkerElement);
+                }
+
+            }
             return strength;
         }
+
+        int CalculatePieceStrength(CheckerElement piece)
+        {
+            int strength = 0;
+
+            // Heuristic: Stronger simply because another piece is present
+            strength += 1;
+
+            // Rank-specific heuristics
+            if (piece.Type == PieceType.Checker)
+            {
+                if (piece.IsAtInitialPosition)
+                {
+                    strength += 1;
+                }
+
+                if (piece.Neighbors.Any(x => x.Side == piece.Side))
+                {
+                    strength += 1;
+                }
+            }
+            else
+            {
+                // Heuristic: Stronger if king is on board
+                strength += 19;
+            }
+
+            return strength;
+        }
+
 
         private bool DoCutOff(GameViewModel initialGameViewModel, GameViewModel curGameModel, int depth)
         {

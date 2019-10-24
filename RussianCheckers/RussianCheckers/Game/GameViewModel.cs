@@ -310,7 +310,7 @@ namespace RussianCheckers.Game
             return gameViewModel;
         }
 
-        private PlayerViewModel GetPlayer(bool isMain)
+        public PlayerViewModel GetPlayer(bool isMain)
         {
             if (isMain)
             {

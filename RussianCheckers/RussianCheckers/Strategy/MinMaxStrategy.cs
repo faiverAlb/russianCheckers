@@ -15,15 +15,15 @@ namespace RussianCheckers.Strategy
             _searchDepth = 4;
         }
 
-        public override KeyValuePair<CheckerElement, CheckerElement> GetSuggestedMove(GameViewModel initialGameViewModel)
+        public override KeyValuePair<CheckerElementViewModel, CheckerElementViewModel> GetSuggestedMove(GameViewModel initialGameViewModel)
         {
-            var resultMove =  new KeyValuePair<CheckerElement, CheckerElement>();
+            var resultMove =  new KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>();
             
             const int minValue = int.MaxValue;
             int maxValue = int.MinValue;
-            IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> allAvailableMoves = initialGameViewModel.GetAllAvailableMoves().ToList();
-            var historyOfPossibleMoves = new Dictionary<int, KeyValuePair<CheckerElement, CheckerElement>>();
-            foreach (KeyValuePair<CheckerElement, CheckerElement> availableMove in allAvailableMoves)
+            IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> allAvailableMoves = initialGameViewModel.GetAllAvailableMoves().ToList();
+            var historyOfPossibleMoves = new Dictionary<int, KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>>();
+            foreach (KeyValuePair<CheckerElementViewModel, CheckerElementViewModel> availableMove in allAvailableMoves)
             {
                 GameViewModel newGameModel = initialGameViewModel.CreateGame();
                 newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
@@ -46,7 +46,7 @@ namespace RussianCheckers.Strategy
                 return minMoveStrength;
             }
 
-            IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> allAvailableMoves = curGameModel.GetAllAvailableMoves();
+            IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> allAvailableMoves = curGameModel.GetAllAvailableMoves();
             foreach (var availableMove in allAvailableMoves)
             {
                 GameViewModel newGameModel = curGameModel.CreateGame();
@@ -123,7 +123,7 @@ namespace RussianCheckers.Strategy
             return strength;
         }
 
-        int CalculatePieceStrength(CheckerElement piece)
+        int CalculatePieceStrength(CheckerElementViewModel piece)
         {
             int strength = 0;
 
@@ -185,7 +185,7 @@ namespace RussianCheckers.Strategy
                 return DoCalculateStrength(initialGameViewModel, curGameModel);
             }
 
-            IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> allAvailableMoves = curGameModel.GetAllAvailableMoves();
+            IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> allAvailableMoves = curGameModel.GetAllAvailableMoves();
             foreach (var availableMove in allAvailableMoves)
             {
                 GameViewModel newGameModel = curGameModel.CreateGame();

@@ -55,22 +55,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Game\CheckerElement.cs" />
+    <Compile Include="Game\CheckerElementViewModel.cs" />
     <Compile Include="Game\DataProvider.cs" />
     <Compile Include="Game\Diagonal.cs" />
+    <Compile Include="Game\Domain\CheckerModel.cs" />
+    <Compile Include="Game\Domain\NeighborsCalculator.cs" />
     <Compile Include="Game\EmptyCellsPlayer.cs" />
-    <Compile Include="Game\GameEnums.cs" />
+    <Compile Include="Game\Domain\GameEnums.cs" />
     <Compile Include="Game\GameInfrastructure\GameStatus.cs" />
     <Compile Include="Game\GameStatusChecker.cs" />
     <Compile Include="Game\GameViewModel.cs" />
     <Compile Include="Game\MainHumanPlayer.cs" />
     <Compile Include="Game\NotificationDialogViewModel.cs" />
+    <Compile Include="Game\Domain\Player.cs" />
     <Compile Include="Game\PlayerViewModel.cs" />
     <Compile Include="Game\MoveValidationManager.cs" />
     <Compile Include="Game\GameInfrastructure\MoveValidationResult.cs" />
     <Compile Include="Game\GameInfrastructure\MoveValidationStatus.cs" />
-    <Compile Include="Game\Point.cs" />
-    <Compile Include="Game\RobotPlayer.cs" />
+    <Compile Include="Game\PointViewModel.cs" />
+    <Compile Include="Game\RobotViewPlayer.cs" />
     <Compile Include="Infrastructure\DialogCloseRequestedEventArgs.cs" />
     <Compile Include="Infrastructure\IDialog.cs" />
     <Compile Include="Infrastructure\IDialogRequestClose.cs" />

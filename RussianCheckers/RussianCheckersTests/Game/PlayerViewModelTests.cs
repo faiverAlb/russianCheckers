@@ -15,21 +15,21 @@ namespace RussianCheckers.Game.Tests
         public void GetPossiblePathsTest()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 2, PieceType.Checker, Side.White),
+                new CheckerElementViewModel(4, 2, PieceType.Checker, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(3, 3, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 3, PieceType.Checker, Side.Black),
-                new CheckerElement(3, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(1, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(3, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(3, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 5, PieceType.Checker, Side.Black),
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var playerTwo = new RobotViewPlayer(Side.Black, dataProvider);
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
 
             //  Act
@@ -47,21 +47,21 @@ namespace RussianCheckers.Game.Tests
         public void CalculateAvailablePathsTest()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 2, PieceType.Checker, Side.White),
+                new CheckerElementViewModel(4, 2, PieceType.Checker, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(3, 3, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 3, PieceType.Checker, Side.Black),
-                new CheckerElement(3, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(1, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(3, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(3, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 5, PieceType.Checker, Side.Black),
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var playerTwo = new RobotViewPlayer(Side.Black, dataProvider);
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
 
             //  Act
@@ -79,11 +79,11 @@ namespace RussianCheckers.Game.Tests
         public void CalculateNeighbors_ForQueen_NoOtherCheckers_ShouldCountAllEmpty()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 6, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
                 
             };
@@ -103,13 +103,13 @@ namespace RussianCheckers.Game.Tests
         public void CalculateNeighbors_ForQueen_HaveSameOnPath_ShouldCountAllEmpty()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 6, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(1, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 3, PieceType.Checker, Side.Black),
             };
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
@@ -125,13 +125,13 @@ namespace RussianCheckers.Game.Tests
         public void CalculateNeighbors_ForQueen_ShouldHaveBlackNeighbor()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 6, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(1, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 3, PieceType.Checker, Side.Black),
             };
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
@@ -139,8 +139,8 @@ namespace RussianCheckers.Game.Tests
             playerOne.CalculateNeighbors();
 
             //  Assert
-            List<CheckerElement> whiteCheckerNeighbors = playerOne.PlayerPositions.Single().Neighbors;
-            CheckerElement blackChecker = secondPlayerCheckers.Single();
+            List<CheckerElementViewModel> whiteCheckerNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            CheckerElementViewModel blackChecker = secondPlayerCheckers.Single();
             Assert.IsTrue(whiteCheckerNeighbors.Contains(blackChecker) );
         }
 
@@ -148,13 +148,13 @@ namespace RussianCheckers.Game.Tests
         public void CalculateNeighbors_ForQueen_ShouldNotHaveEmptyNeighborAfterBlack()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 6, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(1, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 3, PieceType.Checker, Side.Black),
             };
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
@@ -162,7 +162,7 @@ namespace RussianCheckers.Game.Tests
             playerOne.CalculateNeighbors();
 
             //  Assert
-            List<CheckerElement> whiteCheckerNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            List<CheckerElementViewModel> whiteCheckerNeighbors = playerOne.PlayerPositions.Single().Neighbors;
             Assert.IsFalse(whiteCheckerNeighbors.Any(x => x.Side == Side.Empty && x.Column == 0 && x.Row == 2) );
         }
 
@@ -170,14 +170,14 @@ namespace RussianCheckers.Game.Tests
         public void CalculateNeighborsForQueen_HaveTwoBlackNearestNeighbors()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 6, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(1, 3, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 5, PieceType.Checker, Side.Black),
             };
 
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
@@ -186,7 +186,7 @@ namespace RussianCheckers.Game.Tests
             playerOne.CalculateNeighbors();
 
             //  Assert
-            List<CheckerElement> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            List<CheckerElementViewModel> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
             Assert.AreEqual(2, actualNeighbors.Count(x => x.Side == Side.Black));
         }
 
@@ -195,14 +195,14 @@ namespace RussianCheckers.Game.Tests
         public void CalculateNeighborsForQueen_ShouldHave_6_Neighbors()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 6, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(1, 3, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 5, PieceType.Checker, Side.Black),
             };
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
@@ -210,7 +210,7 @@ namespace RussianCheckers.Game.Tests
             playerOne.CalculateNeighbors();
 
             //  Assert
-            List<CheckerElement> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            List<CheckerElementViewModel> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
             Assert.AreEqual(6, actualNeighbors.Count);
         }
 
@@ -219,14 +219,14 @@ namespace RussianCheckers.Game.Tests
         public void CalculateNeighborsForQueen_ShouldHave_4_Neighbors()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 6, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(3, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(3, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 5, PieceType.Checker, Side.Black),
             };            
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
@@ -234,7 +234,7 @@ namespace RussianCheckers.Game.Tests
             playerOne.CalculateNeighbors();
 
             //  Assert
-            List<CheckerElement> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            List<CheckerElementViewModel> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
             Assert.AreEqual(4, actualNeighbors.Count);
         }
 
@@ -243,13 +243,13 @@ namespace RussianCheckers.Game.Tests
         public void CalculateNeighborsForQueen_QueenInCorner_ShouldHave_1_Neighbor()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(0, 0, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(0, 0, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(1, 1, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 1, PieceType.Checker, Side.Black),
             };
 
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
@@ -258,7 +258,7 @@ namespace RussianCheckers.Game.Tests
             playerOne.CalculateNeighbors();
 
             //  Assert
-            List<CheckerElement> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            List<CheckerElementViewModel> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
             Assert.AreEqual(1, actualNeighbors.Count);
         }
 
@@ -266,18 +266,18 @@ namespace RussianCheckers.Game.Tests
         public void CalculateNeighborsForQueen_QueenInCorner_ShouldHave_7_Neighbor()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(0, 0, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(0, 0, PieceType.Queen, Side.White),
             };
 
-            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, new List<CheckerElement>()));
+            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, new List<CheckerElementViewModel>()));
 
             //  Act
             playerOne.CalculateNeighbors();
 
             //  Assert
-            List<CheckerElement> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
+            List<CheckerElementViewModel> actualNeighbors = playerOne.PlayerPositions.Single().Neighbors;
             Assert.AreEqual(7, actualNeighbors.Count);
         }
 
@@ -286,9 +286,9 @@ namespace RussianCheckers.Game.Tests
         public void GetAllElementsInDiagonalFromCurrent_LeftDownInCorner_Returns_0()
         {
             //  Arrange
-            var checker = new CheckerElement(0, 0, PieceType.Checker, Side.White);
-            var mainPlayCheckers = new List<CheckerElement>() {checker};
-            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var checker = new CheckerElementViewModel(0, 0, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElementViewModel>() {checker};
+            var secondPlayerCheckers = new List<CheckerElementViewModel>(){};
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
@@ -300,9 +300,9 @@ namespace RussianCheckers.Game.Tests
         public void GetAllElementsInDiagonalFromCurrent_LeftUpInCorner_Returns_0()
         {
             //  Arrange
-            var checker = new CheckerElement(0, 0, PieceType.Checker, Side.White);
-            var mainPlayCheckers = new List<CheckerElement>() {checker};
-            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var checker = new CheckerElementViewModel(0, 0, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElementViewModel>() {checker};
+            var secondPlayerCheckers = new List<CheckerElementViewModel>(){};
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
@@ -316,9 +316,9 @@ namespace RussianCheckers.Game.Tests
         public void GetAllElementsInDiagonalFromCurrent_RightUpInCorner_Returns_7()
         {
             //  Arrange
-            var checker = new CheckerElement(0, 0, PieceType.Checker, Side.White);
-            var mainPlayCheckers = new List<CheckerElement>() {checker};
-            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var checker = new CheckerElementViewModel(0, 0, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElementViewModel>() {checker};
+            var secondPlayerCheckers = new List<CheckerElementViewModel>(){};
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
@@ -332,9 +332,9 @@ namespace RussianCheckers.Game.Tests
         public void GetAllElementsInDiagonalFromCurrent_RightDownInCorner_Returns_6()
         {
             //  Arrange
-            var checker = new CheckerElement(0, 6, PieceType.Checker, Side.White);
-            var mainPlayCheckers = new List<CheckerElement>() {checker};
-            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var checker = new CheckerElementViewModel(0, 6, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElementViewModel>() {checker};
+            var secondPlayerCheckers = new List<CheckerElementViewModel>(){};
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
@@ -348,9 +348,9 @@ namespace RussianCheckers.Game.Tests
         public void GetAllElementsInDiagonalFromCurrent_InTheBoard_LeftUp_Returns()
         {
             //  Arrange
-            var checker = new CheckerElement(3, 3, PieceType.Checker, Side.White);
-            var mainPlayCheckers = new List<CheckerElement>() {checker};
-            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var checker = new CheckerElementViewModel(3, 3, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElementViewModel>() {checker};
+            var secondPlayerCheckers = new List<CheckerElementViewModel>(){};
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
@@ -364,9 +364,9 @@ namespace RussianCheckers.Game.Tests
         public void GetAllElementsInDiagonalFromCurrent_InTheBoard_LeftDown_Returns_2()
         {
             //  Arrange
-            var checker = new CheckerElement(2, 4, PieceType.Checker, Side.White);
-            var mainPlayCheckers = new List<CheckerElement>() {checker};
-            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var checker = new CheckerElementViewModel(2, 4, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElementViewModel>() {checker};
+            var secondPlayerCheckers = new List<CheckerElementViewModel>(){};
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
@@ -380,9 +380,9 @@ namespace RussianCheckers.Game.Tests
         public void GetAllElementsInDiagonalFromCurrent_InTheBoard_RightUp_Returns_3()
         {
             //  Arrange
-            var checker = new CheckerElement(2, 4, PieceType.Checker, Side.White);
-            var mainPlayCheckers = new List<CheckerElement>() {checker};
-            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var checker = new CheckerElementViewModel(2, 4, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElementViewModel>() {checker};
+            var secondPlayerCheckers = new List<CheckerElementViewModel>(){};
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
@@ -396,9 +396,9 @@ namespace RussianCheckers.Game.Tests
         public void GetAllElementsInDiagonalFromCurrent_InTheBoard_RightDown_Returns_4()
         {
             //  Arrange
-            var checker = new CheckerElement(2, 4, PieceType.Checker, Side.White);
-            var mainPlayCheckers = new List<CheckerElement>() {checker};
-            var secondPlayerCheckers = new List<CheckerElement>(){};
+            var checker = new CheckerElementViewModel(2, 4, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerElementViewModel>() {checker};
+            var secondPlayerCheckers = new List<CheckerElementViewModel>(){};
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
@@ -412,8 +412,8 @@ namespace RussianCheckers.Game.Tests
         public void GetNextElementsInDiagonal_Returns_2()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>() { new CheckerElement(4, 6, PieceType.Checker, Side.White) };
-            var secondPlayerCheckers = new List<CheckerElement>(){ new CheckerElement(2, 4, PieceType.Checker, Side.Black) };
+            var mainPlayCheckers = new List<CheckerElementViewModel>() { new CheckerElementViewModel(4, 6, PieceType.Checker, Side.White) };
+            var secondPlayerCheckers = new List<CheckerElementViewModel>(){ new CheckerElementViewModel(2, 4, PieceType.Checker, Side.Black) };
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
             //  Act
@@ -427,11 +427,11 @@ namespace RussianCheckers.Game.Tests
         public void GetNextElementsInDiagonal_Returns_1()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>() { new CheckerElement(4, 6, PieceType.Checker, Side.White) };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>() { new CheckerElementViewModel(4, 6, PieceType.Checker, Side.White) };
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(2, 4, PieceType.Checker, Side.Black),
-                new CheckerElement(0, 2, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(2, 4, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(0, 2, PieceType.Checker, Side.Black),
             };
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
@@ -444,11 +444,11 @@ namespace RussianCheckers.Game.Tests
         public void GetNextElementsInDiagonal_Returns_0()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>() { new CheckerElement(1, 7, PieceType.Checker, Side.White) };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>() { new CheckerElementViewModel(1, 7, PieceType.Checker, Side.White) };
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(3, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(4, 4, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(3, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(4, 4, PieceType.Checker, Side.Black),
             };
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
@@ -461,11 +461,11 @@ namespace RussianCheckers.Game.Tests
         public void GetNextElementsInDiagonal_Returns_3()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>() { new CheckerElement(1, 7, PieceType.Checker, Side.White) };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>() { new CheckerElementViewModel(1, 7, PieceType.Checker, Side.White) };
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(3, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(7, 1, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(3, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(7, 1, PieceType.Checker, Side.Black),
             };
             var playerOne = new MainHumanPlayer(Side.White, new DataProvider(mainPlayCheckers, secondPlayerCheckers));
 
@@ -479,17 +479,17 @@ namespace RussianCheckers.Game.Tests
         public void CalculateAvailableForQueen_OneBlackChecker_Should_Have_2_Paths()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 6, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(2, 4, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(2, 4, PieceType.Checker, Side.Black),
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var playerTwo = new RobotViewPlayer(Side.Black, dataProvider);
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
 
             //  Act
@@ -506,18 +506,18 @@ namespace RussianCheckers.Game.Tests
         public void CalculateAvailableForQueen_TwoBlackCheckers_Should_Have_3_Path()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 6, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(2, 4, PieceType.Checker, Side.Black),
-                new CheckerElement(1, 1, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(2, 4, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 1, PieceType.Checker, Side.Black),
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var playerTwo = new RobotViewPlayer(Side.Black, dataProvider);
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
 
             //  Act
@@ -534,19 +534,19 @@ namespace RussianCheckers.Game.Tests
         public void CalculateAvailableForQueen_ThreeBlackCheckers_Should_Have_5_Paths()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 6, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(2, 4, PieceType.Checker, Side.Black),
-                new CheckerElement(1, 1, PieceType.Checker, Side.Black),
-                new CheckerElement(6, 4, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(2, 4, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 1, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(6, 4, PieceType.Checker, Side.Black),
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var playerTwo = new RobotViewPlayer(Side.Black, dataProvider);
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
 
             //  Act
@@ -564,19 +564,19 @@ namespace RussianCheckers.Game.Tests
         public void CalculateAvailableForQueen_ThreeBlackCheckers_Should_Have_8_Paths()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 6, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(2, 4, PieceType.Checker, Side.Black),
-                new CheckerElement(1, 1, PieceType.Checker, Side.Black),
-                new CheckerElement(3, 1, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(2, 4, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 1, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(3, 1, PieceType.Checker, Side.Black),
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var playerTwo = new RobotViewPlayer(Side.Black, dataProvider);
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
 
             //  Act
@@ -593,20 +593,20 @@ namespace RussianCheckers.Game.Tests
         public void CalculateAvailableForQueen_FourBlackCheckers_Should_Have_18_Paths()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 6, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(2, 4, PieceType.Checker, Side.Black),
-                new CheckerElement(2, 2, PieceType.Checker, Side.Black),
-                new CheckerElement(4, 2, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(2, 4, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(2, 2, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(4, 2, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 5, PieceType.Checker, Side.Black),
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var playerTwo = new RobotViewPlayer(Side.Black, dataProvider);
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
 
             //  Act
@@ -624,23 +624,23 @@ namespace RussianCheckers.Game.Tests
         public void CalculateAvailableForQueen_SixBlackCheckers_Should_Have_35_Paths()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(3, 3, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(3, 3, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(2, 4, PieceType.Checker, Side.Black),
-                new CheckerElement(2, 6, PieceType.Checker, Side.Black),
-                new CheckerElement(4, 4, PieceType.Checker, Side.Black),
-                new CheckerElement(4, 6, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(2, 4, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(2, 6, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(4, 4, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(4, 6, PieceType.Checker, Side.Black),
 
-                new CheckerElement(2, 2, PieceType.Checker, Side.Black),
-                new CheckerElement(4, 2, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(2, 2, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(4, 2, PieceType.Checker, Side.Black),
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var playerTwo = new RobotViewPlayer(Side.Black, dataProvider);
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
 
             //  Act
@@ -658,21 +658,21 @@ namespace RussianCheckers.Game.Tests
         public void CalculateAvailableForQueen_SameBehaviorAsChecker_ShouldBe_21()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 2, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 2, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(3, 3, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 3, PieceType.Checker, Side.Black),
-                new CheckerElement(3, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(1, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(3, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(3, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 5, PieceType.Checker, Side.Black),
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var playerTwo = new RobotViewPlayer(Side.Black, dataProvider);
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
 
             //  Act
@@ -689,22 +689,22 @@ namespace RussianCheckers.Game.Tests
         public void CalculateAvailableForQueen_SameBehaviorAsChecker_ShouldBe_23()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 2, PieceType.Queen, Side.White),
+                new CheckerElementViewModel(4, 2, PieceType.Queen, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(3, 3, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 3, PieceType.Checker, Side.Black),
-                new CheckerElement(3, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(1, 5, PieceType.Checker, Side.Black),
-                new CheckerElement(5, 1, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(3, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 3, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(3, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(5, 1, PieceType.Checker, Side.Black),
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var playerTwo = new RobotViewPlayer(Side.Black, dataProvider);
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
 
             //  Act
@@ -721,18 +721,18 @@ namespace RussianCheckers.Game.Tests
         public void Checker_ConvertsTakeCheckerAndActsAsQueen_ShouldTakeSecondChecker()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerElement>()
+            var mainPlayCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(5, 5, PieceType.Checker, Side.White),
+                new CheckerElementViewModel(5, 5, PieceType.Checker, Side.White),
             };
-            var secondPlayerCheckers = new List<CheckerElement>()
+            var secondPlayerCheckers = new List<CheckerElementViewModel>()
             {
-                new CheckerElement(4, 6, PieceType.Checker, Side.Black),
-                new CheckerElement(1, 5, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(4, 6, PieceType.Checker, Side.Black),
+                new CheckerElementViewModel(1, 5, PieceType.Checker, Side.Black),
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
             MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-            var playerTwo = new RobotPlayer(Side.Black, dataProvider);
+            var playerTwo = new RobotViewPlayer(Side.Black, dataProvider);
             var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
 
             //  Act

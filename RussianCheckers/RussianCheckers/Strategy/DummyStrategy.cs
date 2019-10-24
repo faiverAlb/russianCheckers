@@ -13,7 +13,7 @@ namespace RussianCheckers.Strategy
         }
 
         //TODO: Move to library 
-        public override KeyValuePair<CheckerElement, CheckerElement> GetSuggestedMove(GameViewModel initialGameViewModel)
+        public override KeyValuePair<CheckerElementViewModel, CheckerElementViewModel> GetSuggestedMove(GameViewModel initialGameViewModel)
         {
             //            return new KeyValuePair<CheckerElement, CheckerElement>();
             var availableTakes = initialGameViewModel.NextMovePlayer.AvailablePaths;
@@ -22,18 +22,18 @@ namespace RussianCheckers.Strategy
             {
                 var checkerToMove = availableTakes.First().First.Value;
                 var toMove = availableTakes.First().Last.Value;
-                return new KeyValuePair<CheckerElement, CheckerElement>(checkerToMove, toMove);
+                return new KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>(checkerToMove, toMove);
             }
 
             var playerPosition = playerPositions.FirstOrDefault(x => x.PossibleMovementElements.Any());
-            CheckerElement possibleMove = null;
+            CheckerElementViewModel possibleMove = null;
             if (playerPosition != null)
             {
                 //                playerPosition.IsSelected = true;
                 possibleMove = playerPosition.PossibleMovementElements.First();
             }
 //
-            return new KeyValuePair<CheckerElement, CheckerElement>(playerPosition, possibleMove);
+            return new KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>(playerPosition, possibleMove);
         }
 
     }

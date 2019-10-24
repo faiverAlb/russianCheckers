@@ -2,12 +2,12 @@
 
 namespace RussianCheckers.Game
 {
-    public class Point:ObservableObject
+    public class PointViewModel:ObservableObject
     {
         private int _x;
         private int _y;
 
-        public Point(int row, int column)
+        public PointViewModel(int row, int column)
         {
             if (row < 0 || row > 7)
                 throw new Exception("Invalid row value");

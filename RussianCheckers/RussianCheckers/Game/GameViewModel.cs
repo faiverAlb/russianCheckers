@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -20,14 +19,14 @@ namespace RussianCheckers.Game
         public Side WinnerSide { get; set; }
 
         public GameViewModel(PlayerViewModel playerOne
-            , RobotPlayer playerTwo
+            , RobotViewPlayer viewPlayerTwo
             , EmptyCellsPlayer emptyCellsPlayer
             , DataProvider dataProvider
             , IDialogService notificationDialog = null
             , bool isPlayingAutomatically = true)
         {
             _playerOne = playerOne;
-            _playerTwo = playerTwo;
+            _viewPlayerTwo = viewPlayerTwo;
             _emptyCellsPlayer = emptyCellsPlayer;
             _dataProvider = dataProvider;
 
@@ -38,13 +37,13 @@ namespace RussianCheckers.Game
 
             _emptyCellsPlayer.CalculateNeighbors();
             playerOne.CalculateNeighbors();
-            playerTwo.CalculateNeighbors(); 
+            viewPlayerTwo.CalculateNeighbors(); 
             
             playerOne.CalculateAvailablePaths();
-            playerTwo.CalculateAvailablePaths();
+            viewPlayerTwo.CalculateAvailablePaths();
 
             var playerOneCollectionContainer = new CollectionContainer { Collection = playerOne.PlayerPositions};
-            var playerTwoCollectionContainer = new CollectionContainer{ Collection = playerTwo.PlayerPositions };
+            var playerTwoCollectionContainer = new CollectionContainer{ Collection = viewPlayerTwo.PlayerPositions };
             var emptyCollectionContainer = new CollectionContainer{ Collection = _emptyCellsPlayer.PlayerPositions };
             _positions.Add(playerOneCollectionContainer);
             _positions.Add(playerTwoCollectionContainer);
@@ -70,11 +69,11 @@ namespace RussianCheckers.Game
 
         private void MakeMoveBySecondUser()
         {
-            var move = _playerTwo.GetOptimalMove(this);
+            var move = _viewPlayerTwo.GetOptimalMove(this);
             if (move.Value != null)
             {
-                CheckerElement fromChecker = move.Key;
-                CheckerElement toPlace = move.Value;
+                CheckerElementViewModel fromChecker = move.Key;
+                CheckerElementViewModel toPlace = move.Value;
                 _selectedChecker = fromChecker;
                 MoveChecker(toPlace);
             }
@@ -87,7 +86,7 @@ namespace RussianCheckers.Game
             set
             {
                 _nextMoveSide = value;
-                NextMovePlayer = _playerOne.Side == _nextMoveSide ? _playerOne : _playerTwo;
+                NextMovePlayer = _playerOne.Side == _nextMoveSide ? _playerOne : _viewPlayerTwo;
                 RaisePropertyChangedEvent(nameof(NextMoveSide));
             }
         }
@@ -103,25 +102,25 @@ namespace RussianCheckers.Game
 
         public ICommand SelectCheckerCommand { get { return new ActionCommand(OnTryMakeMove); } }
 
-        private CheckerElement _selectedChecker;
+        private CheckerElementViewModel _selectedChecker;
         private  Side _nextMoveSide;
         private bool _isGameFinished;
         private readonly PlayerViewModel _playerOne;
         private readonly EmptyCellsPlayer _emptyCellsPlayer;
         private readonly DataProvider _dataProvider;
-        private readonly RobotPlayer _playerTwo;
+        private readonly RobotViewPlayer _viewPlayerTwo;
         private PlayerViewModel _nextMovePlayer;
 
         private void OnTryMakeMove(object obj)
         {
-            MoveChecker((CheckerElement)obj);
+            MoveChecker((CheckerElementViewModel)obj);
         }
 
-        public void MoveChecker(CheckerElement fromPlace, CheckerElement toPlace)
+        public void MoveChecker(CheckerElementViewModel fromPlace, CheckerElementViewModel toPlace)
         {
-            CheckerElement foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
+            CheckerElementViewModel foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
             _selectedChecker = foundChecker;
-            CheckerElement toPosition = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+            CheckerElementViewModel toPosition = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
             if (toPlace.Side == fromPlace.Side)
             {
                 toPosition = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
@@ -130,7 +129,7 @@ namespace RussianCheckers.Game
         }
 
 
-        private void MoveChecker(CheckerElement newSelectedChecker)
+        private void MoveChecker(CheckerElementViewModel newSelectedChecker)
         {
             if (IsGameFinished)
             {
@@ -159,7 +158,7 @@ namespace RussianCheckers.Game
             }
 
 
-            var gameStatusChecker = new GameStatusChecker(_dataProvider, _playerOne, _playerTwo);
+            var gameStatusChecker = new GameStatusChecker(_dataProvider, _playerOne, _viewPlayerTwo);
             GameStatus gameStatus = gameStatusChecker.GetGameStatus();
             if (gameStatus == GameStatus.InProgress)
             {
@@ -186,7 +185,7 @@ namespace RussianCheckers.Game
             }
         }
 
-        private bool IsCheckerMoved(CheckerElement newSelectedChecker, PlayerViewModel player)
+        private bool IsCheckerMoved(CheckerElementViewModel newSelectedChecker, PlayerViewModel player)
         {
             var moveValidationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide, player);
             MoveValidationResult validationResult =  moveValidationManager.GetMoveValidationResult();
@@ -224,17 +223,17 @@ namespace RussianCheckers.Game
             return true;
         }
 
-        private void MoveCheckerToNewPlace(CheckerElement currentPositionElement, CheckerElement emptyPosition, PlayerViewModel player)
+        private void MoveCheckerToNewPlace(CheckerElementViewModel currentPositionElementViewModel, CheckerElementViewModel emptyPosition, PlayerViewModel player)
         {
             int nextCol = emptyPosition.Column;
             int nextRow = emptyPosition.Row;
 
-            List<CheckerElement> itemsTakeByOtherUser = player.MoveCheckerToNewPlace(currentPositionElement, nextCol, nextRow);
+            List<CheckerElementViewModel> itemsTakeByOtherUser = player.MoveCheckerToNewPlace(currentPositionElementViewModel, nextCol, nextRow);
 
             _emptyCellsPlayer.AddNewEmptyElements(itemsTakeByOtherUser);
             if (player == _playerOne)
             {
-                _playerTwo.RemoveCheckers(itemsTakeByOtherUser);
+                _viewPlayerTwo.RemoveCheckers(itemsTakeByOtherUser);
             }
             else
             {
@@ -244,16 +243,16 @@ namespace RussianCheckers.Game
             if (player == _playerOne)
             {
                 _playerOne.CalculateNeighbors();
-                _playerTwo.CalculateNeighbors();
+                _viewPlayerTwo.CalculateNeighbors();
             }
             else
             {
-                _playerTwo.CalculateNeighbors();
+                _viewPlayerTwo.CalculateNeighbors();
                 _playerOne.CalculateNeighbors();
             }
 
             _playerOne.CalculateAvailablePaths();
-            _playerTwo.CalculateAvailablePaths();
+            _viewPlayerTwo.CalculateAvailablePaths();
 
         }
 
@@ -288,7 +287,7 @@ namespace RussianCheckers.Game
             }
         }
 
-        public IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> GetAllAvailableMoves()
+        public IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> GetAllAvailableMoves()
         {
             return NextMovePlayer.GetLegalMovements();
         }
@@ -297,9 +296,9 @@ namespace RussianCheckers.Game
         {
             DataProvider newDataProvider = _dataProvider.Clone();
             PlayerViewModel newPlayerOne = _playerOne.Clone(newDataProvider);
-            RobotPlayer newPlayerTwo = (RobotPlayer) _playerTwo.Clone(newDataProvider);
+            RobotViewPlayer newViewPlayerTwo = (RobotViewPlayer) _viewPlayerTwo.Clone(newDataProvider);
             EmptyCellsPlayer  newEmptyCellsPlayer = (EmptyCellsPlayer) _emptyCellsPlayer.Clone(newDataProvider);
-            var gameViewModel = new GameViewModel(newPlayerOne, newPlayerTwo, newEmptyCellsPlayer, newDataProvider, null, false);
+            var gameViewModel = new GameViewModel(newPlayerOne, newViewPlayerTwo, newEmptyCellsPlayer, newDataProvider, null, false);
             gameViewModel.NextMoveSide = NextMoveSide;
             return gameViewModel;
         }
@@ -308,10 +307,10 @@ namespace RussianCheckers.Game
         {
             if (isMain)
             {
-                return _playerOne.IsMainPLayer ? _playerOne : _playerTwo;
+                return _playerOne.IsMainPLayer ? _playerOne : _viewPlayerTwo;
             }
 
-            return _playerOne.IsMainPLayer ? _playerTwo : _playerOne;
+            return _playerOne.IsMainPLayer ? _viewPlayerTwo : _playerOne;
 
         }
 

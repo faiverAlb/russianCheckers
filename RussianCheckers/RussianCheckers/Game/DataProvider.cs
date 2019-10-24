@@ -6,40 +6,40 @@ namespace RussianCheckers.Game
 {
     public class DataProvider
     {
-        private readonly CheckerElement[,] _data;
+        private readonly CheckerModel[,] _data;
 
-        public DataProvider(CheckerElement[,] data)
+        public DataProvider(CheckerModel[,] data)
         {
             _data = data;
         }
-        public DataProvider(List<CheckerElement> mainPlayerCheckers, List<CheckerElement> secondPlayerCheckers)
+        public DataProvider(List<CheckerModel> mainPlayerCheckers, List<CheckerModel> secondPlayerCheckers)
         {
-            List<CheckerElement> emptyCheckers = GetEmptyCheckersPositions(mainPlayerCheckers, secondPlayerCheckers);
+            List<CheckerModel> emptyCheckers = GetEmptyCheckersPositions(mainPlayerCheckers, secondPlayerCheckers);
             _data = GetCurrentGamePositions(mainPlayerCheckers, secondPlayerCheckers, emptyCheckers);
         }
 
         public DataProvider(Side mainPlayerSide)
         {
-            List<CheckerElement> mainPlayerCheckers = GetMainPlayerCheckers(mainPlayerSide);
+            List<CheckerModel> mainPlayerCheckers = GetMainPlayerCheckers(mainPlayerSide);
             Side secondPlayerSide = mainPlayerSide == Side.White? Side.Black: Side.White;
             
-            List<CheckerElement> secondPlayerCheckers = GetSecondPlayerPositions(secondPlayerSide);
-            List<CheckerElement> emptyCheckers = GetEmptyCheckersPositions(mainPlayerCheckers, secondPlayerCheckers);
+            List<CheckerModel> secondPlayerCheckers = GetSecondPlayerPositions(secondPlayerSide);
+            List<CheckerModel> emptyCheckers = GetEmptyCheckersPositions(mainPlayerCheckers, secondPlayerCheckers);
 
             _data = GetCurrentGamePositions(mainPlayerCheckers, secondPlayerCheckers, emptyCheckers);
 
         }
 
 
-        public CheckerElement GetElementAtPosition(int column, int row)
+        public CheckerModel GetElementAtPosition(int column, int row)
         {
             return _data[column, row];
         }
 
-        private List<CheckerElement> GetEmptyCheckersPositions(List<CheckerElement> mainPlayerCheckers, List<CheckerElement> secondPlayerCheckers)
+        private List<CheckerModel> GetEmptyCheckersPositions(List<CheckerModel> mainPlayerCheckers, List<CheckerModel> secondPlayerCheckers)
         {
-            var positions = new List<CheckerElement>();
-            List<CheckerElement> allPositions = mainPlayerCheckers.ToList();
+            var positions = new List<CheckerModel>();
+            List<CheckerModel> allPositions = mainPlayerCheckers.ToList();
             allPositions.AddRange(secondPlayerCheckers.ToList());
 
             List<int> colsForPlayer = mainPlayerCheckers.Select(x => x.Column).Distinct().ToList();
@@ -55,12 +55,12 @@ namespace RussianCheckers.Game
                     }
                     if (row % 2 == 1 && col % 2 == 1)
                     {
-                        positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.Empty));
+                        positions.Add(new CheckerModel(col, row, PieceType.Checker, Side.Empty));
                         continue;
                     }
                     if (row % 2 == 0 && col % 2 == 0)
                     {
-                        positions.Add(new CheckerElement(col, row, PieceType.Checker, Side.Empty));
+                        positions.Add(new CheckerModel(col, row, PieceType.Checker, Side.Empty));
                         continue;
                     }
                 }
@@ -69,41 +69,41 @@ namespace RussianCheckers.Game
 
         }
 
-        private CheckerElement[,] GetCurrentGamePositions(IEnumerable<CheckerElement> mainPlayerElements, IEnumerable<CheckerElement> secondPlayElements, IEnumerable<CheckerElement> emptyElementsList)
+        private CheckerModel[,] GetCurrentGamePositions(IEnumerable<CheckerModel> mainPlayerElements, IEnumerable<CheckerModel> secondPlayElements, IEnumerable<CheckerModel> emptyElementsList)
         {
-            var data = new CheckerElement[8, 8];
-            foreach (CheckerElement position in mainPlayerElements)
+            var data = new CheckerModel[8, 8];
+            foreach (CheckerModel position in mainPlayerElements)
             {
                 data[position.Column, position.Row] = position;
             }
 
-            foreach (CheckerElement position in secondPlayElements)
+            foreach (CheckerModel position in secondPlayElements)
             {
                 data[position.Column, position.Row] = position;
             }
 
-            foreach (CheckerElement position in emptyElementsList)
+            foreach (CheckerModel position in emptyElementsList)
             {
                 data[position.Column, position.Row] = position;
             }
 
             return data;
         }
-        private List<CheckerElement> GetMainPlayerCheckers(Side side)
+        private List<CheckerModel> GetMainPlayerCheckers(Side side)
         {
-            var positions = new List<CheckerElement>();
+            var positions = new List<CheckerModel>();
             for (int col = 0; col < 8; col++)
             {
                 for (int row = 0; row < 3; row++)
                 {
                     if (row % 2 == 1 && col % 2 == 1)
                     {
-                        positions.Add(new CheckerElement(col, row, PieceType.Checker, side));
+                        positions.Add(new CheckerModel(col, row, PieceType.Checker, side));
                         continue;
                     }
                     if (row % 2 == 0 && col % 2 == 0)
                     {
-                        positions.Add(new CheckerElement(col, row, PieceType.Checker, side));
+                        positions.Add(new CheckerModel(col, row, PieceType.Checker, side));
                     }
                 }
             }
@@ -111,21 +111,21 @@ namespace RussianCheckers.Game
         }
 
 
-        private List<CheckerElement> GetSecondPlayerPositions(Side side)
+        private List<CheckerModel> GetSecondPlayerPositions(Side side)
         {
-            var positions = new List<CheckerElement>();
+            var positions = new List<CheckerModel>();
             for (int col = 0; col < 8; col++)
             {
                 for (int row = 5; row < 8; row++)
                 {
                     if (row % 2 == 1 && col % 2 == 1)
                     {
-                        positions.Add(new CheckerElement(col, row, PieceType.Checker, side));
+                        positions.Add(new CheckerModel(col, row, PieceType.Checker, side));
                         continue;
                     }
                     if (row % 2 == 0 && col % 2 == 0)
                     {
-                        positions.Add(new CheckerElement(col, row, PieceType.Checker, side));
+                        positions.Add(new CheckerModel(col, row, PieceType.Checker, side));
                         continue;
                     }
 
@@ -136,10 +136,10 @@ namespace RussianCheckers.Game
         }
 
 
-        public List<CheckerElement> GetMySideCheckers(Side side)
+        public List<CheckerModel> GetMySideCheckers(Side side)
         {
-            var resultList = new List<CheckerElement>();
-            foreach (CheckerElement checkerElement in _data)
+            var resultList = new List<CheckerModel>();
+            foreach (CheckerModel checkerElement in _data)
             {
                 if (checkerElement?.Side == side)
                 {
@@ -151,14 +151,14 @@ namespace RussianCheckers.Game
         }
 
 
-        public void MoveCheckerToNewPosition(CheckerElement element, int checkerElementColumn, int checkerElementRow)
+        public void MoveCheckerToNewPosition(CheckerModel elementViewModel, int checkerElementColumn, int checkerElementRow)
         {
-            _data[checkerElementColumn, checkerElementRow] = element;
+            _data[checkerElementColumn, checkerElementRow] = elementViewModel;
         }
 
         public DataProvider Clone()
         {
-            var clonedCheckers = new CheckerElement[8,8];
+            var clonedCheckers = new CheckerModel[8,8];
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)

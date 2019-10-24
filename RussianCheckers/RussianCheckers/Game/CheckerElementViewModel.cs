@@ -1,40 +1,43 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace RussianCheckers.Game
 {
-    public class CheckerElement : ObservableObject
+    public class CheckerElementViewModel : ObservableObject
     {
-        public CheckerElement(int column, int row, PieceType type, Side side)
+        public CheckerElementViewModel(CheckerModel checkerModel)
         {
-            _pos = new Point(row, column);
-            Column = column;
-            Row = row;
-            _type = type;
-            _side = side;
-            PossibleMovementElements = new List<CheckerElement>();
-            Neighbors = new List<CheckerElement>();
-            IsAtInitialPosition = true;
+            _checkerModel = checkerModel;
+            _pos = new PointViewModel(_checkerModel.Row, _checkerModel.Column);
+            PossibleMovementElements = new List<CheckerElementViewModel>(_checkerModel.PossibleMovementElements.Select(x => new CheckerElementViewModel(x)));
+            Neighbors = new List<CheckerElementViewModel>(_checkerModel.Neighbors.Select(x => new CheckerElementViewModel(x)));
         }
 
-        public bool IsAtInitialPosition { get; private set; }
+        public bool IsAtInitialPosition
+        {
+            get
+            {
+                return _checkerModel.IsAtInitialPosition;
+            }
+        }
 
-        private Point _pos;
-        public Point Pos
+        private PointViewModel _pos;
+        public PointViewModel Pos
         {
             get { return this._pos; }
             set { this._pos = value; RaisePropertyChangedEvent(nameof(Pos)); }
         }
 
-        public List<CheckerElement> PossibleMovementElements { get; private set; }
+        public List<CheckerElementViewModel> PossibleMovementElements { get; private set; }
 
-        public void SetPossibleMovementElements(List<CheckerElement> possibleMovementElements)
+        public void SetPossibleMovementElements(List<CheckerElementViewModel> possibleMovementElements)
         {
             PossibleMovementElements = possibleMovementElements;
         }
 
-        public bool CanMoveToPosition(CheckerElement element)
+        public bool CanMoveToPosition(CheckerElementViewModel elementViewModel)
         {
-            return PossibleMovementElements.Contains(element);
+            return PossibleMovementElements.Contains(elementViewModel);
         }
 
 
@@ -52,6 +55,7 @@ namespace RussianCheckers.Game
         private Side _side;
         private bool _isSelected;
         private bool _selfAsPossible;
+        private CheckerModel _checkerModel;
 
         public Side Side
         {
@@ -86,9 +90,9 @@ namespace RussianCheckers.Game
 
         
 
-        public List<CheckerElement> Neighbors { get; private set; }
+        public List<CheckerElementViewModel> Neighbors { get; private set; }
 
-        public void SetNeighbors(List<CheckerElement> neighbors)
+        public void SetNeighbors(List<CheckerElementViewModel> neighbors)
         {
             Neighbors = neighbors;
         }
@@ -108,7 +112,7 @@ namespace RussianCheckers.Game
 
         public void SelectPossibleMovement()
         {
-            foreach (CheckerElement possibleMovementElement in PossibleMovementElements)
+            foreach (CheckerElementViewModel possibleMovementElement in PossibleMovementElements)
             {
                 if (possibleMovementElement == this)
                 {
@@ -120,16 +124,16 @@ namespace RussianCheckers.Game
         }
         public void DeSelectPossibleMovement()
         {
-            foreach (CheckerElement possibleMovementElement in PossibleMovementElements)
+            foreach (CheckerElementViewModel possibleMovementElement in PossibleMovementElements)
             {
               possibleMovementElement.IsSelected = false;
               possibleMovementElement.SelfAsPossible = false;
             }
         }
 
-        public CheckerElement Clone()
+        public CheckerElementViewModel Clone()
         {
-            return new CheckerElement(Column, Row, Type, Side);
+            return new CheckerElementViewModel(_checkerModel.Clone());
         }
     }
 }

@@ -8,12 +8,12 @@ namespace RussianCheckers.Game
         {
         }
 
-        public void AddNewEmptyElements(List<CheckerElement> itemsTakeByOtherUser)
+        public void AddNewEmptyElements(List<CheckerElementViewModel> itemsTakeByOtherUser)
         {
-            foreach (CheckerElement checkerElement in itemsTakeByOtherUser)
+            foreach (CheckerElementViewModel checkerElement in itemsTakeByOtherUser)
             {
-                CheckerElement element = _dataProvider.GetElementAtPosition(checkerElement.Column, checkerElement.Row);
-                PlayerPositions.Add(element);
+                CheckerElementViewModel elementViewModel = _dataProvider.GetElementAtPosition(checkerElement.Column, checkerElement.Row);
+                PlayerPositions.Add(elementViewModel);
             }
 
         }

@@ -5,27 +5,27 @@ namespace RussianCheckers.Game
 {
     public class MoveValidationManager
     {
-        private readonly CheckerElement _oldSelectedElement;
-        private readonly CheckerElement _newSelectedElement;
+        private readonly CheckerElementViewModel _oldSelectedElementViewModel;
+        private readonly CheckerElementViewModel _newSelectedElementViewModel;
         private readonly Side _nextMoveSide;
         private readonly PlayerViewModel _player;
 
-        public MoveValidationManager(CheckerElement oldSelectedElement, CheckerElement newSelectedElement,
+        public MoveValidationManager(CheckerElementViewModel oldSelectedElementViewModel, CheckerElementViewModel newSelectedElementViewModel,
             Side nextMoveSide, PlayerViewModel player)
         {
-            _oldSelectedElement = oldSelectedElement;
-            _newSelectedElement = newSelectedElement;
+            _oldSelectedElementViewModel = oldSelectedElementViewModel;
+            _newSelectedElementViewModel = newSelectedElementViewModel;
             _nextMoveSide = nextMoveSide;
             _player = player;
         }
         public MoveValidationResult GetPreValidationResult()
         {
-            if (_oldSelectedElement == null && _newSelectedElement.Side == Side.Empty)
+            if (_oldSelectedElementViewModel == null && _newSelectedElementViewModel.Side == Side.Empty)
             {
                 return new MoveValidationResult(MoveValidationStatus.NothingSelected, "Please select checker first");
             }
 
-            if (_newSelectedElement.Side != _nextMoveSide && _newSelectedElement.Side != Side.Empty)
+            if (_newSelectedElementViewModel.Side != _nextMoveSide && _newSelectedElementViewModel.Side != Side.Empty)
             {
                 return new MoveValidationResult(MoveValidationStatus.NothingSelected, $"Next move should be done by {_nextMoveSide}");
             }
@@ -35,33 +35,33 @@ namespace RussianCheckers.Game
 
         public MoveValidationResult GetMoveValidationResult()
         {
-            if (_player.AvailablePaths.Any() && (_oldSelectedElement == null || _oldSelectedElement.Side == _newSelectedElement.Side) &&_player.AvailablePaths.All(x => x.First.Value != _newSelectedElement))
+            if (_player.AvailablePaths.Any() && (_oldSelectedElementViewModel == null || _oldSelectedElementViewModel.Side == _newSelectedElementViewModel.Side) &&_player.AvailablePaths.All(x => x.First.Value != _newSelectedElementViewModel))
             {
 
                 return new MoveValidationResult(MoveValidationStatus.Error, "You have required move by other checker");
             }
 
-            if (_oldSelectedElement == null)
+            if (_oldSelectedElementViewModel == null)
             {
                 return new MoveValidationResult(MoveValidationStatus.NewItemSelected);
             }
 
-            if (_oldSelectedElement == _newSelectedElement && _player.AvailablePaths.Any(x => x.Last.Value == _newSelectedElement))
+            if (_oldSelectedElementViewModel == _newSelectedElementViewModel && _player.AvailablePaths.Any(x => x.Last.Value == _newSelectedElementViewModel))
             {
                 return new MoveValidationResult(MoveValidationStatus.Ok);
             }
 
-            if (_oldSelectedElement == _newSelectedElement)
+            if (_oldSelectedElementViewModel == _newSelectedElementViewModel)
             {
                 return new MoveValidationResult(MoveValidationStatus.DeselectChecker);
             }
 
-            if (_oldSelectedElement.Side == _newSelectedElement.Side)
+            if (_oldSelectedElementViewModel.Side == _newSelectedElementViewModel.Side)
             {
                 return new MoveValidationResult(MoveValidationStatus.NewItemSelected);
             }
 
-            if (_oldSelectedElement != null && !_oldSelectedElement.CanMoveToPosition(_newSelectedElement))
+            if (_oldSelectedElementViewModel != null && !_oldSelectedElementViewModel.CanMoveToPosition(_newSelectedElementViewModel))
             {
                 return new MoveValidationResult(MoveValidationStatus.Error, "Can't move checker to this place");
             }

@@ -12,10 +12,9 @@ namespace RussianCheckers.Strategy
 
         public MinMaxStrategy()
         {
-            _searchDepth = 5;
+            _searchDepth = 4;
         }
 
-        //TODO: Move to library 
         public override KeyValuePair<CheckerElement, CheckerElement> GetSuggestedMove(GameViewModel initialGameViewModel)
         {
             var resultMove =  new KeyValuePair<CheckerElement, CheckerElement>();
@@ -23,6 +22,7 @@ namespace RussianCheckers.Strategy
             const int minValue = int.MaxValue;
             int maxValue = int.MinValue;
             IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> allAvailableMoves = initialGameViewModel.GetAllAvailableMoves().ToList();
+            var historyOfPossibleMoves = new Dictionary<int, KeyValuePair<CheckerElement, CheckerElement>>();
             foreach (KeyValuePair<CheckerElement, CheckerElement> availableMove in allAvailableMoves)
             {
                 GameViewModel newGameModel = initialGameViewModel.CreateGame();
@@ -32,6 +32,7 @@ namespace RussianCheckers.Strategy
                 {
                     maxValue = curValue;
                     resultMove = availableMove;
+                    historyOfPossibleMoves.Add(maxValue, resultMove);
                 }
             }
             return resultMove;
@@ -39,16 +40,17 @@ namespace RussianCheckers.Strategy
 
         private int MinMove(GameViewModel initialGameViewModel, GameViewModel curGameModel, int depth, int alpha, int beta)
         {
-
             if (DoCutOff(initialGameViewModel, curGameModel, depth))
-                return -DoCalculateStrength(initialGameViewModel, curGameModel);
-            
-            foreach (var availableMove in curGameModel.GetAllAvailableMoves())
+            {
+                var minMoveStrength = -DoCalculateStrength(initialGameViewModel, curGameModel);
+                return minMoveStrength;
+            }
+
+            IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> allAvailableMoves = curGameModel.GetAllAvailableMoves();
+            foreach (var availableMove in allAvailableMoves)
             {
                 GameViewModel newGameModel = curGameModel.CreateGame();
                 newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
-                //                if (!nextGameState.MovePiece(nextMoveState))
-                //                    continue;
                 int value = MaxMove(initialGameViewModel, newGameModel, depth + 1, alpha, beta);
                 if (value < beta)
                 {
@@ -61,9 +63,7 @@ namespace RussianCheckers.Strategy
                     // Return min value with pruning
                     return alpha;
                 }
-
             }
-
             return beta;
         }
 
@@ -171,13 +171,9 @@ namespace RussianCheckers.Strategy
             if ((depth >= 0) && (depth >= curSearchDepth))
                 return true;
 
-            return CutOff(initialGameViewModel, curGameModel, depth);
-
-
-        }
-        protected virtual bool CutOff(GameViewModel initGame, GameViewModel curGame, int depth)
-        {
             return false;
+
+
         }
 
 
@@ -189,13 +185,11 @@ namespace RussianCheckers.Strategy
                 return DoCalculateStrength(initialGameViewModel, curGameModel);
             }
 
-            var allAvailableMoves = curGameModel.GetAllAvailableMoves();
+            IEnumerable<KeyValuePair<CheckerElement, CheckerElement>> allAvailableMoves = curGameModel.GetAllAvailableMoves();
             foreach (var availableMove in allAvailableMoves)
             {
                 GameViewModel newGameModel = curGameModel.CreateGame();
                 newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
-                //                if (!nextGameState.MovePiece(nextMoveState))
-                //                    continue;
                 int value = MinMove(initialGameViewModel, newGameModel, depth + 1, alpha, beta);
                 if (value > alpha)
                 {
@@ -208,7 +202,6 @@ namespace RussianCheckers.Strategy
                     // Return max value with pruning
                     return beta;
                 }
-
             }
 
             return alpha;

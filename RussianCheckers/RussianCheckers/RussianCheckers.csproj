@@ -57,7 +57,6 @@
     </ApplicationDefinition>
     <Compile Include="Game\CheckerElementViewModel.cs" />
     <Compile Include="Game\EmptyCellsPlayer.cs" />
-    <Compile Include="Game\GameInfrastructure\GameStatus.cs" />
     <Compile Include="Game\GameStatusChecker.cs" />
     <Compile Include="Game\GameViewModel.cs" />
     <Compile Include="Game\HumanPlayerViewModel.cs" />

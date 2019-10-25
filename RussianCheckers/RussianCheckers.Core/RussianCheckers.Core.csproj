@@ -46,6 +46,7 @@
     <Compile Include="Diagonal.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameEnums.cs" />
+    <Compile Include="GameStatus.cs" />
     <Compile Include="NeighborsCalculator.cs" />
     <Compile Include="PathCalculator.cs" />
     <Compile Include="Player.cs" />

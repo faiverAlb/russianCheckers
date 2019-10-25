@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RussianCheckers.Game
+namespace RussianCheckers.Core
 {
     public class CheckerModel
     {

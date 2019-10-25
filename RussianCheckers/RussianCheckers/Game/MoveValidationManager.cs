@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using RussianCheckers.Core;
 using RussianCheckers.Game.GameInfrastructure;
 
 namespace RussianCheckers.Game
@@ -35,7 +37,8 @@ namespace RussianCheckers.Game
 
         public MoveValidationResult GetMoveValidationResult()
         {
-            if (_player.AvailablePaths.Any() && (_oldSelectedElementViewModel == null || _oldSelectedElementViewModel.Side == _newSelectedElementViewModel.Side) &&_player.AvailablePaths.All(x => x.First.Value != _newSelectedElementViewModel))
+            IEnumerable<LinkedList<CheckerElementViewModel>> availablePaths = _player.GetAvailablePaths();
+            if (availablePaths.Any() && (_oldSelectedElementViewModel == null || _oldSelectedElementViewModel.Side == _newSelectedElementViewModel.Side) &&availablePaths.All(x => x.First.Value != _newSelectedElementViewModel))
             {
 
                 return new MoveValidationResult(MoveValidationStatus.Error, "You have required move by other checker");
@@ -46,7 +49,7 @@ namespace RussianCheckers.Game
                 return new MoveValidationResult(MoveValidationStatus.NewItemSelected);
             }
 
-            if (_oldSelectedElementViewModel == _newSelectedElementViewModel && _player.AvailablePaths.Any(x => x.Last.Value == _newSelectedElementViewModel))
+            if (_oldSelectedElementViewModel == _newSelectedElementViewModel && availablePaths.Any(x => x.Last.Value == _newSelectedElementViewModel))
             {
                 return new MoveValidationResult(MoveValidationStatus.Ok);
             }

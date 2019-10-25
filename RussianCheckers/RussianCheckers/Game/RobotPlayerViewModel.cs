@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using RussianCheckers.Core;
 using RussianCheckers.Strategy;
 
 namespace RussianCheckers.Game
@@ -15,7 +16,7 @@ namespace RussianCheckers.Game
             _robotStrategy = robotStrategy;
         }
 
-        public RobotPlayerViewModel(RobotPlayer robotPlayer) : this(robotPlayer, new DummyStrategy())
+        public RobotPlayerViewModel(RobotPlayer robotPlayer) : this(robotPlayer, null)
         {
         }
 

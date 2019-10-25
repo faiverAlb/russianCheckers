@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace RussianCheckers.Game
+namespace RussianCheckers.Core
 {
     public class NeighborsCalculator
     {

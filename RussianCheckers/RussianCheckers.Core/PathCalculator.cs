@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RussianCheckers.Game
+namespace RussianCheckers.Core
 {
     public class PathCalculator
     {
@@ -19,7 +19,7 @@ namespace RussianCheckers.Game
             _neighborsCalculator = new NeighborsCalculator(_dataProvider, playerPositions);
         }
 
-        public List<LinkedList<CheckerModel>> CalculateAvailablePaths()
+        public IEnumerable<LinkedList<CheckerModel>> CalculateAvailablePaths()
         {
             var availablePaths = new List<LinkedList<CheckerModel>>();
             foreach (CheckerModel playerPosition in _playerPositions)

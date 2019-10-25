@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using RussianCheckers.Core;
 
 namespace RussianCheckers.Game
 {
     public abstract class PlayerViewModel: ObservableObject
     {
+        private readonly Player _player;
         public bool IsMainPLayer { get; private set; }
         public readonly Side Side;
 //        protected readonly DataProvider _dataProvider;
         public  ObservableCollection<CheckerElementViewModel> PlayerPositions { get; protected set; }
-        public List<LinkedList<CheckerElementViewModel>> AvailablePaths { get;private set; }
+//        public List<LinkedList<CheckerElementViewModel>> AvailablePaths { get;private set; }
 
         public int GetPossibleMovementsCount()
         {
@@ -20,28 +22,29 @@ namespace RussianCheckers.Game
 
         protected PlayerViewModel(Player player)
         {
+            _player = player;
             IEnumerable<CheckerElementViewModel> checkerElementViewModels = player.PlayerPositions.Select(x => new CheckerElementViewModel(x));
             PlayerPositions = new ObservableCollection<CheckerElementViewModel>(checkerElementViewModels);
             Side = player.Side;
             IsMainPLayer = player.IsMainPlayer;
-            AvailablePaths = new List<LinkedList<CheckerElementViewModel>>();
+//            AvailablePaths = new List<LinkedList<CheckerElementViewModel>>();
         }
 
-        public IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> GetLegalMovements()
-        {
-            if (AvailablePaths.Any())
-            {
-                var keyValuePairs = AvailablePaths.Select(x => new KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>(x.First.Value, x.Last.Value));
-                return keyValuePairs;
-            }
-
-            var resultList = new List<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>>();
-            foreach (var playerPosition in PlayerPositions)
-            {
-                resultList.AddRange(playerPosition.PossibleMovementElements.Select(playerPositionPossibleMovementElement => new KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>(playerPosition, playerPositionPossibleMovementElement)));
-            }
-            return resultList;
-        }
+//        public IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> GetLegalMovements()
+//        {
+//            if (AvailablePaths.Any())
+//            {
+//                var keyValuePairs = AvailablePaths.Select(x => new KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>(x.First.Value, x.Last.Value));
+//                return keyValuePairs;
+//            }
+//
+//            var resultList = new List<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>>();
+//            foreach (var playerPosition in PlayerPositions)
+//            {
+//                resultList.AddRange(playerPosition.PossibleMovementElements.Select(playerPositionPossibleMovementElement => new KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>(playerPosition, playerPositionPossibleMovementElement)));
+//            }
+//            return resultList;
+//        }
 
 //        public List<CheckerElementViewModel> MoveCheckerToNewPlace(CheckerElementViewModel checker, int nextCol, int nextRow)
 //        {
@@ -635,6 +638,22 @@ namespace RussianCheckers.Game
             int counter = PlayerPositions.Count(playerPosition => playerPosition.Type == PieceType.Queen);
             return counter;
 
+        }
+
+        public IEnumerable<LinkedList<CheckerElementViewModel>> GetAvailablePaths()
+        {
+            var result = new List<LinkedList<CheckerElementViewModel>>();
+            var playerAvailablePaths = _player.AvailablePaths;
+            foreach (LinkedList<CheckerModel> playerAvailablePath in playerAvailablePaths)
+            {
+                var checkersLinkedList = new LinkedList<CheckerElementViewModel>();
+                foreach (var checkerModel in playerAvailablePath)
+                {
+                    checkersLinkedList.AddLast(new CheckerElementViewModel(checkerModel));
+                }
+                result.Add(checkersLinkedList);
+            }
+            return result;
         }
     }
 }

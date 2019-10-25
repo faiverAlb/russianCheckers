@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using RussianCheckers.Core;
 using RussianCheckers.Game;
 
 namespace RussianCheckers

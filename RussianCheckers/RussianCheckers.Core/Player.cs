@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace RussianCheckers.Game
+namespace RussianCheckers.Core
 {
     public abstract  class Player
     {
@@ -9,7 +8,7 @@ namespace RussianCheckers.Game
         private readonly NeighborsCalculator _neighborsCalculator;
         private readonly PathCalculator _pathCalculator;
         public List<CheckerModel> PlayerPositions { get; private set; }
-        public List<LinkedList<CheckerModel>> AvailablePaths { get; private set; }
+        public IEnumerable<LinkedList<CheckerModel>> AvailablePaths { get; private set; }
 
         public bool IsMainPlayer { get; private set; }
         public Side Side { get; private set; }

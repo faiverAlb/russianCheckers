@@ -1,4 +1,4 @@
-﻿namespace RussianCheckers.Game
+﻿namespace RussianCheckers.Core
 {
     public class Game
     {
@@ -29,6 +29,6 @@
         }
 
         public Side NextMoveSide { get; set; }
-
+        public bool IsGameFinished { get; private set; }
     }
 }

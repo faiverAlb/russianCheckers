@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using RussianCheckers.Core;
 using RussianCheckers.Game;
 using RussianCheckers.Infrastructure;
 using RussianCheckers.Strategy;
@@ -53,7 +54,7 @@ namespace RussianCheckers
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
             var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
-            var game = new Game.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+            var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             var mainHumanPlayer = new HumanPlayerViewModel(mainPlayer);
             var playerViewModel = new RobotPlayerViewModel(robotPlayer);

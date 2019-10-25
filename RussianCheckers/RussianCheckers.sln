@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianCheckers", "RussianC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianCheckersTests", "RussianCheckersTests\RussianCheckersTests.csproj", "{D0C5FDB6-3FD8-493E-98F0-5BF78433B0F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianCheckers.Core", "RussianCheckers.Core\RussianCheckers.Core.csproj", "{473FF9A6-DC16-4959-85DB-BB2B879210E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D0C5FDB6-3FD8-493E-98F0-5BF78433B0F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0C5FDB6-3FD8-493E-98F0-5BF78433B0F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0C5FDB6-3FD8-493E-98F0-5BF78433B0F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{473FF9A6-DC16-4959-85DB-BB2B879210E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{473FF9A6-DC16-4959-85DB-BB2B879210E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{473FF9A6-DC16-4959-85DB-BB2B879210E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{473FF9A6-DC16-4959-85DB-BB2B879210E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

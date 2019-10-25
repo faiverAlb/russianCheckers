@@ -56,20 +56,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Game\CheckerElementViewModel.cs" />
-    <Compile Include="Game\DataProvider.cs" />
-    <Compile Include="Game\Diagonal.cs" />
-    <Compile Include="Game\Domain\CheckerModel.cs" />
-    <Compile Include="Game\Domain\Game.cs" />
-    <Compile Include="Game\Domain\NeighborsCalculator.cs" />
-    <Compile Include="Game\Domain\PathCalculator.cs" />
     <Compile Include="Game\EmptyCellsPlayer.cs" />
-    <Compile Include="Game\Domain\GameEnums.cs" />
     <Compile Include="Game\GameInfrastructure\GameStatus.cs" />
     <Compile Include="Game\GameStatusChecker.cs" />
     <Compile Include="Game\GameViewModel.cs" />
     <Compile Include="Game\HumanPlayerViewModel.cs" />
     <Compile Include="Game\NotificationDialogViewModel.cs" />
-    <Compile Include="Game\Domain\Player.cs" />
     <Compile Include="Game\PlayerViewModel.cs" />
     <Compile Include="Game\MoveValidationManager.cs" />
     <Compile Include="Game\GameInfrastructure\MoveValidationResult.cs" />
@@ -143,6 +135,11 @@
   <ItemGroup>
     <Resource Include="Images\empty.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\RussianCheckers.Core\RussianCheckers.Core.csproj">
+      <Project>{473FF9A6-DC16-4959-85DB-BB2B879210E3}</Project>
+      <Name>RussianCheckers.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

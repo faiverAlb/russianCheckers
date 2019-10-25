@@ -59,17 +59,19 @@ namespace RussianCheckers.Game
 //            return resultList;
 //        }
 
-//        public List<CheckerElementViewModel> MoveCheckerToNewPlace(CheckerElementViewModel checker, int nextCol, int nextRow)
-//        {
-//            int currentCol = checker.Column;
-//            int currentRow = checker.Row;
-//
+        public List<CheckerModel> MoveCheckerToNewPlace(CheckerElementViewModel checker, int nextCol, int nextRow)
+        {
+            int currentCol = checker.Column;
+            int currentRow = checker.Row;
+            List<CheckerModel> toTakeCheckers = _player.MoveCheckerToNewPlace(currentCol,currentRow,nextCol,nextRow);
+
+
 //            var path = AvailablePaths.Where(x =>x.Last.Value.Column == nextCol && x.Last.Value.Row == nextRow).OrderByDescending(x => x.Count).FirstOrDefault();
 //            if (ShouldConvertToQueenByPathDuringTaking(path))
 //            {
 //                checker.Type = PieceType.Queen;
 //            }
-//
+
 //            CheckerElementViewModel newPosition = _dataProvider.GetElementAtPosition(nextCol, nextRow);
 //            CheckerElementViewModel oldPositionedChecker = _dataProvider.GetElementAtPosition(currentCol, currentRow);
 //            if (IsTouchedBorder(newPosition))
@@ -80,7 +82,6 @@ namespace RussianCheckers.Game
 //
 //            _dataProvider.MoveCheckerToNewPosition(oldPositionedChecker, nextCol, nextRow);
 //
-//            CheckerElementViewModel existingPlayerChecker = PlayerPositions.Single(x => x == checker);
 //            List<CheckerElementViewModel> itemsToTake = TakeCheckers(AvailablePaths, nextCol, nextRow, checker);
 //            existingPlayerChecker.SetNewPosition(nextCol, nextRow);
 //
@@ -92,27 +93,28 @@ namespace RussianCheckers.Game
 //            }
 //            newPosition.SetNewPosition(currentCol, currentRow);
 //            _dataProvider.MoveCheckerToNewPosition(newPosition, currentCol, currentRow);
-//            
-//            existingPlayerChecker.DeSelectPossibleMovement();
-//            return itemsToTake;
-//        }
-
-        private bool ShouldConvertToQueenByPathDuringTaking(LinkedList<CheckerElementViewModel> path)
-        {
-            if (path == null)
-            {
-                return false;
-            }
-            foreach (CheckerElementViewModel checkerElement in path)
-            {
-                if (IsTouchedBorder(checkerElement))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            
+            CheckerElementViewModel existingPlayerChecker = PlayerPositions.Single(x => x == checker);
+            existingPlayerChecker.DeSelectPossibleMovement();
+            return toTakeCheckers;
         }
+
+//        private bool ShouldConvertToQueenByPathDuringTaking(LinkedList<CheckerElementViewModel> path)
+//        {
+//            if (path == null)
+//            {
+//                return false;
+//            }
+//            foreach (CheckerElementViewModel checkerElement in path)
+//            {
+//                if (IsTouchedBorder(checkerElement))
+//                {
+//                    return true;
+//                }
+//            }
+//
+//            return false;
+//        }
 
         private List<CheckerElementViewModel> TakeCheckers(List<LinkedList<CheckerElementViewModel>> availablePaths, int column, int row, CheckerElementViewModel checker)
         {

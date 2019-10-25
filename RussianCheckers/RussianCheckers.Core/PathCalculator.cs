@@ -194,7 +194,7 @@ namespace RussianCheckers.Core
                             }
 
                             path.AddLast(otherSideNeighbor);
-                            if (IsTouchedBorder(positionAfterNextChecker))
+                            if (IsMoveToucheBoard(positionAfterNextChecker))
                             {
 
                                 SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited,
@@ -216,7 +216,7 @@ namespace RussianCheckers.Core
                     {
                         path.AddLast(otherSideNeighbor);
 
-                        if (IsTouchedBorder(positionAfterNextChecker))
+                        if (IsMoveToucheBoard(positionAfterNextChecker))
                         {
 
                             SetPossibleMovementsForQueenRecursive(positionAfterNextChecker, path, visited, checkerSide,
@@ -237,7 +237,7 @@ namespace RussianCheckers.Core
             path.RemoveLast();
         }
 
-        private bool IsTouchedBorder(CheckerModel positionAfterNextChecker)
+        public bool IsMoveToucheBoard(CheckerModel positionAfterNextChecker)
         {
             return (_isMainPlayer && positionAfterNextChecker.Row == 7) || (!_isMainPlayer && positionAfterNextChecker.Row == 0);
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace RussianCheckers.Core
 {
@@ -33,6 +34,79 @@ namespace RussianCheckers.Core
         {
             AvailablePaths = _pathCalculator.CalculateAvailablePaths();
         }
+
+        public List<CheckerModel> MoveCheckerToNewPlace(int currentCol, int currentRow, int nextCol, int nextRow)
+        {
+            CheckerModel checker = this.PlayerPositions.Single(x => x.Column == currentCol && x.Row == currentRow);
+            var path = AvailablePaths.Where(x => x.Last.Value.Column == nextCol && x.Last.Value.Row == nextRow).OrderByDescending(x => x.Count).FirstOrDefault();
+            if (ShouldConvertToQueenByPathDuringTaking(path))
+            {
+                checker.BecomeAQueen();
+            }
+
+            CheckerModel newPosition = _dataProvider.GetElementAtPosition(nextCol, nextRow);
+            CheckerModel oldPositionedChecker = _dataProvider.GetElementAtPosition(currentCol, currentRow);
+            if (_pathCalculator.IsMoveToucheBoard(newPosition))
+            {
+                oldPositionedChecker.BecomeAQueen();
+            }
+
+
+            _dataProvider.MoveCheckerToNewPosition(oldPositionedChecker, nextCol, nextRow);
+
+            List<CheckerModel> itemsToTake = GetToTakeCheckers(AvailablePaths, nextCol, nextRow, checker);
+            checker.SetNewPosition(nextCol, nextRow);
+
+            foreach (CheckerModel checkerElement in itemsToTake)
+            {
+                var element = new CheckerModel(checkerElement.Column, checkerElement.Row, PieceType.Checker, Side.Empty);
+                _dataProvider.MoveCheckerToNewPosition(element, checkerElement.Column, checkerElement.Row);
+
+            }
+            newPosition.SetNewPosition(currentCol, currentRow);
+            _dataProvider.MoveCheckerToNewPosition(newPosition, currentCol, currentRow);
+
+//            checker.DeSelectPossibleMovement();
+            return itemsToTake;
+
+        }
+
+        private List<CheckerModel> GetToTakeCheckers(IEnumerable<LinkedList<CheckerModel>> availablePaths, int column, int row, CheckerModel checker)
+        {
+            if (!availablePaths.Any())
+            {
+                return new List<CheckerModel>();
+            }
+
+            LinkedList<CheckerModel> neededPath = availablePaths.Where(x => x.Last.Value.Column == column && x.Last.Value.Row == row).OrderByDescending(x => x.Count).FirstOrDefault();
+            if (neededPath == null)
+            {
+                return new List<CheckerModel>();
+            }
+
+            var itemsToRemove = new List<CheckerModel>(neededPath.Where(x => x.Side != Side.Empty && x.Side != checker.Side));
+            return itemsToRemove;
+        }
+
+
+        private bool ShouldConvertToQueenByPathDuringTaking(LinkedList<CheckerModel> path)
+        {
+            if (path == null)
+            {
+                return false;
+            }
+            foreach (CheckerModel checkerElement in path)
+            {
+                if (_pathCalculator.IsMoveToucheBoard(checkerElement))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
     }
 
 

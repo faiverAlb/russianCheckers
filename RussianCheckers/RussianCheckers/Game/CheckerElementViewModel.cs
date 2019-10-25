@@ -9,10 +9,17 @@ namespace RussianCheckers.Game
         public CheckerElementViewModel(CheckerModel checkerModel, List<CheckerElementViewModel> emptyCheckerElementViewModels)
         {
             _checkerModel = checkerModel;
+            _checkerModel.PositionChangedAction += PositionChangedAction;            
+
             Side = checkerModel.Side;
             _pos = new PointViewModel(_checkerModel.Row, _checkerModel.Column);
             PossibleMovementElements = emptyCheckerElementViewModels.Where(x => _checkerModel.PossibleMovementElements.Any(y => x.Column == y.Column && x.Row == y.Row)).ToList();
 //            Neighbors = new List<CheckerElementViewModel>(_checkerModel.Neighbors.Select(x => new CheckerElementViewModel(x)));
+        }
+
+        private void PositionChangedAction(int column, int row)
+        {
+            _pos.ChangePosition(column, row);
         }
 
         public bool IsAtInitialPosition

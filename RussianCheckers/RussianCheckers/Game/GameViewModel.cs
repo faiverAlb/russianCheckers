@@ -243,19 +243,19 @@ namespace RussianCheckers.Game
                 return false;
             }
 
-//            MoveCheckerToNewPlace(_selectedChecker, newSelectedChecker, player);
-//            _selectedChecker.IsSelected = false;
-//            _selectedChecker = null;
+            MoveCheckerToNewPlace(_selectedChecker, newSelectedChecker, player);
+            _selectedChecker.IsSelected = false;
+            _selectedChecker = null;
             return true;
         }
 
-//        private void MoveCheckerToNewPlace(CheckerElementViewModel currentPositionElementViewModel, CheckerElementViewModel emptyPosition, PlayerViewModel player)
-//        {
-//            int nextCol = emptyPosition.Column;
-//            int nextRow = emptyPosition.Row;
-//
-//            List<CheckerElementViewModel> itemsTakeByOtherUser = player.MoveCheckerToNewPlace(currentPositionElementViewModel, nextCol, nextRow);
-//
+        private void MoveCheckerToNewPlace(CheckerElementViewModel currentPositionElementViewModel, CheckerElementViewModel emptyPosition, PlayerViewModel player)
+        {
+            int nextCol = emptyPosition.Column;
+            int nextRow = emptyPosition.Row;
+
+            List<CheckerModel> itemsTakeByOtherUser = player.MoveCheckerToNewPlace(currentPositionElementViewModel, nextCol, nextRow);
+
 //            _emptyCellsPlayer.AddNewEmptyElements(itemsTakeByOtherUser);
 //            if (player == _playerOne)
 //            {
@@ -279,8 +279,8 @@ namespace RussianCheckers.Game
 //
 //            _playerOne.CalculateAvailablePaths();
 //            _playerTwo.CalculateAvailablePaths();
-//
-//        }
+
+        }
 
 
         private void ShowNotificationMessage(string message)

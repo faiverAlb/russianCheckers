@@ -7,7 +7,7 @@ namespace RussianCheckers.Game
     {
         private readonly EmptyUserPlayer _emptyUserPlayer;
 
-        public EmptyCellsPlayer(EmptyUserPlayer emptyUserPlayer) : base(emptyUserPlayer)
+        public EmptyCellsPlayer(EmptyUserPlayer emptyUserPlayer) : base(emptyUserPlayer, new List<CheckerElementViewModel>())
         {
             _emptyUserPlayer = emptyUserPlayer;
         }

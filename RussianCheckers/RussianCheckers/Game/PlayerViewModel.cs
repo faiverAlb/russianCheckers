@@ -9,6 +9,7 @@ namespace RussianCheckers.Game
     public abstract class PlayerViewModel: ObservableObject
     {
         private readonly Player _player;
+        private readonly List<CheckerElementViewModel> _emptyCheckerViewModelsAsPossible;
         public bool IsMainPLayer { get; private set; }
         public readonly Side Side;
 //        protected readonly DataProvider _dataProvider;
@@ -20,15 +21,27 @@ namespace RussianCheckers.Game
             return PlayerPositions.Sum(position => position.PossibleMovementElements.Count());
         }
 
-        protected PlayerViewModel(Player player)
+        protected PlayerViewModel(Player player, List<CheckerElementViewModel> emptyCheckerViewModelsAsPossible)
         {
             _player = player;
-            IEnumerable<CheckerElementViewModel> checkerElementViewModels = player.PlayerPositions.Select(x => new CheckerElementViewModel(x));
+            _emptyCheckerViewModelsAsPossible = emptyCheckerViewModelsAsPossible;
+            IEnumerable<CheckerElementViewModel> checkerElementViewModels = player.PlayerPositions.Select(x => new CheckerElementViewModel(x, emptyCheckerViewModelsAsPossible));
             PlayerPositions = new ObservableCollection<CheckerElementViewModel>(checkerElementViewModels);
+            
             Side = player.Side;
             IsMainPLayer = player.IsMainPlayer;
 //            AvailablePaths = new List<LinkedList<CheckerElementViewModel>>();
         }
+//        protected PlayerViewModel(Player player)
+//        {
+//            _player = player;
+//            IEnumerable<CheckerElementViewModel> checkerElementViewModels = player.PlayerPositions.Select(x => new CheckerElementViewModel(x));
+//            PlayerPositions = new ObservableCollection<CheckerElementViewModel>(checkerElementViewModels);
+//            
+//            Side = player.Side;
+//            IsMainPLayer = player.IsMainPlayer;
+////            AvailablePaths = new List<LinkedList<CheckerElementViewModel>>();
+//        }
 
 //        public IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> GetLegalMovements()
 //        {
@@ -375,29 +388,29 @@ namespace RussianCheckers.Game
         }
 
 
-        public CheckerElementViewModel GetNextElementInDiagonal(CheckerElementViewModel playerChecker, CheckerElementViewModel otherSideNeighbor)
-        {
-            if (playerChecker.Column - otherSideNeighbor.Column > 0)
-            {
-                if (playerChecker.Row -  otherSideNeighbor.Row > 0)
-                {
-                    return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column - 2 && x.Row == playerChecker.Row - 2);
-                }
-                else
-                {
-                    return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column - 2 && x.Row == playerChecker.Row + 2);
-                }
-            }
-
-            if (playerChecker.Row - otherSideNeighbor.Row > 0)
-            {
-                return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column + 2 && x.Row == playerChecker.Row - 2);
-            }
-            else
-            {
-                return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column + 2 && x.Row == playerChecker.Row + 2);
-            }
-        }
+//        public CheckerElementViewModel GetNextElementInDiagonal(CheckerElementViewModel playerChecker, CheckerElementViewModel otherSideNeighbor)
+//        {
+//            if (playerChecker.Column - otherSideNeighbor.Column > 0)
+//            {
+//                if (playerChecker.Row -  otherSideNeighbor.Row > 0)
+//                {
+//                    return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column - 2 && x.Row == playerChecker.Row - 2);
+//                }
+//                else
+//                {
+//                    return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column - 2 && x.Row == playerChecker.Row + 2);
+//                }
+//            }
+//
+//            if (playerChecker.Row - otherSideNeighbor.Row > 0)
+//            {
+//                return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column + 2 && x.Row == playerChecker.Row - 2);
+//            }
+//            else
+//            {
+//                return otherSideNeighbor.Neighbors.SingleOrDefault(x => x.Column == playerChecker.Column + 2 && x.Row == playerChecker.Row + 2);
+//            }
+//        }
 
 
 //        public Queue<CheckerElementViewModel> GetAllElementsInDiagonalFromCurrent(CheckerElementViewModel checker, Diagonal diagonal)
@@ -649,7 +662,8 @@ namespace RussianCheckers.Game
                 var checkersLinkedList = new LinkedList<CheckerElementViewModel>();
                 foreach (var checkerModel in playerAvailablePath)
                 {
-                    checkersLinkedList.AddLast(new CheckerElementViewModel(checkerModel));
+                    CheckerElementViewModel emptyCheckerVM = _emptyCheckerViewModelsAsPossible.SingleOrDefault(x => x.Column == checkerModel.Column && x.Row == checkerModel.Row);
+                    checkersLinkedList.AddLast(emptyCheckerVM);
                 }
                 result.Add(checkersLinkedList);
             }

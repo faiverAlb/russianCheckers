@@ -6,12 +6,12 @@ namespace RussianCheckers.Game
 {
     public class CheckerElementViewModel : ObservableObject
     {
-        public CheckerElementViewModel(CheckerModel checkerModel)
+        public CheckerElementViewModel(CheckerModel checkerModel, List<CheckerElementViewModel> emptyCheckerElementViewModels)
         {
             _checkerModel = checkerModel;
             Side = checkerModel.Side;
             _pos = new PointViewModel(_checkerModel.Row, _checkerModel.Column);
-            PossibleMovementElements = new List<CheckerElementViewModel>(_checkerModel.PossibleMovementElements.Select(x => new CheckerElementViewModel(x)));
+            PossibleMovementElements = emptyCheckerElementViewModels.Where(x => _checkerModel.PossibleMovementElements.Any(y => x.Column == y.Column && x.Row == y.Row)).ToList();
 //            Neighbors = new List<CheckerElementViewModel>(_checkerModel.Neighbors.Select(x => new CheckerElementViewModel(x)));
         }
 
@@ -100,12 +100,12 @@ namespace RussianCheckers.Game
 
         
 
-        public List<CheckerElementViewModel> Neighbors { get; private set; }
+//        public List<CheckerElementViewModel> Neighbors { get; private set; }
 
-        public void SetNeighbors(List<CheckerElementViewModel> neighbors)
-        {
-            Neighbors = neighbors;
-        }
+//        public void SetNeighbors(List<CheckerElementViewModel> neighbors)
+//        {
+//            Neighbors = neighbors;
+//        }
 
 //        public void SetNewPosition(int column, int row)
 //        {
@@ -141,9 +141,9 @@ namespace RussianCheckers.Game
             }
         }
 
-        public CheckerElementViewModel Clone()
-        {
-            return new CheckerElementViewModel(_checkerModel.Clone());
-        }
+//        public CheckerElementViewModel Clone()
+//        {
+//            return new CheckerElementViewModel(_checkerModel.Clone());
+//        }
     }
 }

@@ -28,9 +28,9 @@ namespace RussianCheckers.Game
             _isPlayingAutomatically = isPlayingAutomatically;
             
 
-            _playerOne = new HumanPlayerViewModel(_game.MainPlayer);
-            _playerTwo = new RobotPlayerViewModel(_game.RobotPlayer);
             _emptyCellsPlayer = new EmptyCellsPlayer(_game.EmptyCellsAsPlayer);
+            _playerOne = new HumanPlayerViewModel(_game.MainPlayer, _emptyCellsPlayer.PlayerPositions.ToList());
+            _playerTwo = new RobotPlayerViewModel(_game.RobotPlayer, _emptyCellsPlayer.PlayerPositions.ToList());
 
             var playerOneCollectionContainer = new CollectionContainer { Collection = _playerOne.PlayerPositions };
             var playerTwoCollectionContainer = new CollectionContainer { Collection = _playerTwo.PlayerPositions };

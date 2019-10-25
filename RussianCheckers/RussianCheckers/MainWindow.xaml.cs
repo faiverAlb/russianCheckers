@@ -56,9 +56,9 @@ namespace RussianCheckers
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
-            var mainHumanPlayer = new HumanPlayerViewModel(mainPlayer);
-            var playerViewModel = new RobotPlayerViewModel(robotPlayer);
-            var emptyCellsPlayer = new EmptyCellsPlayer(emptyPlayer);
+//            var emptyCellsPlayer = new EmptyCellsPlayer(emptyPlayer);
+//            var mainHumanPlayer = new HumanPlayerViewModel(mainPlayer, emptyCellsPlayer.PlayerPositions.ToList());
+//            var playerViewModel = new RobotPlayerViewModel(robotPlayer, emptyCellsPlayer.PlayerPositions.ToList());
             this.DataContext = new GameViewModel(game, notificationDialogService, false);
         }
     }

@@ -10,13 +10,13 @@ namespace RussianCheckers.Game
         private readonly RobotPlayer _robotPlayer;
         private readonly RobotStrategy _robotStrategy;
 
-        public RobotPlayerViewModel(RobotPlayer robotPlayer, RobotStrategy robotStrategy) : base(robotPlayer)
+        public RobotPlayerViewModel(RobotPlayer robotPlayer, RobotStrategy robotStrategy, List<CheckerElementViewModel> emptyCheckerViewModelsAsPossible) : base(robotPlayer,emptyCheckerViewModelsAsPossible)
         {
             _robotPlayer = robotPlayer;
             _robotStrategy = robotStrategy;
         }
 
-        public RobotPlayerViewModel(RobotPlayer robotPlayer) : this(robotPlayer, null)
+        public RobotPlayerViewModel(RobotPlayer robotPlayer, List<CheckerElementViewModel> emptyCheckerViewModelsAsPossible) : this(robotPlayer, null,emptyCheckerViewModelsAsPossible)
         {
         }
 
@@ -26,9 +26,13 @@ namespace RussianCheckers.Game
             return result;
         }
 
+//        public override PlayerViewModel Clone(DataProvider dataProvider)
+//        {
+//            return new RobotPlayerViewModel(_robotPlayer.Clone(dataProvider));
+//        }
         public override PlayerViewModel Clone(DataProvider dataProvider)
         {
-            return new RobotPlayerViewModel(_robotPlayer.Clone(dataProvider));
+            throw new System.NotImplementedException();
         }
     }
 }

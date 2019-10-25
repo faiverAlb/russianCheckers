@@ -9,7 +9,7 @@ namespace RussianCheckers
     {
         private readonly MainPlayer _player;
 
-        public HumanPlayerViewModel(MainPlayer player) : base(player)
+        public HumanPlayerViewModel(MainPlayer player, List<CheckerElementViewModel> emptyCheckerViewModelsAsPossible) : base(player,emptyCheckerViewModelsAsPossible)
         {
             _player = player;
 //            PlayerPositions = new ObservableCollection<CheckerElement>(GetTestSchema1(side));
@@ -36,9 +36,13 @@ namespace RussianCheckers
 //            };
 //        }
 
+//        public override PlayerViewModel Clone(DataProvider dataProvider)
+//        {
+//            return new HumanPlayerViewModel(_player.Clone(dataProvider));
+//        }
         public override PlayerViewModel Clone(DataProvider dataProvider)
         {
-            return new HumanPlayerViewModel(_player.Clone(dataProvider));
+            throw new System.NotImplementedException();
         }
     }
 }

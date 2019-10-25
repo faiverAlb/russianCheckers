@@ -34,7 +34,7 @@ namespace RussianCheckers.Game
         }
 
 
-        private List<KeyValuePair<Diagonal, CheckerModel>> GetNeighborsForQueen(CheckerModel сheckerModel)
+        public List<KeyValuePair<Diagonal, CheckerModel>> GetNeighborsForQueen(CheckerModel сheckerModel)
         {
             var neighbors = new List<KeyValuePair<Diagonal, CheckerModel>>();
 

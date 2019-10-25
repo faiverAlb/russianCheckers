@@ -48,5 +48,16 @@ namespace RussianCheckers.Game
         {
             Neighbors = neighbors;
         }
+
+        public void SetPossibleMovementElements(List<CheckerModel> possibleMovements)
+        {
+            PossibleMovementElements = possibleMovements;
+        }
+
+        public override string ToString()
+        {
+            return $"{Side}, {Type}, [{Column},{Row}]";
+        }
+
     }
 }

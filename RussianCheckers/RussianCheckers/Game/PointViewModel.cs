@@ -59,5 +59,10 @@ namespace RussianCheckers.Game
             X = CalculateX(column);
             Y = CalculateY(7 - row);
         }
+
+        public override string ToString()
+        {
+            return $"({X},{Y})";
+        }
     }
 }

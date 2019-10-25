@@ -12,72 +12,98 @@ namespace RussianCheckers.Game
 {
     public class GameViewModel : ObservableObject
     {
-
+        private readonly Game _game;
         private readonly IDialogService _notificationDialog;
         private readonly bool _isPlayingAutomatically;
         private readonly CompositeCollection _positions = new CompositeCollection();
         public Side WinnerSide { get; set; }
 
-        public GameViewModel(PlayerViewModel playerOne
-            , RobotViewPlayer viewPlayerTwo
-            , EmptyCellsPlayer emptyCellsPlayer
-            , DataProvider dataProvider
-            , IDialogService notificationDialog = null
-            , bool isPlayingAutomatically = true)
+        public GameViewModel(Game game,
+            IDialogService notificationDialog,
+            bool isPlayingAutomatically)
         {
-            _playerOne = playerOne;
-            _viewPlayerTwo = viewPlayerTwo;
-            _emptyCellsPlayer = emptyCellsPlayer;
-            _dataProvider = dataProvider;
-
+            _game = game;
             _notificationDialog = notificationDialog;
             _isPlayingAutomatically = isPlayingAutomatically;
-            NextMoveSide = Side.White;
             
 
-            _emptyCellsPlayer.CalculateNeighbors();
-            playerOne.CalculateNeighbors();
-            viewPlayerTwo.CalculateNeighbors(); 
-            
-            playerOne.CalculateAvailablePaths();
-            viewPlayerTwo.CalculateAvailablePaths();
+            _playerOne = new HumanPlayerViewModel(_game.MainPlayer);
+            _modelTwo = new RobotPlayerViewModel(_game.RobotPlayer);
+            _emptyCellsPlayer = new EmptyCellsPlayer(_game.EmptyCellsAsPlayer);
 
-            var playerOneCollectionContainer = new CollectionContainer { Collection = playerOne.PlayerPositions};
-            var playerTwoCollectionContainer = new CollectionContainer{ Collection = viewPlayerTwo.PlayerPositions };
-            var emptyCollectionContainer = new CollectionContainer{ Collection = _emptyCellsPlayer.PlayerPositions };
+            var playerOneCollectionContainer = new CollectionContainer { Collection = _playerOne.PlayerPositions };
+            var playerTwoCollectionContainer = new CollectionContainer { Collection = _modelTwo.PlayerPositions };
+            var emptyCollectionContainer = new CollectionContainer { Collection = _emptyCellsPlayer.PlayerPositions };
             _positions.Add(playerOneCollectionContainer);
             _positions.Add(playerTwoCollectionContainer);
             _positions.Add(emptyCollectionContainer);
 
-            WaitMove();
+            NextMoveSide = _game.NextMoveSide;
+            //            WaitMove();
+
         }
 
-        private void WaitMove()
-        {
-            if (!_isPlayingAutomatically)
-            {
-                return;
-            }
-            
-            if (_playerOne.Side == NextMoveSide)
-            {
-                return;
-            }
 
-            MakeMoveBySecondUser();
-        }
+        //        public GameViewModel(PlayerViewModel playerOne
+        //            , RobotViewPlayer playerTwo
+        //            , EmptyCellsPlayer emptyCellsPlayer
+        //            , DataProvider dataProvider
+        //            , IDialogService notificationDialog = null
+        //            , bool isPlayingAutomatically = true)
+        //        {
+        //            _playerOne = playerOne;
+        //            _playerTwo = playerTwo;
+        //            _emptyCellsPlayer = emptyCellsPlayer;
+        //            _dataProvider = dataProvider;
+        //
+        //            _notificationDialog = notificationDialog;
+        //            _isPlayingAutomatically = isPlayingAutomatically;
+        //            NextMoveSide = Side.White;
+        //            
+        //
+        //            _emptyCellsPlayer.CalculateNeighbors();
+        //            playerOne.CalculateNeighbors();
+        //            playerTwo.CalculateNeighbors(); 
+        //            
+        //            playerOne.CalculateAvailablePaths();
+        //            playerTwo.CalculateAvailablePaths();
+        //
+        //            var playerOneCollectionContainer = new CollectionContainer { Collection = playerOne.PlayerPositions};
+        //            var playerTwoCollectionContainer = new CollectionContainer{ Collection = playerTwo.PlayerPositions };
+        //            var emptyCollectionContainer = new CollectionContainer{ Collection = _emptyCellsPlayer.PlayerPositions };
+        //            _positions.Add(playerOneCollectionContainer);
+        //            _positions.Add(playerTwoCollectionContainer);
+        //            _positions.Add(emptyCollectionContainer);
+        //
+        //            WaitMove();
+        //        }
 
-        private void MakeMoveBySecondUser()
-        {
-            var move = _viewPlayerTwo.GetOptimalMove(this);
-            if (move.Value != null)
-            {
-                CheckerElementViewModel fromChecker = move.Key;
-                CheckerElementViewModel toPlace = move.Value;
-                _selectedChecker = fromChecker;
-                MoveChecker(toPlace);
-            }
-        }
+        //        private void WaitMove()
+        //        {
+        //            if (!_isPlayingAutomatically)
+        //            {
+        //                return;
+        //            }
+        //            
+        //            if (_playerOne.Side == NextMoveSide)
+        //            {
+        //                return;
+        //            }
+        //
+        //            MakeMoveBySecondUser();
+        //        }
+
+        //        private void MakeMoveBySecondUser()
+        //        {
+        //            var move = _playerTwo.GetOptimalMove(this);
+        //            if (move.Value != null)
+        //            {
+        //                CheckerElementViewModel fromChecker = move.Key;
+        //                CheckerElementViewModel toPlace = move.Value;
+        //                _selectedChecker = fromChecker;
+        //                MoveChecker(toPlace);
+        //            }
+        //        }
 
 
         public Side NextMoveSide
@@ -86,7 +112,7 @@ namespace RussianCheckers.Game
             set
             {
                 _nextMoveSide = value;
-                NextMovePlayer = _playerOne.Side == _nextMoveSide ? _playerOne : _viewPlayerTwo;
+                NextMovePlayer = _playerOne.Side == _nextMoveSide ? _playerOne : _modelTwo;
                 RaisePropertyChangedEvent(nameof(NextMoveSide));
             }
         }
@@ -100,7 +126,7 @@ namespace RussianCheckers.Game
         }
 
 
-        public ICommand SelectCheckerCommand { get { return new ActionCommand(OnTryMakeMove); } }
+//        public ICommand SelectCheckerCommand { get { return new ActionCommand(OnTryMakeMove); } }
 
         private CheckerElementViewModel _selectedChecker;
         private  Side _nextMoveSide;
@@ -108,71 +134,71 @@ namespace RussianCheckers.Game
         private readonly PlayerViewModel _playerOne;
         private readonly EmptyCellsPlayer _emptyCellsPlayer;
         private readonly DataProvider _dataProvider;
-        private readonly RobotViewPlayer _viewPlayerTwo;
+        private readonly RobotPlayerViewModel _modelTwo;
         private PlayerViewModel _nextMovePlayer;
 
-        private void OnTryMakeMove(object obj)
-        {
-            MoveChecker((CheckerElementViewModel)obj);
-        }
+//        private void OnTryMakeMove(object obj)
+//        {
+//            MoveChecker((CheckerElementViewModel)obj);
+//        }
 
-        public void MoveChecker(CheckerElementViewModel fromPlace, CheckerElementViewModel toPlace)
-        {
-            CheckerElementViewModel foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
-            _selectedChecker = foundChecker;
-            CheckerElementViewModel toPosition = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
-            if (toPlace.Side == fromPlace.Side)
-            {
-                toPosition = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
-            }
-            MoveChecker(toPosition);
-        }
-
-
-        private void MoveChecker(CheckerElementViewModel newSelectedChecker)
-        {
-            if (IsGameFinished)
-            {
-                ShowNotificationMessage("Game is over!");
-                return;
-            }
-//            PlayerViewModel player = _playerOne.Side == NextMoveSide ? _playerOne : _playerTwo;
-            var validationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide, NextMovePlayer);
-
-            MoveValidationResult preValidationMoveValidationResult = validationManager.GetPreValidationResult();
-            if (preValidationMoveValidationResult.Status == MoveValidationStatus.Error)
-            {
-                ShowNotificationMessage(preValidationMoveValidationResult.ErrorMessage);
-                return;
-            }
-
-            if (preValidationMoveValidationResult.Status == MoveValidationStatus.NothingSelected)
-            {
-                return;
-            }
-
-            bool makeMoveStatus = IsCheckerMoved(newSelectedChecker, NextMovePlayer);
-            if (makeMoveStatus == false)
-            {
-                return;
-            }
+//        public void MoveChecker(CheckerElementViewModel fromPlace, CheckerElementViewModel toPlace)
+//        {
+//            CheckerElementViewModel foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
+//            _selectedChecker = foundChecker;
+//            CheckerElementViewModel toPosition = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+//            if (toPlace.Side == fromPlace.Side)
+//            {
+//                toPosition = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+//            }
+//            MoveChecker(toPosition);
+//        }
 
 
-            var gameStatusChecker = new GameStatusChecker(_dataProvider, _playerOne, _viewPlayerTwo);
-            GameStatus gameStatus = gameStatusChecker.GetGameStatus();
-            if (gameStatus == GameStatus.InProgress)
-            {
-                NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
-                
-                WaitMove();
-                return;
-            }
-
-            IsGameFinished = true;
-            WinnerSide = gameStatus == GameStatus.BlackWin ? Side.Black : Side.White;
-            string pleaseSelectCheckerFirst = gameStatus == GameStatus.BlackWin ? "Black win!" : "White win!";
-            ShowNotificationMessage(pleaseSelectCheckerFirst);
-        }
+//        private void MoveChecker(CheckerElementViewModel newSelectedChecker)
+//        {
+//            if (IsGameFinished)
+//            {
+//                ShowNotificationMessage("Game is over!");
+//                return;
+//            }
+////            PlayerViewModel player = _playerOne.Side == NextMoveSide ? _playerOne : _playerTwo;
+//            var validationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide, NextMovePlayer);
+//
+//            MoveValidationResult preValidationMoveValidationResult = validationManager.GetPreValidationResult();
+//            if (preValidationMoveValidationResult.Status == MoveValidationStatus.Error)
+//            {
+//                ShowNotificationMessage(preValidationMoveValidationResult.ErrorMessage);
+//                return;
+//            }
+//
+//            if (preValidationMoveValidationResult.Status == MoveValidationStatus.NothingSelected)
+//            {
+//                return;
+//            }
+//
+//            bool makeMoveStatus = IsCheckerMoved(newSelectedChecker, NextMovePlayer);
+//            if (makeMoveStatus == false)
+//            {
+//                return;
+//            }
+//
+//
+//            var gameStatusChecker = new GameStatusChecker(_dataProvider, _playerOne, _playerTwo);
+//            GameStatus gameStatus = gameStatusChecker.GetGameStatus();
+//            if (gameStatus == GameStatus.InProgress)
+//            {
+//                NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
+//                
+//                WaitMove();
+//                return;
+//            }
+//
+//            IsGameFinished = true;
+//            WinnerSide = gameStatus == GameStatus.BlackWin ? Side.Black : Side.White;
+//            string pleaseSelectCheckerFirst = gameStatus == GameStatus.BlackWin ? "Black win!" : "White win!";
+//            ShowNotificationMessage(pleaseSelectCheckerFirst);
+//        }
 
 
         public bool IsGameFinished
@@ -185,76 +211,76 @@ namespace RussianCheckers.Game
             }
         }
 
-        private bool IsCheckerMoved(CheckerElementViewModel newSelectedChecker, PlayerViewModel player)
-        {
-            var moveValidationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide, player);
-            MoveValidationResult validationResult =  moveValidationManager.GetMoveValidationResult();
-            if (validationResult.Status == MoveValidationStatus.NewItemSelected)
-            {
-                if (_selectedChecker != null)
-                {
-                    _selectedChecker.IsSelected = false;
-                    _selectedChecker.DeSelectPossibleMovement();
-                }
-                _selectedChecker = newSelectedChecker;
+//        private bool IsCheckerMoved(CheckerElementViewModel newSelectedChecker, PlayerViewModel player)
+//        {
+//            var moveValidationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide, player);
+//            MoveValidationResult validationResult =  moveValidationManager.GetMoveValidationResult();
+//            if (validationResult.Status == MoveValidationStatus.NewItemSelected)
+//            {
+//                if (_selectedChecker != null)
+//                {
+//                    _selectedChecker.IsSelected = false;
+//                    _selectedChecker.DeSelectPossibleMovement();
+//                }
+//                _selectedChecker = newSelectedChecker;
+//
+//                _selectedChecker.IsSelected = true;
+//                _selectedChecker.SelectPossibleMovement();
+//                return false;
+//            }
+//
+//            if (validationResult.Status == MoveValidationStatus.DeselectChecker)
+//            {
+//                _selectedChecker.IsSelected = false;
+//                _selectedChecker.DeSelectPossibleMovement();
+//                _selectedChecker = null;
+//                return false;
+//            }
+//
+//            if (validationResult.Status == MoveValidationStatus.Error)
+//            {
+//                ShowNotificationMessage(validationResult.ErrorMessage);
+//                return false;
+//            }
+//
+//            MoveCheckerToNewPlace(_selectedChecker, newSelectedChecker, player);
+//            _selectedChecker.IsSelected = false;
+//            _selectedChecker = null;
+//            return true;
+//        }
 
-                _selectedChecker.IsSelected = true;
-                _selectedChecker.SelectPossibleMovement();
-                return false;
-            }
-
-            if (validationResult.Status == MoveValidationStatus.DeselectChecker)
-            {
-                _selectedChecker.IsSelected = false;
-                _selectedChecker.DeSelectPossibleMovement();
-                _selectedChecker = null;
-                return false;
-            }
-
-            if (validationResult.Status == MoveValidationStatus.Error)
-            {
-                ShowNotificationMessage(validationResult.ErrorMessage);
-                return false;
-            }
-
-            MoveCheckerToNewPlace(_selectedChecker, newSelectedChecker, player);
-            _selectedChecker.IsSelected = false;
-            _selectedChecker = null;
-            return true;
-        }
-
-        private void MoveCheckerToNewPlace(CheckerElementViewModel currentPositionElementViewModel, CheckerElementViewModel emptyPosition, PlayerViewModel player)
-        {
-            int nextCol = emptyPosition.Column;
-            int nextRow = emptyPosition.Row;
-
-            List<CheckerElementViewModel> itemsTakeByOtherUser = player.MoveCheckerToNewPlace(currentPositionElementViewModel, nextCol, nextRow);
-
-            _emptyCellsPlayer.AddNewEmptyElements(itemsTakeByOtherUser);
-            if (player == _playerOne)
-            {
-                _viewPlayerTwo.RemoveCheckers(itemsTakeByOtherUser);
-            }
-            else
-            {
-                _playerOne.RemoveCheckers(itemsTakeByOtherUser);
-            }
-            _emptyCellsPlayer.CalculateNeighbors();
-            if (player == _playerOne)
-            {
-                _playerOne.CalculateNeighbors();
-                _viewPlayerTwo.CalculateNeighbors();
-            }
-            else
-            {
-                _viewPlayerTwo.CalculateNeighbors();
-                _playerOne.CalculateNeighbors();
-            }
-
-            _playerOne.CalculateAvailablePaths();
-            _viewPlayerTwo.CalculateAvailablePaths();
-
-        }
+//        private void MoveCheckerToNewPlace(CheckerElementViewModel currentPositionElementViewModel, CheckerElementViewModel emptyPosition, PlayerViewModel player)
+//        {
+//            int nextCol = emptyPosition.Column;
+//            int nextRow = emptyPosition.Row;
+//
+//            List<CheckerElementViewModel> itemsTakeByOtherUser = player.MoveCheckerToNewPlace(currentPositionElementViewModel, nextCol, nextRow);
+//
+//            _emptyCellsPlayer.AddNewEmptyElements(itemsTakeByOtherUser);
+//            if (player == _playerOne)
+//            {
+//                _playerTwo.RemoveCheckers(itemsTakeByOtherUser);
+//            }
+//            else
+//            {
+//                _playerOne.RemoveCheckers(itemsTakeByOtherUser);
+//            }
+//            _emptyCellsPlayer.CalculateNeighbors();
+//            if (player == _playerOne)
+//            {
+//                _playerOne.CalculateNeighbors();
+//                _playerTwo.CalculateNeighbors();
+//            }
+//            else
+//            {
+//                _playerTwo.CalculateNeighbors();
+//                _playerOne.CalculateNeighbors();
+//            }
+//
+//            _playerOne.CalculateAvailablePaths();
+//            _playerTwo.CalculateAvailablePaths();
+//
+//        }
 
 
         private void ShowNotificationMessage(string message)
@@ -292,25 +318,25 @@ namespace RussianCheckers.Game
             return NextMovePlayer.GetLegalMovements();
         }
 
-        public GameViewModel CreateGame()
-        {
-            DataProvider newDataProvider = _dataProvider.Clone();
-            PlayerViewModel newPlayerOne = _playerOne.Clone(newDataProvider);
-            RobotViewPlayer newViewPlayerTwo = (RobotViewPlayer) _viewPlayerTwo.Clone(newDataProvider);
-            EmptyCellsPlayer  newEmptyCellsPlayer = (EmptyCellsPlayer) _emptyCellsPlayer.Clone(newDataProvider);
-            var gameViewModel = new GameViewModel(newPlayerOne, newViewPlayerTwo, newEmptyCellsPlayer, newDataProvider, null, false);
-            gameViewModel.NextMoveSide = NextMoveSide;
-            return gameViewModel;
-        }
+//        public GameViewModel CreateGame()
+//        {
+//            DataProvider newDataProvider = _dataProvider.Clone();
+//            PlayerViewModel newPlayerOne = _playerOne.Clone(newDataProvider);
+//            RobotViewPlayer newViewPlayerTwo = (RobotViewPlayer) _playerTwo.Clone(newDataProvider);
+//            EmptyCellsPlayer  newEmptyCellsPlayer = (EmptyCellsPlayer) _emptyCellsPlayer.Clone(newDataProvider);
+//            var gameViewModel = new GameViewModel(newPlayerOne, newViewPlayerTwo, newEmptyCellsPlayer, newDataProvider, null, false);
+//            gameViewModel.NextMoveSide = NextMoveSide;
+//            return gameViewModel;
+//        }
 
         public PlayerViewModel GetPlayer(bool isMain)
         {
             if (isMain)
             {
-                return _playerOne.IsMainPLayer ? _playerOne : _viewPlayerTwo;
+                return _playerOne.IsMainPLayer ? _playerOne : _modelTwo;
             }
 
-            return _playerOne.IsMainPLayer ? _viewPlayerTwo : _playerOne;
+            return _playerOne.IsMainPLayer ? _modelTwo : _playerOne;
 
         }
 

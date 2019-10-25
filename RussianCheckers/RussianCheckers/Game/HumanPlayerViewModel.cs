@@ -4,10 +4,13 @@ using RussianCheckers.Game;
 
 namespace RussianCheckers
 {
-    public class MainHumanPlayer : PlayerViewModel
+    public class HumanPlayerViewModel : PlayerViewModel
     {
-        public MainHumanPlayer(Side side, DataProvider dataProvider):base(side, dataProvider, true)
+        private readonly MainPlayer _player;
+
+        public HumanPlayerViewModel(MainPlayer player) : base(player)
         {
+            _player = player;
 //            PlayerPositions = new ObservableCollection<CheckerElement>(GetTestSchema1(side));
 //            PlayerPositions = new ObservableCollection<CheckerElement>(GetTestSchema2(side));
         }
@@ -17,7 +20,7 @@ namespace RussianCheckers
 //            return new List<CheckerElement>()
 //            {
 //                new CheckerElement(4,2,PieceType.Checker,side),
-////                new CheckerElement(0,2,PieceType.Checker,side)
+////                new CheckerElement(0,2,PieceType.Checker,side) 
 //            };
 //        }
 //        private List<CheckerElement> GetTestSchema2(Side side)
@@ -34,7 +37,7 @@ namespace RussianCheckers
 
         public override PlayerViewModel Clone(DataProvider dataProvider)
         {
-            return new MainHumanPlayer(this.Side, dataProvider);
+            return new HumanPlayerViewModel(_player.Clone(dataProvider));
         }
     }
 }

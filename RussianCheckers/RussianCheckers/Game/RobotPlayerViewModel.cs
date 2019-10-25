@@ -4,16 +4,18 @@ using RussianCheckers.Strategy;
 
 namespace RussianCheckers.Game
 {
-    public class RobotViewPlayer : PlayerViewModel
+    public class RobotPlayerViewModel : PlayerViewModel
     {
+        private readonly RobotPlayer _robotPlayer;
         private readonly RobotStrategy _robotStrategy;
 
-        public RobotViewPlayer(Side side, DataProvider dataProvider, RobotStrategy robotStrategy) : base(side, dataProvider,false)
+        public RobotPlayerViewModel(RobotPlayer robotPlayer, RobotStrategy robotStrategy) : base(robotPlayer)
         {
+            _robotPlayer = robotPlayer;
             _robotStrategy = robotStrategy;
         }
 
-        public RobotViewPlayer(Side side, DataProvider dataProvider) : this(side, dataProvider, new DummyStrategy())
+        public RobotPlayerViewModel(RobotPlayer robotPlayer) : this(robotPlayer, new DummyStrategy())
         {
         }
 
@@ -25,7 +27,7 @@ namespace RussianCheckers.Game
 
         public override PlayerViewModel Clone(DataProvider dataProvider)
         {
-            return new RobotViewPlayer(this.Side, dataProvider);
+            return new RobotPlayerViewModel(_robotPlayer.Clone(dataProvider));
         }
     }
 }

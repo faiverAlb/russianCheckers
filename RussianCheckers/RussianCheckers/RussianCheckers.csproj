@@ -59,13 +59,15 @@
     <Compile Include="Game\DataProvider.cs" />
     <Compile Include="Game\Diagonal.cs" />
     <Compile Include="Game\Domain\CheckerModel.cs" />
+    <Compile Include="Game\Domain\Game.cs" />
     <Compile Include="Game\Domain\NeighborsCalculator.cs" />
+    <Compile Include="Game\Domain\PathCalculator.cs" />
     <Compile Include="Game\EmptyCellsPlayer.cs" />
     <Compile Include="Game\Domain\GameEnums.cs" />
     <Compile Include="Game\GameInfrastructure\GameStatus.cs" />
     <Compile Include="Game\GameStatusChecker.cs" />
     <Compile Include="Game\GameViewModel.cs" />
-    <Compile Include="Game\MainHumanPlayer.cs" />
+    <Compile Include="Game\HumanPlayerViewModel.cs" />
     <Compile Include="Game\NotificationDialogViewModel.cs" />
     <Compile Include="Game\Domain\Player.cs" />
     <Compile Include="Game\PlayerViewModel.cs" />
@@ -73,7 +75,7 @@
     <Compile Include="Game\GameInfrastructure\MoveValidationResult.cs" />
     <Compile Include="Game\GameInfrastructure\MoveValidationStatus.cs" />
     <Compile Include="Game\PointViewModel.cs" />
-    <Compile Include="Game\RobotViewPlayer.cs" />
+    <Compile Include="Game\RobotPlayerViewModel.cs" />
     <Compile Include="Infrastructure\DialogCloseRequestedEventArgs.cs" />
     <Compile Include="Infrastructure\IDialog.cs" />
     <Compile Include="Infrastructure\IDialogRequestClose.cs" />

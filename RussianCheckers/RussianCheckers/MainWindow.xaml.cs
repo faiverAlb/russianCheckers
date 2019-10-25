@@ -17,7 +17,6 @@ namespace RussianCheckers
             var notificationDialogService = new DialogService(this);
             notificationDialogService.Register<NotificationDialogViewModel,NotificationDialog>();
 
-            Side mainPlayerSide = Side.White;
 
 
 //            var mainPlayCheckers = new List<CheckerElement>()
@@ -49,17 +48,17 @@ namespace RussianCheckers
 //
 //            };
 //            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-            var dataProvider = new DataProvider(mainPlayerSide);
 
-            var mainHumanPlayer = new MainHumanPlayer(mainPlayerSide, dataProvider);
-            var playerViewModel = new RobotViewPlayer(Side.Black, dataProvider, new MinMaxStrategy());
-            var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
-            this.DataContext = new GameViewModel(
-                mainHumanPlayer
-                , playerViewModel,
-                emptyCellsPlayer,
-                dataProvider,
-                notificationDialogService);
+            var dataProvider = new DataProvider(Side.White);
+            var mainPlayer = new MainPlayer(dataProvider, Side.White);
+            var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
+            var emptyPlayer = new EmptyUserPlayer(dataProvider);
+            var game = new Game.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+
+            var mainHumanPlayer = new HumanPlayerViewModel(mainPlayer);
+            var playerViewModel = new RobotPlayerViewModel(robotPlayer);
+            var emptyCellsPlayer = new EmptyCellsPlayer(emptyPlayer);
+            this.DataContext = new GameViewModel(game, notificationDialogService, false);
         }
     }
 }

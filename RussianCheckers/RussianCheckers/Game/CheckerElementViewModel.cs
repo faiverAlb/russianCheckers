@@ -8,9 +8,10 @@ namespace RussianCheckers.Game
         public CheckerElementViewModel(CheckerModel checkerModel)
         {
             _checkerModel = checkerModel;
+            Side = checkerModel.Side;
             _pos = new PointViewModel(_checkerModel.Row, _checkerModel.Column);
             PossibleMovementElements = new List<CheckerElementViewModel>(_checkerModel.PossibleMovementElements.Select(x => new CheckerElementViewModel(x)));
-            Neighbors = new List<CheckerElementViewModel>(_checkerModel.Neighbors.Select(x => new CheckerElementViewModel(x)));
+//            Neighbors = new List<CheckerElementViewModel>(_checkerModel.Neighbors.Select(x => new CheckerElementViewModel(x)));
         }
 
         public bool IsAtInitialPosition
@@ -30,10 +31,10 @@ namespace RussianCheckers.Game
 
         public List<CheckerElementViewModel> PossibleMovementElements { get; private set; }
 
-        public void SetPossibleMovementElements(List<CheckerElementViewModel> possibleMovementElements)
-        {
-            PossibleMovementElements = possibleMovementElements;
-        }
+//        public void SetPossibleMovementElements(List<CheckerElementViewModel> possibleMovementElements)
+//        {
+//            PossibleMovementElements = possibleMovementElements;
+//        }
 
         public bool CanMoveToPosition(CheckerElementViewModel elementViewModel)
         {
@@ -42,8 +43,16 @@ namespace RussianCheckers.Game
 
 
 
-        public int Column { get; private set; }
-        public int Row { get; private set; }
+        public int Column
+        {
+            get { return _checkerModel.Column; }
+        }
+
+        public int Row
+        {
+            get { return _checkerModel.Row; }
+
+        }
 
         private PieceType _type;
         public PieceType Type
@@ -97,13 +106,13 @@ namespace RussianCheckers.Game
             Neighbors = neighbors;
         }
 
-        public void SetNewPosition(int column, int row)
-        {
-            Column = column;
-            Row = row;
-            _pos.ChangePosition(column, row);
-            IsAtInitialPosition = false;
-        }
+//        public void SetNewPosition(int column, int row)
+//        {
+//            Column = column;
+//            Row = row;
+//            _pos.ChangePosition(column, row);
+//            IsAtInitialPosition = false;
+//        }
 
         public override string ToString()
         {

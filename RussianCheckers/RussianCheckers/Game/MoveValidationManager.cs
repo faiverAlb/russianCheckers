@@ -11,14 +11,18 @@ namespace RussianCheckers.Game
         private readonly CheckerElementViewModel _newSelectedElementViewModel;
         private readonly Side _nextMoveSide;
         private readonly PlayerViewModel _player;
+        private readonly GameViewModel _gameViewModel;
 
-        public MoveValidationManager(CheckerElementViewModel oldSelectedElementViewModel, CheckerElementViewModel newSelectedElementViewModel,
-            Side nextMoveSide, PlayerViewModel player)
+        public MoveValidationManager(CheckerElementViewModel oldSelectedElementViewModel,
+            CheckerElementViewModel newSelectedElementViewModel,
+            Side nextMoveSide, PlayerViewModel player
+            , GameViewModel gameViewModel)
         {
             _oldSelectedElementViewModel = oldSelectedElementViewModel;
             _newSelectedElementViewModel = newSelectedElementViewModel;
             _nextMoveSide = nextMoveSide;
             _player = player;
+            _gameViewModel = gameViewModel;
         }
         public MoveValidationResult GetPreValidationResult()
         {
@@ -37,7 +41,19 @@ namespace RussianCheckers.Game
 
         public MoveValidationResult GetMoveValidationResult()
         {
-            IEnumerable<LinkedList<CheckerElementViewModel>> availablePaths = _player.GetAvailablePaths();
+            IEnumerable<LinkedList<CheckerModel>> availablePathsModels = _player.GetAvailablePaths();
+            var availablePaths = new List<LinkedList<CheckerElementViewModel>>();
+            foreach (LinkedList<CheckerModel> playerAvailablePath in availablePathsModels)
+            {
+                var checkersLinkedList = new LinkedList<CheckerElementViewModel>();
+                foreach (var checkerModel in playerAvailablePath)
+                {
+                    CheckerElementViewModel foundCheckerViewModel = _gameViewModel.FindChecker(checkerModel.Column,checkerModel.Row);
+                    checkersLinkedList.AddLast(foundCheckerViewModel);
+                }
+                availablePaths.Add(checkersLinkedList);
+            }
+
             if (availablePaths.Any() && (_oldSelectedElementViewModel == null || _oldSelectedElementViewModel.Side == _newSelectedElementViewModel.Side) &&availablePaths.All(x => x.First.Value != _newSelectedElementViewModel))
             {
 

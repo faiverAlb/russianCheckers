@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -163,7 +164,11 @@ namespace RussianCheckers.Game
                 ShowNotificationMessage("Game is over!");
                 return;
             }
-            var validationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide, NextMovePlayer);
+            var validationManager = new MoveValidationManager(_selectedChecker
+                , newSelectedChecker
+                , NextMoveSide
+                , NextMovePlayer
+                ,this);
 
             MoveValidationResult preValidationMoveValidationResult = validationManager.GetPreValidationResult();
             if (preValidationMoveValidationResult.Status == MoveValidationStatus.Error)
@@ -213,7 +218,11 @@ namespace RussianCheckers.Game
 
         private bool IsCheckerMoved(CheckerElementViewModel newSelectedChecker, PlayerViewModel player)
         {
-            var moveValidationManager = new MoveValidationManager(_selectedChecker, newSelectedChecker, NextMoveSide, player);
+            var moveValidationManager = new MoveValidationManager(_selectedChecker
+                , newSelectedChecker
+                , NextMoveSide
+                , player
+                , this);
             MoveValidationResult validationResult =  moveValidationManager.GetMoveValidationResult();
             if (validationResult.Status == MoveValidationStatus.NewItemSelected)
             {
@@ -355,6 +364,22 @@ namespace RussianCheckers.Game
         {
             PlayerViewModel player = GetPlayer(isForMainPlayer);
             return player.GetQueensCount();
+        }
+
+        public CheckerElementViewModel FindChecker(int column, int row)
+        {
+            var findChecker = _playerOne.PlayerPositions.SingleOrDefault(x => x.Column == column && x.Row == row);
+            if (findChecker != null)
+                return findChecker;
+            findChecker = _playerTwo.PlayerPositions.SingleOrDefault(x => x.Column == column && x.Row == row);
+            if (findChecker != null)
+                return findChecker;
+            findChecker = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == column && x.Row == row);
+            if (findChecker == null)
+            {
+                throw new Exception($"Can't find checker at position ({column},{row}) in game view model: ");
+            }
+            return findChecker;
         }
     }
 

@@ -183,11 +183,12 @@ namespace RussianCheckers.Game
 
         }
 
-        public IEnumerable<LinkedList<CheckerElementViewModel>> GetAvailablePaths()
+        public IEnumerable<LinkedList<CheckerModel>> GetAvailablePaths()
         {
             var result = new List<LinkedList<CheckerElementViewModel>>();
             var playerAvailablePaths = _player.AvailablePaths;
-//            foreach (LinkedList<CheckerModel> playerAvailablePath in playerAvailablePaths)
+            return playerAvailablePaths;
+            //            foreach (LinkedList<CheckerModel> playerAvailablePath in playerAvailablePaths)
 //            {
 //                var checkersLinkedList = new LinkedList<CheckerElementViewModel>();
 //                foreach (var checkerModel in playerAvailablePath)
@@ -197,7 +198,7 @@ namespace RussianCheckers.Game
 //                }
 //                result.Add(checkersLinkedList);
 //            }
-            return result;
+//            return result;
         }
 
     }

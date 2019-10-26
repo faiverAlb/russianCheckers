@@ -66,7 +66,6 @@ namespace RussianCheckers.Core
             newPosition.SetNewPosition(currentCol, currentRow);
             _dataProvider.MoveCheckerToNewPosition(newPosition, currentCol, currentRow);
 
-//            checker.DeSelectPossibleMovement();
             return itemsToTake;
 
         }

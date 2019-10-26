@@ -14,7 +14,7 @@ namespace RussianCheckers.Game
             Side = checkerModel.Side;
             _pos = new PointViewModel(_checkerModel.Row, _checkerModel.Column);
             PossibleMovementElements = emptyCheckerElementViewModels.Where(x => _checkerModel.PossibleMovementElements.Any(y => x.Column == y.Column && x.Row == y.Row)).ToList();
-//            Neighbors = new List<CheckerElementViewModel>(_checkerModel.Neighbors.Select(x => new CheckerElementViewModel(x)));
+            //            Neighbors = new List<CheckerElementViewModel>(_checkerModel.Neighbors.Select(x => new CheckerElementViewModel(x)));
         }
 
         private void PositionChangedAction(int column, int row)
@@ -152,5 +152,9 @@ namespace RussianCheckers.Game
 //        {
 //            return new CheckerElementViewModel(_checkerModel.Clone());
 //        }
+        public void ReSetPossibleMovements(List<CheckerElementViewModel> emptyItems)
+        {
+            PossibleMovementElements = emptyItems.Where(x => _checkerModel.PossibleMovementElements.Any(y => x.Column == y.Column && x.Row == y.Row)).ToList();
+        }
     }
 }

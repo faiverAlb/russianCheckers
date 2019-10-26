@@ -28,6 +28,24 @@
             RobotPlayer.CalculateAvailablePaths();
         }
 
+        public void ReCalculateWithRespectToOrder(bool isMainPlayerMove)
+        {
+            EmptyCellsAsPlayer.CalculateNeighbors();
+
+            if (isMainPlayerMove)
+            {
+                MainPlayer.CalculateNeighbors();
+                RobotPlayer.CalculateNeighbors();
+            }
+            else
+            {
+                RobotPlayer.CalculateNeighbors();
+                MainPlayer.CalculateNeighbors();
+            }
+
+            MainPlayer.CalculateAvailablePaths();
+            RobotPlayer.CalculateAvailablePaths();
+        }
         public Side NextMoveSide { get; set; }
         public bool IsGameFinished { get; private set; }
     }

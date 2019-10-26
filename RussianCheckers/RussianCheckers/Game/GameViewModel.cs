@@ -256,15 +256,20 @@ namespace RussianCheckers.Game
 
             List<CheckerModel> itemsTakeByOtherUser = player.MoveCheckerToNewPlace(currentPositionElementViewModel, nextCol, nextRow);
 
-//            _emptyCellsPlayer.AddNewEmptyElements(itemsTakeByOtherUser);
-//            if (player == _playerOne)
-//            {
-//                _playerTwo.RemoveCheckers(itemsTakeByOtherUser);
-//            }
-//            else
-//            {
-//                _playerOne.RemoveCheckers(itemsTakeByOtherUser);
-//            }
+            
+            _emptyCellsPlayer.AddNewEmptyElements(itemsTakeByOtherUser);
+            if (player == _playerOne)
+            {
+                _playerTwo.RemoveCheckers(itemsTakeByOtherUser);
+            }
+            else
+            {
+                _playerOne.RemoveCheckers(itemsTakeByOtherUser);
+            }
+            _game.ReCalculateWithRespectToOrder(player.IsMainPlayer);
+            
+            _playerOne.ReSetPossibleMovements(_emptyCellsPlayer.PlayerPositions.ToList());
+            _playerTwo.ReSetPossibleMovements(_emptyCellsPlayer.PlayerPositions.ToList());
 //            _emptyCellsPlayer.CalculateNeighbors();
 //            if (player == _playerOne)
 //            {
@@ -333,10 +338,10 @@ namespace RussianCheckers.Game
         {
             if (isMain)
             {
-                return _playerOne.IsMainPLayer ? _playerOne : _playerTwo;
+                return _playerOne.IsMainPlayer ? _playerOne : _playerTwo;
             }
 
-            return _playerOne.IsMainPLayer ? _playerTwo : _playerOne;
+            return _playerOne.IsMainPlayer ? _playerTwo : _playerOne;
 
         }
 

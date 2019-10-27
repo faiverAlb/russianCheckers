@@ -29,13 +29,13 @@ namespace RussianCheckers.Game
             _isPlayingAutomatically = isPlayingAutomatically;
             
 
-            _emptyCellsPlayer = new EmptyCellsPlayer(_game.EmptyCellsAsPlayer);
-            _playerOne = new HumanPlayerViewModel(_game.MainPlayer, _emptyCellsPlayer.PlayerPositions.ToList());
-            _playerTwo = new RobotPlayerViewModel(_game.RobotPlayer, _emptyCellsPlayer.PlayerPositions.ToList());
+            _emptyCellsPlayerViewModel = new EmptyCellsPlayerViewModel(_game.EmptyCellsAsPlayer);
+            _playerOne = new HumanPlayerViewModel(_game.MainPlayer, _emptyCellsPlayerViewModel.PlayerPositions.ToList());
+            _playerTwo = new RobotPlayerViewModel(_game.RobotPlayer, _emptyCellsPlayerViewModel.PlayerPositions.ToList());
 
             var playerOneCollectionContainer = new CollectionContainer { Collection = _playerOne.PlayerPositions };
             var playerTwoCollectionContainer = new CollectionContainer { Collection = _playerTwo.PlayerPositions };
-            var emptyCollectionContainer = new CollectionContainer { Collection = _emptyCellsPlayer.PlayerPositions };
+            var emptyCollectionContainer = new CollectionContainer { Collection = _emptyCellsPlayerViewModel.PlayerPositions };
             _positions.Add(playerOneCollectionContainer);
             _positions.Add(playerTwoCollectionContainer);
             _positions.Add(emptyCollectionContainer);
@@ -134,7 +134,7 @@ namespace RussianCheckers.Game
         private  Side _nextMoveSide;
         private bool _isGameFinished;
         private readonly PlayerViewModel _playerOne;
-        private readonly EmptyCellsPlayer _emptyCellsPlayer;
+        private readonly EmptyCellsPlayerViewModel _emptyCellsPlayerViewModel;
         private readonly DataProvider _dataProvider;
         private readonly RobotPlayerViewModel _playerTwo;
         private PlayerViewModel _nextMovePlayer;
@@ -265,22 +265,24 @@ namespace RussianCheckers.Game
 
             int playerCol = currentPositionElementViewModel.Column;
             int playerRow = currentPositionElementViewModel.Row;
-            List<CheckerModel> itemsTakeByOtherUser = playerViewModel.MoveCheckerToNewPlace(currentPositionElementViewModel, nextCol, nextRow);
+//            Tuple<List<CheckerModel>, List<CheckerModel>, List<CheckerModel>> itemsTakeByOtherUser = 
+                playerViewModel.MoveCheckerToNewPlace(currentPositionElementViewModel, nextCol, nextRow);
 
-            _emptyCellsPlayer.UpdateModelValue(emptyPosition, playerCol, playerRow);
-            _emptyCellsPlayer.AddNewEmptyElements(itemsTakeByOtherUser);
-            if (playerViewModel == _playerOne)
-            {
-                _playerTwo.RemoveCheckers(itemsTakeByOtherUser);
-            }
-            else
-            {
-                _playerOne.RemoveCheckers(itemsTakeByOtherUser);
-            }
+
+//            _emptyCellsPlayerViewModel.UpdateModelValue(emptyPosition, playerCol, playerRow);
+//            _emptyCellsPlayerViewModel.AddNewEmptyElements(itemsTakeByOtherUser);
+//            if (playerViewModel == _playerOne)
+//            {
+//                _playerTwo.RemoveCheckers(itemsTakeByOtherUser);
+//            }
+//            else
+//            {
+//                _playerOne.RemoveCheckers(itemsTakeByOtherUser);
+//            }
             _game.ReCalculateWithRespectToOrder(playerViewModel.IsMainPlayer);
             
-            _playerOne.ReSetPossibleMovements(_emptyCellsPlayer.PlayerPositions.ToList());
-            _playerTwo.ReSetPossibleMovements(_emptyCellsPlayer.PlayerPositions.ToList());
+            _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
+            _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
 
         }
 
@@ -362,7 +364,7 @@ namespace RussianCheckers.Game
             findChecker = _playerTwo.PlayerPositions.SingleOrDefault(x => x.Column == column && x.Row == row);
             if (findChecker != null)
                 return findChecker;
-            findChecker = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == column && x.Row == row);
+            findChecker = _emptyCellsPlayerViewModel.PlayerPositions.SingleOrDefault(x => x.Column == column && x.Row == row);
             if (findChecker == null)
             {
                 throw new Exception($"Can't find checker at position ({column},{row}) in game view model: ");

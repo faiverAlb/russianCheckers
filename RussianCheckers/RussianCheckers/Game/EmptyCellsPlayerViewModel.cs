@@ -4,28 +4,18 @@ using RussianCheckers.Core;
 
 namespace RussianCheckers.Game
 {
-    public class EmptyCellsPlayer : PlayerViewModel
+    public class EmptyCellsPlayerViewModel : PlayerViewModel
     {
         private readonly EmptyUserPlayer _emptyUserPlayer;
 
-        public EmptyCellsPlayer(EmptyUserPlayer emptyUserPlayer) : base(emptyUserPlayer, new List<CheckerElementViewModel>())
+        public EmptyCellsPlayerViewModel(EmptyUserPlayer emptyUserPlayer) : base(emptyUserPlayer, new List<CheckerElementViewModel>())
         {
             _emptyUserPlayer = emptyUserPlayer;
         }
 
-//        public void AddNewEmptyElements(List<CheckerElementViewModel> itemsTakeByOtherUser)
-//        {
-//            foreach (CheckerElementViewModel checkerElement in itemsTakeByOtherUser)
-//            {
-//                CheckerElementViewModel elementViewModel = _dataProvider.GetElementAtPosition(checkerElement.Column, checkerElement.Row);
-//                PlayerPositions.Add(elementViewModel);
-//            }
-//
-//        }
-
         public override PlayerViewModel Clone(DataProvider dataProvider)
         {
-            return new EmptyCellsPlayer(_emptyUserPlayer.Clone(dataProvider));
+            return new EmptyCellsPlayerViewModel(_emptyUserPlayer.Clone(dataProvider));
         }
 
         public void AddNewEmptyElements(List<CheckerModel> itemsTaken)
@@ -42,8 +32,8 @@ namespace RussianCheckers.Game
 
         public void UpdateModelValue(CheckerElementViewModel currentValue, int playerCol, int playerRow)
         {
-            CheckerModel toUpdate = _emptyUserPlayer.PlayerPositions.Single(x => x.Column == currentValue.Column && x.Row == currentValue.Row);
-            toUpdate.SetNewPosition(playerCol, playerRow);
+//            CheckerModel toUpdate = _emptyUserPlayer.PlayerPositions.Single(x => x.Column == currentValue.Column && x.Row == currentValue.Row);
+////            toUpdate.SetNewPosition(playerCol, playerRow);
         }
     }
 }

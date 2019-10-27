@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using RussianCheckers.Core;
@@ -32,6 +33,7 @@ namespace RussianCheckers.Game
         protected PlayerViewModel(Player player, List<CheckerElementViewModel> emptyCheckerViewModelsAsPossible)
         {
             _player = player;
+            _player.NotificationAction += OnDataChanged;
             _emptyCheckerViewModelsAsPossible = emptyCheckerViewModelsAsPossible;
             IEnumerable<CheckerElementViewModel> checkerElementViewModels =
                 player.PlayerPositions.Select(x => new CheckerElementViewModel(x, emptyCheckerViewModelsAsPossible));
@@ -40,6 +42,22 @@ namespace RussianCheckers.Game
             Side = player.Side;
             IsMainPlayer = player.IsMainPlayer;
         }
+
+        private void OnDataChanged(List<CheckerModel> added, List<CheckerModel> deleted)
+        {
+            foreach (CheckerModel checkerModel in added)
+            {
+                CheckerElementViewModel elementViewModel = new CheckerElementViewModel(checkerModel, new List<CheckerElementViewModel>());
+                PlayerPositions.Add(elementViewModel);
+            }
+
+            foreach (var checkerModel in deleted)
+            {
+                CheckerElementViewModel toDelete = PlayerPositions.Single(x => x.Column == checkerModel.Column && x.Row == checkerModel.Row);
+                PlayerPositions.Remove(toDelete);
+            }
+        }
+
 
 
 //        public IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> GetLegalMovements()
@@ -58,14 +76,14 @@ namespace RussianCheckers.Game
 //            return resultList;
 //        }
 
-        public List<CheckerModel> MoveCheckerToNewPlace(CheckerElementViewModel checker, int nextCol, int nextRow)
+        public void MoveCheckerToNewPlace(CheckerElementViewModel checker, int nextCol, int nextRow)
         {
             int currentCol = checker.Column;
             int currentRow = checker.Row;
-            List<CheckerModel> toTakeCheckers = _player.MoveCheckerToNewPlace(currentCol,currentRow,nextCol,nextRow);
+            _player.MoveCheckerToNewPlace(currentCol,currentRow,nextCol,nextRow);
             CheckerElementViewModel existingPlayerChecker = PlayerPositions.Single(x => x == checker);
             existingPlayerChecker.DeSelectPossibleMovement();
-            return toTakeCheckers;
+//            return resultTuple;
         }
 
         private List<CheckerElementViewModel> TakeCheckers(List<LinkedList<CheckerElementViewModel>> availablePaths, int column, int row, CheckerElementViewModel checker)

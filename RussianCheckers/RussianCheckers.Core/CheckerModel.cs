@@ -28,9 +28,9 @@ namespace RussianCheckers.Core
 
         public List<CheckerModel> PossibleMovementElements { get; set; }
 
-        public int Row { get; set; }
+        public int Row { get; private set; }
 
-        public int Column { get; set; }
+        public int Column { get; private set; }
         public Side Side
         {
             get { return _side; }
@@ -64,7 +64,7 @@ namespace RussianCheckers.Core
             Type = PieceType.Queen;
         }
 
-        public void SetNewPosition(int column, int row)
+        public void SetNewPosition2(int column, int row)
         {
             Column = column;
             Row = row;

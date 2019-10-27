@@ -1,24 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RussianCheckers.Core
 {
     public class DataProvider
     {
+        public  Action<List<CheckerModel>, List<CheckerModel>, List<CheckerModel>> NotificationAction;
         private readonly CheckerModel[,] _data;
+        private bool _isStartTrackChanging;
+        private List<CheckerModel> _added;
+        private List<CheckerModel> _deleted;
+        private List<CheckerModel> _modified;
 
         public DataProvider(CheckerModel[,] data)
         {
             _data = data;
+            _isStartTrackChanging = false;
+            _added = new List<CheckerModel>();
+            _deleted = new List<CheckerModel>();
+            _modified = new List<CheckerModel>();
+
         }
         public DataProvider(List<CheckerModel> mainPlayerCheckers, List<CheckerModel> secondPlayerCheckers)
         {
             List<CheckerModel> emptyCheckers = GetEmptyCheckersPositions(mainPlayerCheckers, secondPlayerCheckers);
             _data = GetCurrentGamePositions(mainPlayerCheckers, secondPlayerCheckers, emptyCheckers);
+
+            _isStartTrackChanging = false;
+            _added = new List<CheckerModel>();
+            _deleted = new List<CheckerModel>();
+            _modified = new List<CheckerModel>();
         }
 
         public DataProvider(Side mainPlayerSide)
         {
+            _isStartTrackChanging = false;
+            _added = new List<CheckerModel>();
+            _deleted = new List<CheckerModel>();
+            _modified = new List<CheckerModel>();
+
             List<CheckerModel> mainPlayerCheckers = GetMainPlayerCheckers(mainPlayerSide);
             Side secondPlayerSide = mainPlayerSide == Side.White? Side.Black: Side.White;
             
@@ -150,9 +171,30 @@ namespace RussianCheckers.Core
         }
 
 
-        public void MoveCheckerToNewPosition(CheckerModel elementViewModel, int checkerElementColumn, int checkerElementRow)
+        public void MoveCheckerToNewPosition(CheckerModel checketToMove, int newPositionColumn, int newPositionRow)
         {
-            _data[checkerElementColumn, checkerElementRow] = elementViewModel;
+            int fromColumn = checketToMove.Column;
+            int fromRow = checketToMove.Row;
+            CheckerModel oldPositionedItem = _data[newPositionColumn, newPositionRow];
+
+            if (fromColumn == newPositionColumn && fromRow == newPositionRow)
+            {
+                 _data[newPositionColumn, newPositionRow] = checketToMove;
+                _added.Add(checketToMove);
+                _deleted.Add(oldPositionedItem);
+                return;
+            }
+
+
+            _data[newPositionColumn, newPositionRow] = checketToMove;
+            checketToMove.SetNewPosition2(newPositionColumn, newPositionRow);
+            
+            _data[fromColumn, fromRow] = oldPositionedItem;
+            oldPositionedItem.SetNewPosition2(fromColumn, fromRow);
+
+            _modified.Add(oldPositionedItem);
+            _modified.Add(checketToMove);
+
         }
 
         public DataProvider Clone()
@@ -166,6 +208,20 @@ namespace RussianCheckers.Core
                 }
             }
             return new DataProvider(clonedCheckers);
+        }
+
+        public void StartTrackChanges()
+        {
+            _isStartTrackChanging = true;
+            _added = new List<CheckerModel>();
+            _deleted = new List<CheckerModel>();
+            _modified = new List<CheckerModel>();
+        }
+
+        public void StopTrackChanges()
+        {
+            _isStartTrackChanging = false;
+            NotificationAction?.Invoke(_added, _deleted, _modified);
         }
     }
 }

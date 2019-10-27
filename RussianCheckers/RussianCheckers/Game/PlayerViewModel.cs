@@ -95,69 +95,6 @@ namespace RussianCheckers.Game
         }
 
 
-
-
-
-//        public List<LinkedList<CheckerElementViewModel>> GetPossiblePaths(CheckerElementViewModel playerPosition)
-//        {
-//            var paths = new List<LinkedList<CheckerElementViewModel>>();
-//            if (playerPosition.Type == PieceType.Checker)
-//            {
-//                SetPossibleMovementsRecursive(playerPosition, new LinkedList<CheckerElementViewModel>(), new List<CheckerElementViewModel>(),playerPosition.Side, paths);
-//            }
-//            else
-//            {
-//                if (playerPosition.Neighbors.All(x => x.Side == Side.Empty))
-//                {
-//                    foreach (var neighbor in playerPosition.Neighbors)
-//                    {
-//                        paths.Add(new LinkedList<CheckerElementViewModel>(new List<CheckerElementViewModel>(){ neighbor }));
-//                    }
-//                }
-//                else
-//                {
-//                    SetPossibleMovementsForQueenRecursive(playerPosition, new LinkedList<CheckerElementViewModel>(), new List<CheckerElementViewModel>(),playerPosition.Side, paths);
-//                }
-//
-//            }
-//            return paths;
-//        }
-
-
-
-
-
-
-//        public List<CheckerElementViewModel> GetNextElementsInDiagonal(CheckerElementViewModel playerChecker, CheckerElementViewModel otherSideNeighbor,CheckerElementViewModel rootElementViewModel = null)
-//        {
-//            Diagonal diagonal;
-//            if (playerChecker.Column - otherSideNeighbor.Column > 0)
-//            {
-//                diagonal = playerChecker.Row - otherSideNeighbor.Row > 0 ? Diagonal.LeftDown : Diagonal.LeftUp;
-//            }
-//            else
-//            {
-//                diagonal = playerChecker.Row - otherSideNeighbor.Row > 0 ? Diagonal.RightDown : Diagonal.RightUp;
-//            }
-//
-//            Queue<CheckerElementViewModel> allElementsInDiagonalFromCurrent = GetAllElementsInDiagonalFromCurrent(otherSideNeighbor, diagonal);
-//            if (allElementsInDiagonalFromCurrent.Count == 0 )
-//            {
-//                return new List<CheckerElementViewModel>();
-//            }
-//            var emptyElementsAfterOtherChecker = new List<CheckerElementViewModel>();
-//            while (allElementsInDiagonalFromCurrent.Count > 0)
-//            {
-//                var value = allElementsInDiagonalFromCurrent.Dequeue();
-//                if (value.Side != Side.Empty && value != rootElementViewModel)
-//                {
-//                    break;
-//                }
-//                emptyElementsAfterOtherChecker.Add(value);
-//            }
-//            return emptyElementsAfterOtherChecker;
-//        }
-
         public void RemoveCheckers(List<CheckerModel> models)
         {
             var toRemove = PlayerPositions.Where(x => models.SingleOrDefault(y => x.Column == y.Column && x.Row == y.Row) != null).ToList();

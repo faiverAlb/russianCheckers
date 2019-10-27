@@ -33,23 +33,14 @@ namespace RussianCheckers.Game
         {
             _player = player;
             _emptyCheckerViewModelsAsPossible = emptyCheckerViewModelsAsPossible;
-            IEnumerable<CheckerElementViewModel> checkerElementViewModels = player.PlayerPositions.Select(x => new CheckerElementViewModel(x, emptyCheckerViewModelsAsPossible));
+            IEnumerable<CheckerElementViewModel> checkerElementViewModels =
+                player.PlayerPositions.Select(x => new CheckerElementViewModel(x, emptyCheckerViewModelsAsPossible));
             PlayerPositions = new ObservableCollection<CheckerElementViewModel>(checkerElementViewModels);
-            
+
             Side = player.Side;
             IsMainPlayer = player.IsMainPlayer;
-//            AvailablePaths = new List<LinkedList<CheckerElementViewModel>>();
         }
-//        protected PlayerViewModel(Player player)
-//        {
-//            _player = player;
-//            IEnumerable<CheckerElementViewModel> checkerElementViewModels = player.PlayerPositions.Select(x => new CheckerElementViewModel(x));
-//            PlayerPositions = new ObservableCollection<CheckerElementViewModel>(checkerElementViewModels);
-//            
-//            Side = player.Side;
-//            IsMainPLayer = player.IsMainPlayer;
-////            AvailablePaths = new List<LinkedList<CheckerElementViewModel>>();
-//        }
+
 
 //        public IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> GetLegalMovements()
 //        {
@@ -97,6 +88,7 @@ namespace RussianCheckers.Game
 
         public void RemoveCheckers(List<CheckerModel> models)
         {
+            _player.RemoveCheckers(models);
             var toRemove = PlayerPositions.Where(x => models.SingleOrDefault(y => x.Column == y.Column && x.Row == y.Row) != null).ToList();
             foreach (var checkerElement in toRemove)
             {
@@ -122,7 +114,7 @@ namespace RussianCheckers.Game
 
         public IEnumerable<LinkedList<CheckerModel>> GetAvailablePaths()
         {
-            var playerAvailablePaths = _player.AvailablePaths;
+            var playerAvailablePaths = _player.CalculateAvailablePaths();
             return playerAvailablePaths;
         }
     }

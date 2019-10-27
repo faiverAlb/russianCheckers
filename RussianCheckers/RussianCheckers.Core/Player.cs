@@ -9,7 +9,7 @@ namespace RussianCheckers.Core
         private readonly NeighborsCalculator _neighborsCalculator;
         private readonly PathCalculator _pathCalculator;
         public List<CheckerModel> PlayerPositions { get; private set; }
-        public IEnumerable<LinkedList<CheckerModel>> AvailablePaths { get; private set; }
+//        public IEnumerable<LinkedList<CheckerModel>> AvailablePaths { get; private set; }
 
         public bool IsMainPlayer { get; private set; }
         public Side Side { get; private set; }
@@ -30,15 +30,16 @@ namespace RussianCheckers.Core
             _neighborsCalculator.CalculateNeighbors();
         }
 
-        public void CalculateAvailablePaths()
+        public IEnumerable<LinkedList<CheckerModel>> CalculateAvailablePaths()
         {
-            AvailablePaths = _pathCalculator.CalculateAvailablePaths();
+            return _pathCalculator.CalculateAvailablePaths();
         }
 
         public List<CheckerModel> MoveCheckerToNewPlace(int currentCol, int currentRow, int nextCol, int nextRow)
         {
             CheckerModel checker = this.PlayerPositions.Single(x => x.Column == currentCol && x.Row == currentRow);
-            var path = AvailablePaths.Where(x => x.Last.Value.Column == nextCol && x.Last.Value.Row == nextRow).OrderByDescending(x => x.Count).FirstOrDefault();
+            var availablePaths = CalculateAvailablePaths();
+            var path = availablePaths.Where(x => x.Last.Value.Column == nextCol && x.Last.Value.Row == nextRow).OrderByDescending(x => x.Count).FirstOrDefault();
             if (ShouldConvertToQueenByPathDuringTaking(path))
             {
                 checker.BecomeAQueen();
@@ -54,7 +55,7 @@ namespace RussianCheckers.Core
 
             _dataProvider.MoveCheckerToNewPosition(oldPositionedChecker, nextCol, nextRow);
 
-            List<CheckerModel> itemsToTake = GetToTakeCheckers(AvailablePaths, nextCol, nextRow, checker);
+            List<CheckerModel> itemsToTake = GetToTakeCheckers(availablePaths, nextCol, nextRow, checker);
             checker.SetNewPosition(nextCol, nextRow);
 
             foreach (CheckerModel checkerElement in itemsToTake)
@@ -106,6 +107,13 @@ namespace RussianCheckers.Core
         }
 
 
+        public void RemoveCheckers(List<CheckerModel> models)
+        {
+            foreach (var checkerModel in models)
+            {
+                PlayerPositions.Remove(checkerModel);
+            }
+        }
     }
 
 

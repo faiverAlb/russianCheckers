@@ -33,6 +33,7 @@ namespace RussianCheckers.Game
             foreach (CheckerModel checkerElement in itemsTaken)
             {
                 var model = new CheckerModel(checkerElement.Column, checkerElement.Row, checkerElement.Type, Side.Empty);
+                _emptyUserPlayer.PlayerPositions.Add(model);
                 CheckerElementViewModel elementViewModel = new CheckerElementViewModel(model,new List<CheckerElementViewModel>());
                 PlayerPositions.Add(elementViewModel);
             }

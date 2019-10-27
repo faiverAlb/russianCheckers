@@ -258,16 +258,18 @@ namespace RussianCheckers.Game
             return true;
         }
 
-        private void MoveCheckerToNewPlace(CheckerElementViewModel currentPositionElementViewModel, CheckerElementViewModel emptyPosition, PlayerViewModel player)
+        private void MoveCheckerToNewPlace(CheckerElementViewModel currentPositionElementViewModel, CheckerElementViewModel emptyPosition, PlayerViewModel playerViewModel)
         {
             int nextCol = emptyPosition.Column;
             int nextRow = emptyPosition.Row;
 
-            List<CheckerModel> itemsTakeByOtherUser = player.MoveCheckerToNewPlace(currentPositionElementViewModel, nextCol, nextRow);
+            int playerCol = currentPositionElementViewModel.Column;
+            int playerRow = currentPositionElementViewModel.Row;
+            List<CheckerModel> itemsTakeByOtherUser = playerViewModel.MoveCheckerToNewPlace(currentPositionElementViewModel, nextCol, nextRow);
 
-            
+            _emptyCellsPlayer.UpdateModelValue(emptyPosition, playerCol, playerRow);
             _emptyCellsPlayer.AddNewEmptyElements(itemsTakeByOtherUser);
-            if (player == _playerOne)
+            if (playerViewModel == _playerOne)
             {
                 _playerTwo.RemoveCheckers(itemsTakeByOtherUser);
             }
@@ -275,24 +277,10 @@ namespace RussianCheckers.Game
             {
                 _playerOne.RemoveCheckers(itemsTakeByOtherUser);
             }
-            _game.ReCalculateWithRespectToOrder(player.IsMainPlayer);
+            _game.ReCalculateWithRespectToOrder(playerViewModel.IsMainPlayer);
             
             _playerOne.ReSetPossibleMovements(_emptyCellsPlayer.PlayerPositions.ToList());
             _playerTwo.ReSetPossibleMovements(_emptyCellsPlayer.PlayerPositions.ToList());
-//            _emptyCellsPlayer.CalculateNeighbors();
-//            if (player == _playerOne)
-//            {
-//                _playerOne.CalculateNeighbors();
-//                _playerTwo.CalculateNeighbors();
-//            }
-//            else
-//            {
-//                _playerTwo.CalculateNeighbors();
-//                _playerOne.CalculateNeighbors();
-//            }
-//
-//            _playerOne.CalculateAvailablePaths();
-//            _playerTwo.CalculateAvailablePaths();
 
         }
 

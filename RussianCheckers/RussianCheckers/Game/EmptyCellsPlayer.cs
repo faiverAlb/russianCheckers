@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RussianCheckers.Core;
 
 namespace RussianCheckers.Game
@@ -37,6 +38,12 @@ namespace RussianCheckers.Game
                 CheckerElementViewModel elementViewModel = new CheckerElementViewModel(model,new List<CheckerElementViewModel>());
                 PlayerPositions.Add(elementViewModel);
             }
+        }
+
+        public void UpdateModelValue(CheckerElementViewModel currentValue, int playerCol, int playerRow)
+        {
+            CheckerModel toUpdate = _emptyUserPlayer.PlayerPositions.Single(x => x.Column == currentValue.Column && x.Row == currentValue.Row);
+            toUpdate.SetNewPosition(playerCol, playerRow);
         }
     }
 }

@@ -124,5 +124,90 @@ namespace RussianCheckers.Game.Tests
             Assert.AreEqual(7, queueOfDiagonalElements.Count);
         }
 
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_RightDownInCorner_Returns_6()
+        {
+            //  Arrange
+            var checker = new CheckerModel(0, 6, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerModel>() { checker };
+            var secondPlayerCheckers = new List<CheckerModel>() { };
+            var dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            var playerOne = new MainPlayer(dataProvider, Side.White);
+
+            //  Act
+            var pathCalculator = new PathCalculator(dataProvider, playerOne.PlayerPositions, true);
+            var queueOfDiagonalElements = pathCalculator.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.RightDown);
+            //  Assert
+            Assert.AreEqual(6 , queueOfDiagonalElements.Count);
+        }
+
+
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_InTheBoard_LeftUp_Returns()
+        {
+            //  Arrange
+            var checker = new CheckerModel(3, 3, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerModel>() { checker };
+            var secondPlayerCheckers = new List<CheckerModel>() { };
+            var dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            var playerOne = new MainPlayer(dataProvider, Side.White);
+
+            //  Act
+            var pathCalculator = new PathCalculator(dataProvider, playerOne.PlayerPositions, true);
+            var queueOfDiagonalElements = pathCalculator.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.LeftUp);
+            //  Assert
+            Assert.AreEqual(3 , queueOfDiagonalElements.Count);
+        }
+
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_InTheBoard_LeftDown_Returns_2()
+        {
+            //  Arrange
+            var checker = new CheckerModel(2, 4, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerModel>() { checker };
+            var secondPlayerCheckers = new List<CheckerModel>() { };
+            var dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            var playerOne = new MainPlayer(dataProvider, Side.White);
+
+            //  Act
+            var pathCalculator = new PathCalculator(dataProvider, playerOne.PlayerPositions, true);
+            var queueOfDiagonalElements = pathCalculator.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.LeftDown);
+            //  Assert
+            Assert.AreEqual(2 , queueOfDiagonalElements.Count);
+        }
+
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_InTheBoard_RightUp_Returns_3()
+        {
+            //  Arrange
+            var checker = new CheckerModel(2, 4, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerModel>() { checker };
+            var secondPlayerCheckers = new List<CheckerModel>() { };
+            var dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            var playerOne = new MainPlayer(dataProvider, Side.White);
+
+            //  Act
+            var pathCalculator = new PathCalculator(dataProvider, playerOne.PlayerPositions, true);
+            var queueOfDiagonalElements = pathCalculator.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.RightUp);
+            //  Assert
+            Assert.AreEqual(3 , queueOfDiagonalElements.Count);
+        }
+
+        [TestMethod()]
+        public void GetAllElementsInDiagonalFromCurrent_InTheBoard_RightDown_Returns_4()
+        {
+            //  Arrange
+            var checker = new CheckerModel(2, 4, PieceType.Checker, Side.White);
+            var mainPlayCheckers = new List<CheckerModel>() { checker };
+            var secondPlayerCheckers = new List<CheckerModel>() { };
+            var dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            var playerOne = new MainPlayer(dataProvider, Side.White);
+
+            //  Act
+            var pathCalculator = new PathCalculator(dataProvider, playerOne.PlayerPositions, true);
+            var queueOfDiagonalElements = pathCalculator.GetAllElementsInDiagonalFromCurrent(checker,Diagonal.RightDown);
+            //  Assert
+            Assert.AreEqual(4 , queueOfDiagonalElements.Count);
+        }
     }
 }

@@ -128,6 +128,27 @@ namespace RussianCheckers.Core
         }
 
 
+        public IEnumerable<KeyValuePair<CheckerModel, CheckerModel>> GetLegalMovements()
+        {
+            IEnumerable<LinkedList<CheckerModel>> availablePaths = CalculateAvailablePaths();
+            if (availablePaths.Any())
+            {
+                var keyValuePairs = availablePaths.Select(x =>
+                    new KeyValuePair<CheckerModel, CheckerModel>(x.First.Value, x.Last.Value));
+                return keyValuePairs;
+            }
+
+            var resultList = new List<KeyValuePair<CheckerModel, CheckerModel>>();
+            foreach (var playerPosition in PlayerPositions)
+            {
+                resultList.AddRange(playerPosition.PossibleMovementElements.Select(
+                    playerPositionPossibleMovementElement =>
+                        new KeyValuePair<CheckerModel, CheckerModel>(playerPosition,
+                            playerPositionPossibleMovementElement)));
+            }
+
+            return resultList;
+        }
     }
 
 

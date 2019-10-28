@@ -154,10 +154,11 @@ namespace RussianCheckers.Game
                 return;
             }
 
-
-            if (!_game.IsGameFinished)
+            bool isGameFinished = _game.CheckGameStatus();
+            if (!isGameFinished)
             {
-                NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
+                _game.ChangeTurn();
+                NextMoveSide = _game.NextMoveSide;
                 
                 WaitMove();
                 return;
@@ -218,7 +219,6 @@ namespace RussianCheckers.Game
             
             _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
             _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
-            _game.CheckGameStatus();
         }
 
 

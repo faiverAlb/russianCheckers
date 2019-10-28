@@ -11,9 +11,7 @@ namespace RussianCheckers.Game
         private readonly Player _player;
         public bool IsMainPlayer { get; private set; }
         public readonly Side Side;
-//        protected readonly DataProvider _dataProvider;
         public  ObservableCollection<CheckerElementViewModel> PlayerPositions { get; protected set; }
-//        public List<LinkedList<CheckerElementViewModel>> AvailablePaths { get;private set; }
 
 
 

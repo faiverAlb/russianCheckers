@@ -20,11 +20,12 @@ namespace RussianCheckers.Core.Strategy
             int maxValue = int.MinValue;
             IEnumerable<KeyValuePair<CheckerModel, CheckerModel>> allAvailableMoves =
                 initialGame.GetAllAvailableMoves().ToList();
-//            var historyOfPossibleMoves = new Dictionary<int, KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>>();
-//            foreach (KeyValuePair<CheckerElementViewModel, CheckerElementViewModel> availableMove in allAvailableMoves)
-//            {
-//                GameViewModel newGameModel = initialGameViewModel.CreateGame();
-//                newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
+            
+            var historyOfPossibleMoves = new Dictionary<int, KeyValuePair<CheckerModel, CheckerModel>>();
+            foreach (KeyValuePair<CheckerModel, CheckerModel> availableMove in allAvailableMoves)
+            {
+                Game newGameModel = initialGame.CreateGame();
+                newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
 //                int curValue =  MinMove(initialGameViewModel, newGameModel, 1, maxValue, minValue);
 //                if ((curValue > maxValue) || (resultMove.Value == null))
 //                {
@@ -32,8 +33,8 @@ namespace RussianCheckers.Core.Strategy
 //                    resultMove = availableMove;
 //                    historyOfPossibleMoves.Add(maxValue, resultMove);
 //                }
-//            }
-//            return resultMove;
+            }
+            return resultMove;
         }
 //
 //        private int MinMove(GameViewModel initialGameViewModel, GameViewModel curGameModel, int depth, int alpha, int beta)

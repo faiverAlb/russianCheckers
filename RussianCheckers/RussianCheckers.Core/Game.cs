@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RussianCheckers.Game;
 
 namespace RussianCheckers.Core
@@ -10,6 +11,8 @@ namespace RussianCheckers.Core
         public  EmptyUserPlayer EmptyCellsAsPlayer { get; }
         private readonly DataProvider _dataProvider;
         private  Side _winnerSide = Side.None;
+        private Side _nextMoveSide;
+
         public Game(MainPlayer mainPlayer
             , RobotPlayer robotPlayer
             , EmptyUserPlayer emptyCellsAsPlayer
@@ -21,7 +24,6 @@ namespace RussianCheckers.Core
             _dataProvider = dataProvider;
 
             NextMoveSide = Side.White;
-
 
         }
 
@@ -43,7 +45,20 @@ namespace RussianCheckers.Core
             MainPlayer.CalculateAvailablePaths();
             RobotPlayer.CalculateAvailablePaths();
         }
-        public Side NextMoveSide { get; set; }
+
+        public Side NextMoveSide
+        {
+            get { return _nextMoveSide; }
+            private set
+            {
+                _nextMoveSide = value;
+                NextMovePlayer = MainPlayer.Side == _nextMoveSide ? (Player)MainPlayer : RobotPlayer;
+
+            }
+        }
+
+        public Player NextMovePlayer { get; private set; }
+
         public bool IsGameFinished { get; private set; }
 
         public IEnumerable<KeyValuePair<CheckerModel, CheckerModel>> GetAllAvailableMoves()
@@ -51,7 +66,7 @@ namespace RussianCheckers.Core
             return NextMovePlayer.GetLegalMovements();
         }
 
-        public void CheckGameStatus()
+        public bool CheckGameStatus()
         {
 
             var gameStatusChecker = new GameStatusChecker(_dataProvider, MainPlayer, RobotPlayer);
@@ -59,13 +74,72 @@ namespace RussianCheckers.Core
             if (winnerSide != Side.None)
             {
                 _winnerSide = winnerSide;
+                IsGameFinished = true;
+                return true;
             }
-            
+            return false;
         }
 
         public Side GetWinnerSide()
         {
             return _winnerSide;
+        }
+
+        public void ChangeTurn()
+        {
+            NextMoveSide = NextMoveSide == Side.White ? Side.Black : Side.White;
+        }
+
+        public Game CreateGame()
+        {
+            DataProvider newDataProvider = _dataProvider.Clone();
+            MainPlayer newPlayerOne = MainPlayer.Clone(newDataProvider);
+            RobotPlayer newViewPlayerTwo = RobotPlayer.Clone(newDataProvider);
+            EmptyUserPlayer  newEmptyCellsPlayer = EmptyCellsAsPlayer.Clone(newDataProvider);
+            var newGameModel = new Game(newPlayerOne, newViewPlayerTwo, newEmptyCellsPlayer, newDataProvider);
+            newGameModel.NextMoveSide = NextMoveSide;
+            return newGameModel;
+        }
+
+        //        public GameViewModel CreateGame()
+        //        {
+        //            DataProvider newDataProvider = _dataProvider.Clone();
+        //            PlayerViewModel newPlayerOne = _playerOne.Clone(newDataProvider);
+        //            RobotViewPlayer newViewPlayerTwo = (RobotViewPlayer) _playerTwo.Clone(newDataProvider);
+        //            EmptyCellsPlayer  newEmptyCellsPlayer = (EmptyCellsPlayer) _emptyCellsPlayer.Clone(newDataProvider);
+        //            var gameViewModel = new GameViewModel(newPlayerOne, newViewPlayerTwo, newEmptyCellsPlayer, newDataProvider, null, false);
+        //            gameViewModel.NextMoveSide = NextMoveSide;
+        //            return gameViewModel;
+        //        }
+
+
+        //        public void MoveChecker(CheckerElementViewModel fromPlace, CheckerElementViewModel toPlace)
+        //        {
+        //            CheckerElementViewModel foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
+        //            _selectedChecker = foundChecker;
+        //            CheckerElementViewModel toPosition = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+        //            if (toPlace.Side == fromPlace.Side)
+        //            {
+        //                toPosition = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+        //            }
+        //            MoveChecker(toPosition);
+        //        }
+
+        public void MoveChecker(CheckerModel fromPlace, CheckerModel toPlace)
+        {
+            CheckerModel foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
+//            _selectedChecker = foundChecker;
+            CheckerModel toPosition = EmptyCellsAsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+            if (toPlace.Side == fromPlace.Side)
+            {
+                toPosition = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+            }
+            int currentCol = foundChecker.Column;
+            int currentRow = foundChecker.Row;
+            int nextCol = toPosition.Column;
+            int nextRow = toPosition.Row;
+            NextMovePlayer.MoveCheckerToNewPlace(currentCol, currentRow, nextCol, nextRow);
+            ReCalculateWithRespectToOrder(NextMovePlayer.IsMainPlayer);
         }
     }
 }

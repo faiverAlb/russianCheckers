@@ -12,38 +12,6 @@ namespace RussianCheckers.Game.Tests
     public class PlayerViewModelTests
     {
 //        [TestMethod()]
-//        public void GetPossiblePathsTest()
-//        {
-//            //  Arrange
-//            var mainPlayCheckers = new List<CheckerElementViewModel>()
-//            {
-//                new CheckerElementViewModel(4, 2, PieceType.Checker, Side.White),
-//            };
-//            var secondPlayerCheckers = new List<CheckerElementViewModel>()
-//            {
-//                new CheckerElementViewModel(3, 3, PieceType.Checker, Side.Black),
-//                new CheckerElementViewModel(5, 3, PieceType.Checker, Side.Black),
-//                new CheckerElementViewModel(3, 5, PieceType.Checker, Side.Black),
-//                new CheckerElementViewModel(5, 5, PieceType.Checker, Side.Black),
-//                new CheckerElementViewModel(1, 5, PieceType.Checker, Side.Black),
-//            };
-//            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-//            MainHumanPlayer playerOne = new MainHumanPlayer(Side.White, dataProvider);
-//            var playerTwo = new RobotViewPlayer(Side.Black, dataProvider);
-//            var emptyCellsPlayer = new EmptyCellsPlayer(Side.Empty, dataProvider);
-//
-//            //  Act
-//            emptyCellsPlayer.CalculateNeighbors();
-//            playerOne.CalculateNeighbors();
-//            playerTwo.CalculateNeighbors();
-//
-//            //  Assert
-//            var availablePathsForWhite = playerOne.GetPossiblePaths(mainPlayCheckers.Single());
-//            Assert.AreEqual(9, availablePathsForWhite.Max(x => x.Count));
-//        }
-//
-//
-//        [TestMethod()]
 //        public void CalculateAvailablePathsTest()
 //        {
 //            //  Arrange
@@ -73,8 +41,8 @@ namespace RussianCheckers.Game.Tests
 //            playerOne.CalculateAvailablePaths();
 //            Assert.AreEqual(10, playerOne.AvailablePaths.Count);
 //        }
-//
-//
+
+
 //        [TestMethod()]
 //        public void CalculateNeighbors_ForQueen_NoOtherCheckers_ShouldCountAllEmpty()
 //        {

@@ -67,30 +67,21 @@ namespace RussianCheckers.Core
             {
                 checker.BecomeAQueen();
             }
-            
             CheckerModel newPosition = _dataProvider.GetElementAtPosition(nextCol, nextRow);
             CheckerModel oldPositionedChecker = _dataProvider.GetElementAtPosition(currentCol, currentRow);
             if (_pathCalculator.IsMoveToucheBoard(newPosition))
             {
                 oldPositionedChecker.BecomeAQueen();
             }
-
             _dataProvider.StartTrackChanges();
-
             List<CheckerModel> itemsToTake = GetToTakeCheckers(availablePaths, nextCol, nextRow, checker);
-
             foreach (CheckerModel checkerElement in itemsToTake)
             {
                 var element = new CheckerModel(checkerElement.Column, checkerElement.Row, PieceType.Checker, Side.Empty);
                 _dataProvider.MoveCheckerToNewPosition(element, checkerElement.Column, checkerElement.Row);
-
             }
             _dataProvider.MoveCheckerToNewPosition(oldPositionedChecker, nextCol, nextRow);
-
             _dataProvider.StopTrackChanges();
-
-//            return resultTuple;
-
         }
 
         private List<CheckerModel> GetToTakeCheckers(IEnumerable<LinkedList<CheckerModel>> availablePaths, int column, int row, CheckerModel checker)

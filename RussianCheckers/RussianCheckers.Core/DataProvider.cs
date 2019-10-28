@@ -185,7 +185,6 @@ namespace RussianCheckers.Core
                 return;
             }
 
-
             _data[newPositionColumn, newPositionRow] = checketToMove;
             checketToMove.SetNewPosition2(newPositionColumn, newPositionRow);
             

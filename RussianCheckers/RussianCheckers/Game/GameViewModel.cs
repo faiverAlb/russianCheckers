@@ -260,30 +260,11 @@ namespace RussianCheckers.Game
 
         private void MoveCheckerToNewPlace(CheckerElementViewModel currentPositionElementViewModel, CheckerElementViewModel emptyPosition, PlayerViewModel playerViewModel)
         {
-            int nextCol = emptyPosition.Column;
-            int nextRow = emptyPosition.Row;
-
-            int playerCol = currentPositionElementViewModel.Column;
-            int playerRow = currentPositionElementViewModel.Row;
-//            Tuple<List<CheckerModel>, List<CheckerModel>, List<CheckerModel>> itemsTakeByOtherUser = 
-                playerViewModel.MoveCheckerToNewPlace(currentPositionElementViewModel, nextCol, nextRow);
-
-
-//            _emptyCellsPlayerViewModel.UpdateModelValue(emptyPosition, playerCol, playerRow);
-//            _emptyCellsPlayerViewModel.AddNewEmptyElements(itemsTakeByOtherUser);
-//            if (playerViewModel == _playerOne)
-//            {
-//                _playerTwo.RemoveCheckers(itemsTakeByOtherUser);
-//            }
-//            else
-//            {
-//                _playerOne.RemoveCheckers(itemsTakeByOtherUser);
-//            }
+            playerViewModel.MoveCheckerToNewPlace(currentPositionElementViewModel, emptyPosition.Column, emptyPosition.Row);
             _game.ReCalculateWithRespectToOrder(playerViewModel.IsMainPlayer);
             
             _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
             _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
-
         }
 
 

@@ -11,7 +11,7 @@ namespace RussianCheckers.Core
         private readonly PathCalculator _pathCalculator;
         public List<CheckerModel> PlayerPositions { get; private set; }
         //        public IEnumerable<LinkedList<CheckerModel>> AvailablePaths { get; private set; }
-        public Action<List<CheckerModel>, List<CheckerModel>> NotificationAction;
+        public Action<List<CheckerModel>, List<CheckerModel>, List<CheckerModel>> NotificationAction;
 
         public bool IsMainPlayer { get; private set; }
         public Side Side { get; private set; }
@@ -44,7 +44,9 @@ namespace RussianCheckers.Core
                 deletedFromForPlayer.Add(deletedModel);
             }
 
-            NotificationAction?.Invoke(addedForPlayer, deletedFromForPlayer);
+            modified = modified.Where(x => x.Side == Side).ToList();
+
+            NotificationAction?.Invoke(addedForPlayer, deletedFromForPlayer, modified);
         }
 
 

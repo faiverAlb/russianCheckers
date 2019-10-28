@@ -41,7 +41,7 @@ namespace RussianCheckers.Game
             IsMainPlayer = player.IsMainPlayer;
         }
 
-        private void OnDataChanged(List<CheckerModel> added, List<CheckerModel> deleted)
+        private void OnDataChanged(List<CheckerModel> added, List<CheckerModel> deleted, List<CheckerModel> modified)
         {
             foreach (CheckerModel checkerModel in added)
             {
@@ -53,6 +53,15 @@ namespace RussianCheckers.Game
             {
                 CheckerElementViewModel toDelete = PlayerPositions.Single(x => x.Column == checkerModel.Column && x.Row == checkerModel.Row);
                 PlayerPositions.Remove(toDelete);
+            }
+
+            foreach (CheckerModel modifiedElement in modified)
+            {
+                CheckerElementViewModel viewModel = PlayerPositions.Single(x => x.Column == modifiedElement.Column && x.Row == modifiedElement.Row);
+                if (viewModel.Type != modifiedElement.Type)
+                {
+                    viewModel.Type = modifiedElement.Type;
+                }
             }
         }
 
@@ -100,19 +109,6 @@ namespace RussianCheckers.Game
             var itemsToRemove = new List<CheckerElementViewModel>(neededPath.Where(x => x.Side != Side.Empty && x.Side != checker.Side));
             return itemsToRemove;
         }
-
-
-//        public void RemoveCheckers(List<CheckerModel> models)
-//        {
-//            _player.RemoveCheckers(models);
-//            var toRemove = PlayerPositions.Where(x => models.SingleOrDefault(y => x.Column == y.Column && x.Row == y.Row) != null).ToList();
-//            foreach (var checkerElement in toRemove)
-//            {
-//
-//                PlayerPositions.Remove(checkerElement);
-//            }
-//        }
-
         public abstract PlayerViewModel Clone(DataProvider dataProvider);
 
         public int GetSimpleCheckersCount()

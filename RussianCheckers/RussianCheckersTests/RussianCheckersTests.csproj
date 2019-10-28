@@ -58,7 +58,6 @@
   <ItemGroup>
     <Compile Include="Game\NeighborsCalculatorTests.cs" />
     <Compile Include="Game\PathCalculatorTests.cs" />
-    <Compile Include="Game\PlayerViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

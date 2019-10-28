@@ -327,7 +327,7 @@ namespace RussianCheckers.Core
         }
 
 
-        public List<CheckerModel> CheckerModel(CheckerModel playerChecker, CheckerModel otherSideNeighbor, CheckerModel rootElementViewModel = null)
+        public List<CheckerModel> GetNextElementsInDiagonal(CheckerModel playerChecker, CheckerModel otherSideNeighbor, CheckerModel rootElementViewModel = null)
         {
             Diagonal diagonal;
             if (playerChecker.Column - otherSideNeighbor.Column > 0)
@@ -399,7 +399,7 @@ namespace RussianCheckers.Core
 
                 Diagonal diagonal = otherSideNeighborPair.Key;
                 CheckerModel otherSideNeighbor = otherSideNeighborPair.Value;
-                List<CheckerModel> elementsAfterOpponent = CheckerModel(currentChecker, otherSideNeighbor, path.First.Value);
+                List<CheckerModel> elementsAfterOpponent = GetNextElementsInDiagonal(currentChecker, otherSideNeighbor, path.First.Value);
                 foreach (CheckerModel positionAfterNextChecker in elementsAfterOpponent)
                 {
                     if (positionAfterNextChecker == null ||
@@ -431,8 +431,7 @@ namespace RussianCheckers.Core
                             List<KeyValuePair<Diagonal, CheckerModel>> neighborsForCycleRoot = _neighborsCalculator.GetNeighborsForQueen(positionAfterNextChecker);
                             foreach (var checkerElement in neighborsForCycleRoot.Where(x => x.Value.Side != Side.Empty))
                             {
-                                List<CheckerModel> toVisitAgain =
-                                    CheckerModel(positionAfterNextChecker, checkerElement.Value);
+                                List<CheckerModel> toVisitAgain = GetNextElementsInDiagonal(positionAfterNextChecker, checkerElement.Value);
                                 foreach (CheckerModel previouslyVisitedToWalkAgain in toVisitAgain)
                                 {
                                     CheckerModel firstToNotDelete = path.Last.Value;

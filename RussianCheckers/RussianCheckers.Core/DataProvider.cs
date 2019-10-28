@@ -171,28 +171,33 @@ namespace RussianCheckers.Core
         }
 
 
-        public void MoveCheckerToNewPosition(CheckerModel checketToMove, int newPositionColumn, int newPositionRow)
+        public void MoveCheckerToNewPosition(CheckerModel checkerToMove, int newPositionColumn, int newPositionRow)
         {
-            int fromColumn = checketToMove.Column;
-            int fromRow = checketToMove.Row;
+            int fromColumn = checkerToMove.Column;
+            int fromRow = checkerToMove.Row;
             CheckerModel oldPositionedItem = _data[newPositionColumn, newPositionRow];
+
+            if (checkerToMove == oldPositionedItem)
+            {
+                return;
+            }
 
             if (fromColumn == newPositionColumn && fromRow == newPositionRow)
             {
-                 _data[newPositionColumn, newPositionRow] = checketToMove;
-                _added.Add(checketToMove);
+                 _data[newPositionColumn, newPositionRow] = checkerToMove;
+                _added.Add(checkerToMove);
                 _deleted.Add(oldPositionedItem);
                 return;
             }
 
-            _data[newPositionColumn, newPositionRow] = checketToMove;
-            checketToMove.SetNewPosition2(newPositionColumn, newPositionRow);
+            _data[newPositionColumn, newPositionRow] = checkerToMove;
+            checkerToMove.SetNewPosition2(newPositionColumn, newPositionRow);
             
             _data[fromColumn, fromRow] = oldPositionedItem;
             oldPositionedItem.SetNewPosition2(fromColumn, fromRow);
 
             _modified.Add(oldPositionedItem);
-            _modified.Add(checketToMove);
+            _modified.Add(checkerToMove);
 
         }
 

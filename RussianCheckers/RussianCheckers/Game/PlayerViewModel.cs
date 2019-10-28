@@ -9,7 +9,6 @@ namespace RussianCheckers.Game
     public abstract class PlayerViewModel: ObservableObject
     {
         private readonly Player _player;
-        private readonly List<CheckerElementViewModel> _emptyCheckerViewModelsAsPossible;
         public bool IsMainPlayer { get; private set; }
         public readonly Side Side;
 //        protected readonly DataProvider _dataProvider;
@@ -34,7 +33,6 @@ namespace RussianCheckers.Game
         {
             _player = player;
             _player.NotificationAction += OnDataChanged;
-            _emptyCheckerViewModelsAsPossible = emptyCheckerViewModelsAsPossible;
             IEnumerable<CheckerElementViewModel> checkerElementViewModels =
                 player.PlayerPositions.Select(x => new CheckerElementViewModel(x, emptyCheckerViewModelsAsPossible));
             PlayerPositions = new ObservableCollection<CheckerElementViewModel>(checkerElementViewModels);
@@ -104,16 +102,16 @@ namespace RussianCheckers.Game
         }
 
 
-        public void RemoveCheckers(List<CheckerModel> models)
-        {
-            _player.RemoveCheckers(models);
-            var toRemove = PlayerPositions.Where(x => models.SingleOrDefault(y => x.Column == y.Column && x.Row == y.Row) != null).ToList();
-            foreach (var checkerElement in toRemove)
-            {
-
-                PlayerPositions.Remove(checkerElement);
-            }
-        }
+//        public void RemoveCheckers(List<CheckerModel> models)
+//        {
+//            _player.RemoveCheckers(models);
+//            var toRemove = PlayerPositions.Where(x => models.SingleOrDefault(y => x.Column == y.Column && x.Row == y.Row) != null).ToList();
+//            foreach (var checkerElement in toRemove)
+//            {
+//
+//                PlayerPositions.Remove(checkerElement);
+//            }
+//        }
 
         public abstract PlayerViewModel Clone(DataProvider dataProvider);
 

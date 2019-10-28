@@ -120,13 +120,6 @@ namespace RussianCheckers.Core
         }
 
 
-        public void RemoveCheckers(List<CheckerModel> models)
-        {
-            foreach (var checkerModel in models)
-            {
-                PlayerPositions.Remove(checkerModel);
-            }
-        }
     }
 
 

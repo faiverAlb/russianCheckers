@@ -8,8 +8,8 @@ namespace RussianCheckers.Core
     {
         private readonly DataProvider _dataProvider;
         private readonly List<CheckerModel> _playerPositions;
+        private readonly NeighborsCalculator _neighborsCalculator;
         private readonly bool _isMainPlayer;
-        private NeighborsCalculator _neighborsCalculator;
 
         public PathCalculator(DataProvider dataProvider,List<CheckerModel> playerPositions, bool isMainPlayer)
         {

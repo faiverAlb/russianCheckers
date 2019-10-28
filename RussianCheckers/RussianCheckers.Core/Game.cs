@@ -20,12 +20,6 @@
             NextMoveSide = Side.White;
 
 
-            EmptyCellsAsPlayer.CalculateNeighbors();
-            MainPlayer.CalculateNeighbors();
-            RobotPlayer.CalculateNeighbors();
-
-            MainPlayer.CalculateAvailablePaths();
-            RobotPlayer.CalculateAvailablePaths();
         }
 
         public void ReCalculateWithRespectToOrder(bool isMainPlayerMove)

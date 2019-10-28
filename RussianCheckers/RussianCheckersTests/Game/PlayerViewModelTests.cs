@@ -1,16 +1,16 @@
-﻿//using Microsoft.VisualStudio.TestTools.UnitTesting;
-//using RussianCheckers.Game;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//
-//namespace RussianCheckers.Game.Tests
-//{
-//    [TestClass()]
-//    public class PlayerViewModelTests
-//    {
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RussianCheckers.Game;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RussianCheckers.Game.Tests
+{
+    [TestClass()]
+    public class PlayerViewModelTests
+    {
 //        [TestMethod()]
 //        public void GetPossiblePathsTest()
 //        {
@@ -744,7 +744,7 @@
 //            //  Assert
 //            Assert.IsTrue(playerOne.AvailablePaths.Any(x => x.Last.Value.Column == 0 && x.Last.Value.Row == 4));
 //        }
-//
-//
-//    }
-//}
+
+
+    }
+}

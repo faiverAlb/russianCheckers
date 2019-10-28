@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RussianCheckers.Core;
-using RussianCheckers.Game;
-using RussianCheckers.Infrastructure;
-using RussianCheckers.Strategy;
 
-namespace RussianCheckers
+namespace RussianCheckers.Game.Tests
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    [TestClass()]
+    public class PathCalculatorTests
     {
-        public MainWindow()
+
+
+        [TestMethod()]
+        public void GetPossiblePathsTest()
         {
-            InitializeComponent();
-            var notificationDialogService = new DialogService(this);
-            notificationDialogService.Register<NotificationDialogViewModel,NotificationDialog>();
-
-
+            //  Arrange
             var mainPlayCheckers = new List<CheckerModel>()
             {
                 new CheckerModel(4, 2, PieceType.Checker, Side.White),
@@ -32,22 +26,21 @@ namespace RussianCheckers
                 new CheckerModel(5, 5, PieceType.Checker, Side.Black),
                 new CheckerModel(1, 5, PieceType.Checker, Side.Black),
             };
-
+            
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
 
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
             var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
 
-            //            var dataProvider = new DataProvider(Side.White);
-            //            var mainPlayer = new MainPlayer(dataProvider, Side.White);
-            //            var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
-            //            var emptyPlayer = new EmptyUserPlayer(dataProvider);
-
+            //  Act
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
             game.ReCalculateWithRespectToOrder(true);
+            var availablePathsForWhite = mainPlayer.CalculateAvailablePaths();
 
-            this.DataContext = new GameViewModel(game, notificationDialogService, false);
+            //  Assert
+            Assert.AreEqual(9, availablePathsForWhite.Max(x => x.Count));
         }
+
     }
 }

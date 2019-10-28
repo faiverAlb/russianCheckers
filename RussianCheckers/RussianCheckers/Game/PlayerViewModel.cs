@@ -15,10 +15,6 @@ namespace RussianCheckers.Game
         public  ObservableCollection<CheckerElementViewModel> PlayerPositions { get; protected set; }
 //        public List<LinkedList<CheckerElementViewModel>> AvailablePaths { get;private set; }
 
-        public int GetPossibleMovementsCount()
-        {
-            return PlayerPositions.Sum(position => position.PossibleMovementElements.Count());
-        }
 
 
         public void ReSetPossibleMovements(List<CheckerElementViewModel> emptyItems)

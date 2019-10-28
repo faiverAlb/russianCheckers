@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RussianCheckers.Core.Strategy;
 
 namespace RussianCheckers.Core
 {
@@ -47,6 +48,11 @@ namespace RussianCheckers.Core
             modified = modified.Where(x => x.Side == Side).ToList();
 
             NotificationAction?.Invoke(addedForPlayer, deletedFromForPlayer, modified);
+        }
+
+        public int GetPossibleMovementsCount()
+        {
+            return PlayerPositions.Sum(position => position.PossibleMovementElements.Count());
         }
 
 
@@ -150,9 +156,22 @@ namespace RussianCheckers.Core
 
     public class RobotPlayer : Player
     {
+        private readonly RobotStrategy _robotStrategy;
+
         public RobotPlayer(DataProvider dataProvider, Side side) : base(dataProvider, side, false)
         {
         }
+        public RobotPlayer(DataProvider dataProvider, Side side, RobotStrategy robotStrategy) : base(dataProvider, side, false)
+        {
+            _robotStrategy = robotStrategy;
+        }
+
+        public KeyValuePair<CheckerModel, CheckerModel> GetOptimalMove(Game game)
+        {
+            var result = _robotStrategy.GetSuggestedMove(game);
+            return result;
+        }
+
 
         public RobotPlayer Clone(DataProvider dataProvider)
         {

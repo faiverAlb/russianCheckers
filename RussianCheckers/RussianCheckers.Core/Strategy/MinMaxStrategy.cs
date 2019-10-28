@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using RussianCheckers.Game;
 
-namespace RussianCheckers.Strategy
+namespace RussianCheckers.Core.Strategy
 {
-//    public class MinMaxStrategy:RobotStrategy
-//    {
+    public class MinMaxStrategy:RobotStrategy
+    {
 //        readonly int _searchDepth;
 //
 //        public MinMaxStrategy()
@@ -15,13 +12,14 @@ namespace RussianCheckers.Strategy
 //            _searchDepth = 4;
 //        }
 //
-//        public override KeyValuePair<CheckerElementViewModel, CheckerElementViewModel> GetSuggestedMove(GameViewModel initialGameViewModel)
-//        {
-//            var resultMove =  new KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>();
+        public override KeyValuePair<CheckerModel, CheckerModel> GetSuggestedMove(Game initialGame)
+        {
+            var resultMove =  new KeyValuePair<CheckerModel, CheckerModel>();
 //            
-//            const int minValue = int.MaxValue;
-//            int maxValue = int.MinValue;
-//            IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> allAvailableMoves = initialGameViewModel.GetAllAvailableMoves().ToList();
+            const int minValue = int.MaxValue;
+            int maxValue = int.MinValue;
+            IEnumerable<KeyValuePair<CheckerModel, CheckerModel>> allAvailableMoves =
+                initialGame.GetAllAvailableMoves().ToList();
 //            var historyOfPossibleMoves = new Dictionary<int, KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>>();
 //            foreach (KeyValuePair<CheckerElementViewModel, CheckerElementViewModel> availableMove in allAvailableMoves)
 //            {
@@ -36,7 +34,7 @@ namespace RussianCheckers.Strategy
 //                }
 //            }
 //            return resultMove;
-//        }
+        }
 //
 //        private int MinMove(GameViewModel initialGameViewModel, GameViewModel curGameModel, int depth, int alpha, int beta)
 //        {
@@ -207,5 +205,5 @@ namespace RussianCheckers.Strategy
 //            return alpha;
 //
 //        }
-//    }
+    }
 }

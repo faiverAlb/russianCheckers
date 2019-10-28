@@ -14,7 +14,7 @@ namespace RussianCheckers.Game
 {
     public class GameViewModel : ObservableObject
     {
-        private readonly Core.Game _game;
+        public readonly Core.Game _game;
         private readonly IDialogService _notificationDialog;
         private readonly bool _isPlayingAutomatically;
         private readonly CompositeCollection _positions = new CompositeCollection();
@@ -41,71 +41,37 @@ namespace RussianCheckers.Game
             _positions.Add(emptyCollectionContainer);
 
             NextMoveSide = _game.NextMoveSide;
-            //            WaitMove();
+            WaitMove();
 
         }
 
+        private void WaitMove()
+        {
+            if (!_isPlayingAutomatically)
+            {
+                return;
+            }
+            
+            if (_playerOne.Side == NextMoveSide)
+            {
+                return;
+            }
+        
+            MakeMoveBySecondUser();
+        }
 
-        //        public GameViewModel(PlayerViewModel playerOne
-        //            , RobotViewPlayer playerTwo
-        //            , EmptyCellsPlayer emptyCellsPlayer
-        //            , DataProvider dataProvider
-        //            , IDialogService notificationDialog = null
-        //            , bool isPlayingAutomatically = true)
-        //        {
-        //            _playerOne = playerOne;
-        //            _playerTwo = playerTwo;
-        //            _emptyCellsPlayer = emptyCellsPlayer;
-        //            _dataProvider = dataProvider;
-        //
-        //            _notificationDialog = notificationDialog;
-        //            _isPlayingAutomatically = isPlayingAutomatically;
-        //            NextMoveSide = Side.White;
-        //            
-        //
-        //            _emptyCellsPlayer.CalculateNeighbors();
-        //            playerOne.CalculateNeighbors();
-        //            playerTwo.CalculateNeighbors(); 
-        //            
-        //            playerOne.CalculateAvailablePaths();
-        //            playerTwo.CalculateAvailablePaths();
-        //
-        //            var playerOneCollectionContainer = new CollectionContainer { Collection = playerOne.PlayerPositions};
-        //            var playerTwoCollectionContainer = new CollectionContainer{ Collection = playerTwo.PlayerPositions };
-        //            var emptyCollectionContainer = new CollectionContainer{ Collection = _emptyCellsPlayer.PlayerPositions };
-        //            _positions.Add(playerOneCollectionContainer);
-        //            _positions.Add(playerTwoCollectionContainer);
-        //            _positions.Add(emptyCollectionContainer);
-        //
-        //            WaitMove();
-        //        }
-
-        //        private void WaitMove()
-        //        {
-        //            if (!_isPlayingAutomatically)
-        //            {
-        //                return;
-        //            }
-        //            
-        //            if (_playerOne.Side == NextMoveSide)
-        //            {
-        //                return;
-        //            }
-        //
-        //            MakeMoveBySecondUser();
-        //        }
-
-        //        private void MakeMoveBySecondUser()
-        //        {
-        //            var move = _playerTwo.GetOptimalMove(this);
-        //            if (move.Value != null)
-        //            {
-        //                CheckerElementViewModel fromChecker = move.Key;
-        //                CheckerElementViewModel toPlace = move.Value;
-        //                _selectedChecker = fromChecker;
-        //                MoveChecker(toPlace);
-        //            }
-        //        }
+        private void MakeMoveBySecondUser()
+        {
+            var move = _playerTwo.GetOptimalMove(this);
+            if (move.Value != null)
+            {
+                
+                CheckerElementViewModel fromChecker = FindChecker(move.Key.Column, move.Key.Row);
+                CheckerElementViewModel toPlace = FindChecker(move.Value.Column, move.Value.Row);
+                _selectedChecker = fromChecker;
+                MoveChecker(toPlace);
+            }
+        }
 
 
         public Side NextMoveSide
@@ -189,32 +155,19 @@ namespace RussianCheckers.Game
             }
 
 
-            var gameStatusChecker = new GameStatusChecker(_dataProvider, _playerOne, _playerTwo);
-            GameStatus gameStatus = gameStatusChecker.GetGameStatus();
-            if (gameStatus == GameStatus.InProgress)
+            if (!_game.IsGameFinished)
             {
                 NextMoveSide = NextMoveSide == Side.Black ? Side.White : Side.Black;
                 
-//                WaitMove();
+                WaitMove();
                 return;
             }
 
 //            IsGameFinished = true;
-            WinnerSide = gameStatus == GameStatus.BlackWin ? Side.Black : Side.White;
-            string pleaseSelectCheckerFirst = gameStatus == GameStatus.BlackWin ? "Black win!" : "White win!";
+            WinnerSide = _game.GetWinnerSide();
+            string pleaseSelectCheckerFirst = WinnerSide == Side.Black ? "Black win!" : "White win!";
             ShowNotificationMessage(pleaseSelectCheckerFirst);
         }
-
-
-//        public bool IsGameFinished
-//        {
-//            get { return _isGameFinished; }
-//            set
-//            {
-//                _isGameFinished = value;
-//                RaisePropertyChangedEvent(nameof(IsGameFinished));
-//            }
-//        }
 
         private bool IsCheckerMoved(CheckerElementViewModel newSelectedChecker, PlayerViewModel player)
         {
@@ -265,6 +218,7 @@ namespace RussianCheckers.Game
             
             _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
             _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
+            _game.CheckGameStatus();
         }
 
 
@@ -296,6 +250,11 @@ namespace RussianCheckers.Game
             {
                 return _positions;
             }
+        }
+
+        public Core.Game Game
+        {
+            get => _game;
         }
 
 //        public IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> GetAllAvailableMoves()

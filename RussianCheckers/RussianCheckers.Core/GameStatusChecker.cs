@@ -1,63 +1,63 @@
 ﻿using RussianCheckers.Core;
-using RussianCheckers.Game.GameInfrastructure;
 
 namespace RussianCheckers.Game
 {
     internal class GameStatusChecker
     {
         private readonly DataProvider _dataProvider;
-        private readonly PlayerViewModel _playerOne;
-        private readonly PlayerViewModel _playerTwo;
+        private readonly Player _playerOne;
+        private readonly Player _playerTwo;
 
-        public GameStatusChecker(DataProvider dataProvider, PlayerViewModel playerOne, PlayerViewModel playerTwo)
+        public GameStatusChecker(DataProvider dataProvider, Player playerOne, Player playerTwo)
         {
             _dataProvider = dataProvider;
             _playerOne = playerOne;
             _playerTwo = playerTwo;
         }
 
-        public GameStatus GetGameStatus()
+        public Side GetGameStatus()
         {
             if (_playerOne.PlayerPositions.Count == 0)
             {
                 if (_playerOne.Side == Side.White)
                 {
-                    return GameStatus.BlackWin;
+                    
+                    return Side.Black;
                 }
 
-                return GameStatus.WhiteWin;
+                return Side.White;
             }
 
             if (_playerTwo.PlayerPositions.Count == 0)
             {
                 if (_playerTwo.Side == Side.White)
                 {
-                    return GameStatus.BlackWin;
+                    return Side.Black;
                 }
 
-                return GameStatus.WhiteWin;
+                return Side.White;
             }
 
             if (_playerOne.GetPossibleMovementsCount() == 0)
             {
                 if (_playerOne.Side == Side.White)
                 {
-                    return GameStatus.BlackWin;
+                    return Side.Black;
                 }
 
-                return GameStatus.WhiteWin;
+                return Side.White;
             }
             if (_playerTwo.GetPossibleMovementsCount() == 0)
             {
                 if (_playerTwo.Side == Side.White)
                 {
-                    return GameStatus.BlackWin;
+                    return Side.Black;
                 }
 
-                return GameStatus.WhiteWin;
+                return Side.White;
             }
 
-            return GameStatus.InProgress;
+            return Side.None;
         }
     }
 }

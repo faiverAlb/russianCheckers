@@ -1,9 +1,8 @@
-﻿namespace RussianCheckers.Core
-{
-    public enum GameStatus
-    {
-        InProgress,
-        WhiteWin,
-        BlackWin
-    }
-}
+﻿//namespace RussianCheckers.Core
+//{
+//    public enum GameStatus
+//    {
+//        InProgress,
+//       Finished
+//    }
+//}

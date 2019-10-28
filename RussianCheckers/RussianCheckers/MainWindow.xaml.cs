@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Windows;
 using RussianCheckers.Core;
+using RussianCheckers.Core.Strategy;
 using RussianCheckers.Game;
 using RussianCheckers.Infrastructure;
-using RussianCheckers.Strategy;
 
 namespace RussianCheckers
 {
@@ -31,7 +31,7 @@ namespace RussianCheckers
             };
             DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
-            var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
+            var robotPlayer = new RobotPlayer(dataProvider, Side.Black, new MinMaxStrategy());
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
 
             //            var dataProvider = new DataProvider(Side.White);

@@ -57,7 +57,6 @@
     </ApplicationDefinition>
     <Compile Include="Game\CheckerElementViewModel.cs" />
     <Compile Include="Game\EmptyCellsPlayerViewModel.cs" />
-    <Compile Include="Game\GameStatusChecker.cs" />
     <Compile Include="Game\GameViewModel.cs" />
     <Compile Include="Game\HumanPlayerViewModel.cs" />
     <Compile Include="Game\NotificationDialogViewModel.cs" />
@@ -75,9 +74,6 @@
     <Compile Include="NotificationDialog.xaml.cs">
       <DependentUpon>NotificationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Strategy\DummyStrategy.cs" />
-    <Compile Include="Strategy\MinMaxStrategy.cs" />
-    <Compile Include="Strategy\RobotStrategy.cs" />
     <Compile Include="TextConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -139,6 +135,9 @@
       <Project>{473FF9A6-DC16-4959-85DB-BB2B879210E3}</Project>
       <Name>RussianCheckers.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Strategy\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,8 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using RussianCheckers.Core;
 using RussianCheckers.Game.GameInfrastructure;
 using RussianCheckers.Infrastructure;
@@ -55,8 +59,8 @@ namespace RussianCheckers.Game
             {
                 return;
             }
-        
-            MakeMoveBySecondUser();
+            _cancellationToken = new CancellationTokenSource();
+            Task.Run(() => { MakeMoveBySecondUser(); }, _cancellationToken.Token);
         }
 
         private void MakeMoveBySecondUser()
@@ -64,11 +68,14 @@ namespace RussianCheckers.Game
             var move = _playerTwo.GetOptimalMove(this);
             if (move.Value != null)
             {
-                
-                CheckerElementViewModel fromChecker = FindChecker(move.Key.Column, move.Key.Row);
-                CheckerElementViewModel toPlace = FindChecker(move.Value.Column, move.Value.Row);
-                _selectedChecker = fromChecker;
-                MoveChecker(toPlace);
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)(
+                    () =>
+                    {
+                        CheckerElementViewModel fromChecker = FindChecker(move.Key.Column, move.Key.Row);
+                        CheckerElementViewModel toPlace = FindChecker(move.Value.Column, move.Value.Row);
+                        _selectedChecker = fromChecker;
+                        MoveChecker(toPlace);
+                    }));
             }
         }
 
@@ -97,12 +104,11 @@ namespace RussianCheckers.Game
 
         private CheckerElementViewModel _selectedChecker;
         private  Side _nextMoveSide;
-        private bool _isGameFinished;
         private readonly PlayerViewModel _playerOne;
         private readonly EmptyCellsPlayerViewModel _emptyCellsPlayerViewModel;
-        private readonly DataProvider _dataProvider;
         private readonly RobotPlayerViewModel _playerTwo;
         private PlayerViewModel _nextMovePlayer;
+        private CancellationTokenSource _cancellationToken;
 
         private void OnTryMakeMove(object obj)
         {

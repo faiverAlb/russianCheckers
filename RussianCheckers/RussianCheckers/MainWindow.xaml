@@ -121,6 +121,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition ></RowDefinition>
+            <RowDefinition ></RowDefinition>
             <RowDefinition Height="480"></RowDefinition>
             <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
@@ -133,7 +134,10 @@
             Next move:
             <TextBlock Text="{Binding NextMoveSide}"></TextBlock>
         </TextBlock>
-        <ItemsControl Grid.Row="1" Grid.Column="1" x:Name="ChessBoard" ItemsSource="{Binding Positions}">
+        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="20">
+            Calculating...
+        </TextBlock>
+        <ItemsControl Grid.Row="2" Grid.Column="1" x:Name="ChessBoard" ItemsSource="{Binding Positions}" >
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas>

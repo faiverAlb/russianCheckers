@@ -57,6 +57,7 @@ namespace RussianCheckers.Game
             
             if (_playerOne.Side == NextMoveSide)
             {
+                IsCalculatingMove = false;
                 return;
             }
             _cancellationToken = new CancellationTokenSource();
@@ -66,6 +67,7 @@ namespace RussianCheckers.Game
         private void MakeMoveBySecondUser()
         {
             var move = _playerTwo.GetOptimalMove(this);
+            IsCalculatingMove = true;
             if (move.Value != null)
             {
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)(
@@ -76,6 +78,16 @@ namespace RussianCheckers.Game
                         _selectedChecker = fromChecker;
                         MoveChecker(toPlace);
                     }));
+            }
+        }
+
+        public bool IsCalculatingMove
+        {
+            get { return _isCalculatingMove; }
+            set
+            {
+                _isCalculatingMove = value;
+                RaisePropertyChangedEvent(nameof(IsCalculatingMove));
             }
         }
 
@@ -109,6 +121,7 @@ namespace RussianCheckers.Game
         private readonly RobotPlayerViewModel _playerTwo;
         private PlayerViewModel _nextMovePlayer;
         private CancellationTokenSource _cancellationToken;
+        private bool _isCalculatingMove;
 
         private void OnTryMakeMove(object obj)
         {

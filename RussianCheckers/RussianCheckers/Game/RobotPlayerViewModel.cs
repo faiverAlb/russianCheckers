@@ -8,12 +8,6 @@ namespace RussianCheckers.Game
     public class RobotPlayerViewModel : PlayerViewModel
     {
         private readonly RobotPlayer _robotPlayer;
-
-        public override PlayerViewModel Clone(DataProvider dataProvider)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public RobotPlayerViewModel(RobotPlayer robotPlayer, List<CheckerElementViewModel> emptyCheckerViewModelsAsPossible) : base(robotPlayer, emptyCheckerViewModelsAsPossible)
         {
             _robotPlayer = robotPlayer;

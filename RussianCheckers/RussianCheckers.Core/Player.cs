@@ -149,6 +149,19 @@ namespace RussianCheckers.Core
 
             return resultList;
         }
+
+        public int GetSimpleCheckersCount()
+        {
+            int counter = PlayerPositions.Count(playerPosition => playerPosition.Type == PieceType.Checker);
+            return counter;
+        }
+
+        public int GetQueensCount()
+        {
+            int counter = PlayerPositions.Count(playerPosition => playerPosition.Type == PieceType.Queen);
+            return counter;
+
+        }
     }
 
 

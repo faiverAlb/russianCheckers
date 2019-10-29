@@ -40,7 +40,7 @@ namespace RussianCheckers.Core
 
         public CheckerModel Clone()
         {
-            return new CheckerModel(Column, Row, Type, _side, PositionChangedAction);
+            return new CheckerModel(Column, Row, Type, _side);
 
         }
 

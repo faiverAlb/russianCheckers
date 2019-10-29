@@ -41,7 +41,6 @@ namespace RussianCheckers.Game
             _positions.Add(emptyCollectionContainer);
 
             NextMoveSide = _game.NextMoveSide;
-            WaitMove();
 
         }
 
@@ -284,17 +283,17 @@ namespace RussianCheckers.Game
 
         }
 
-        public int GetSimpleCheckersCount(bool isForMainPlayer)
-        {
-            PlayerViewModel player = GetPlayer(isForMainPlayer);
-            return player.GetSimpleCheckersCount();
-        }
-
-        public int GetQueensCount(bool isForMainPlayer)
-        {
-            PlayerViewModel player = GetPlayer(isForMainPlayer);
-            return player.GetQueensCount();
-        }
+//        public int GetSimpleCheckersCount(bool isForMainPlayer)
+//        {
+//            PlayerViewModel player = GetPlayer(isForMainPlayer);
+//            return player.GetSimpleCheckersCount();
+//        }
+//
+//        public int GetQueensCount(bool isForMainPlayer)
+//        {
+//            PlayerViewModel player = GetPlayer(isForMainPlayer);
+//            return player.GetQueensCount();
+//        }
 
         public CheckerElementViewModel FindChecker(int column, int row)
         {

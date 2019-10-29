@@ -141,5 +141,29 @@ namespace RussianCheckers.Core
             NextMovePlayer.MoveCheckerToNewPlace(currentCol, currentRow, nextCol, nextRow);
             ReCalculateWithRespectToOrder(NextMovePlayer.IsMainPlayer);
         }
+
+
+        public Player GetPlayer(bool isMain)
+        {
+            if (isMain)
+            {
+                return MainPlayer;
+            }
+
+            return RobotPlayer;
+
+        }
+
+        public int GetSimpleCheckersCount(bool isForMainPlayer)
+        {
+            Player player = GetPlayer(isForMainPlayer);
+            return player.GetSimpleCheckersCount();
+        }
+
+        public int GetQueensCount(bool isForMainPlayer)
+        {
+            Player player = GetPlayer(isForMainPlayer);
+            return player.GetQueensCount();
+        }
     }
 }

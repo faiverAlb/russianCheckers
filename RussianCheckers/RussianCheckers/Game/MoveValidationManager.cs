@@ -13,9 +13,10 @@ namespace RussianCheckers.Game
         private readonly PlayerViewModel _player;
         private readonly GameViewModel _gameViewModel;
 
-        public MoveValidationManager(CheckerElementViewModel oldSelectedElementViewModel,
-            CheckerElementViewModel newSelectedElementViewModel,
-            Side nextMoveSide, PlayerViewModel player
+        public MoveValidationManager(CheckerElementViewModel oldSelectedElementViewModel
+            , CheckerElementViewModel newSelectedElementViewModel
+            , Side nextMoveSide
+            , PlayerViewModel player
             , GameViewModel gameViewModel)
         {
             _oldSelectedElementViewModel = oldSelectedElementViewModel;
@@ -24,6 +25,7 @@ namespace RussianCheckers.Game
             _player = player;
             _gameViewModel = gameViewModel;
         }
+
         public MoveValidationResult GetPreValidationResult()
         {
             if (_oldSelectedElementViewModel == null && _newSelectedElementViewModel.Side == Side.Empty)

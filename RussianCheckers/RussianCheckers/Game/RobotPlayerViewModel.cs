@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using RussianCheckers.Core;
-using RussianCheckers.Core.Strategy;
 
 namespace RussianCheckers.Game
 {

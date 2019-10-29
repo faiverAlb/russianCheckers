@@ -109,18 +109,6 @@ namespace RussianCheckers.Game
             MoveChecker((CheckerElementViewModel)obj);
         }
 
-//        public void MoveChecker(CheckerElementViewModel fromPlace, CheckerElementViewModel toPlace)
-//        {
-//            CheckerElementViewModel foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
-//            _selectedChecker = foundChecker;
-//            CheckerElementViewModel toPosition = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
-//            if (toPlace.Side == fromPlace.Side)
-//            {
-//                toPosition = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
-//            }
-//            MoveChecker(toPosition);
-//        }
-
 
         private void MoveChecker(CheckerElementViewModel newSelectedChecker)
         {
@@ -163,7 +151,6 @@ namespace RussianCheckers.Game
                 return;
             }
 
-//            IsGameFinished = true;
             WinnerSide = _game.GetWinnerSide();
             string pleaseSelectCheckerFirst = WinnerSide == Side.Black ? "Black win!" : "White win!";
             ShowNotificationMessage(pleaseSelectCheckerFirst);
@@ -253,47 +240,8 @@ namespace RussianCheckers.Game
 
         public Core.Game Game
         {
-            get => _game;
+            get { return _game; }
         }
-
-//        public IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> GetAllAvailableMoves()
-//        {
-//            return NextMovePlayer.GetLegalMovements();
-//        }
-
-//        public GameViewModel CreateGame()
-//        {
-//            DataProvider newDataProvider = _dataProvider.Clone();
-//            PlayerViewModel newPlayerOne = _playerOne.Clone(newDataProvider);
-//            RobotViewPlayer newViewPlayerTwo = (RobotViewPlayer) _playerTwo.Clone(newDataProvider);
-//            EmptyCellsPlayer  newEmptyCellsPlayer = (EmptyCellsPlayer) _emptyCellsPlayer.Clone(newDataProvider);
-//            var gameViewModel = new GameViewModel(newPlayerOne, newViewPlayerTwo, newEmptyCellsPlayer, newDataProvider, null, false);
-//            gameViewModel.NextMoveSide = NextMoveSide;
-//            return gameViewModel;
-//        }
-
-        public PlayerViewModel GetPlayer(bool isMain)
-        {
-            if (isMain)
-            {
-                return _playerOne.IsMainPlayer ? _playerOne : _playerTwo;
-            }
-
-            return _playerOne.IsMainPlayer ? _playerTwo : _playerOne;
-
-        }
-
-//        public int GetSimpleCheckersCount(bool isForMainPlayer)
-//        {
-//            PlayerViewModel player = GetPlayer(isForMainPlayer);
-//            return player.GetSimpleCheckersCount();
-//        }
-//
-//        public int GetQueensCount(bool isForMainPlayer)
-//        {
-//            PlayerViewModel player = GetPlayer(isForMainPlayer);
-//            return player.GetQueensCount();
-//        }
 
         public CheckerElementViewModel FindChecker(int column, int row)
         {

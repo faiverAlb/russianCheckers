@@ -67,56 +67,6 @@ namespace RussianCheckers.Game
             existingPlayerChecker.DeSelectPossibleMovement();
         }
 
-
-
-        //        public IEnumerable<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>> GetLegalMovements()
-        //        {
-        //            if (AvailablePaths.Any())
-        //            {
-        //                var keyValuePairs = AvailablePaths.Select(x => new KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>(x.First.Value, x.Last.Value));
-        //                return keyValuePairs;
-        //            }
-        //
-        //            var resultList = new List<KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>>();
-        //            foreach (var playerPosition in PlayerPositions)
-        //            {
-        //                resultList.AddRange(playerPosition.PossibleMovementElements.Select(playerPositionPossibleMovementElement => new KeyValuePair<CheckerElementViewModel, CheckerElementViewModel>(playerPosition, playerPositionPossibleMovementElement)));
-        //            }
-        //            return resultList;
-        //        }
-
-
-        //        private List<CheckerElementViewModel> TakeCheckers(List<LinkedList<CheckerElementViewModel>> availablePaths, int column, int row, CheckerElementViewModel checker)
-        //        {
-        //            if (!availablePaths.Any())
-        //            {
-        //                return new List<CheckerElementViewModel>();
-        //            }
-        //
-        //            LinkedList<CheckerElementViewModel> neededPath = availablePaths.Where(x => x.Last.Value.Column == column && x.Last.Value.Row == row).OrderByDescending(x => x.Count).FirstOrDefault();
-        //            if (neededPath == null)
-        //            {
-        //                return new List<CheckerElementViewModel>();
-        //            }
-        //
-        //            var itemsToRemove = new List<CheckerElementViewModel>(neededPath.Where(x => x.Side != Side.Empty && x.Side != checker.Side));
-        //            return itemsToRemove;
-        //        }
-        //        public abstract PlayerViewModel Clone(DataProvider dataProvider);
-
-        //        public int GetSimpleCheckersCount()
-        //        {
-        //            int counter = PlayerPositions.Count(playerPosition => playerPosition.Type == PieceType.Checker);
-        //            return counter;
-        //        }
-        //
-        //        public int GetQueensCount()
-        //        {
-        //            int counter = PlayerPositions.Count(playerPosition => playerPosition.Type == PieceType.Queen);
-        //            return counter;
-        //
-        //        }
-
         public IEnumerable<LinkedList<CheckerModel>> GetAvailablePaths()
         {
             var playerAvailablePaths = _player.CalculateAvailablePaths();

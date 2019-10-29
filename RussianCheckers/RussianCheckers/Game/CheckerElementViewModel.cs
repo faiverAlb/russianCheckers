@@ -15,20 +15,11 @@ namespace RussianCheckers.Game
             Type = checkerModel.Type;
             _pos = new PointViewModel(_checkerModel.Row, _checkerModel.Column);
             PossibleMovementElements = emptyCheckerElementViewModels.Where(x => _checkerModel.PossibleMovementElements.Any(y => x.Column == y.Column && x.Row == y.Row)).ToList();
-            //            Neighbors = new List<CheckerElementViewModel>(_checkerModel.Neighbors.Select(x => new CheckerElementViewModel(x)));
         }
 
         private void PositionChangedAction(int column, int row)
         {
             _pos.ChangePosition(column, row);
-        }
-
-        public bool IsAtInitialPosition
-        {
-            get
-            {
-                return _checkerModel.IsAtInitialPosition;
-            }
         }
 
         private PointViewModel _pos;
@@ -39,11 +30,6 @@ namespace RussianCheckers.Game
         }
 
         public List<CheckerElementViewModel> PossibleMovementElements { get; private set; }
-
-//        public void SetPossibleMovementElements(List<CheckerElementViewModel> possibleMovementElements)
-//        {
-//            PossibleMovementElements = possibleMovementElements;
-//        }
 
         public bool CanMoveToPosition(CheckerElementViewModel elementViewModel)
         {
@@ -107,22 +93,6 @@ namespace RussianCheckers.Game
         }
 
         
-
-//        public List<CheckerElementViewModel> Neighbors { get; private set; }
-
-//        public void SetNeighbors(List<CheckerElementViewModel> neighbors)
-//        {
-//            Neighbors = neighbors;
-//        }
-
-//        public void SetNewPosition(int column, int row)
-//        {
-//            Column = column;
-//            Row = row;
-//            _pos.ChangePosition(column, row);
-//            IsAtInitialPosition = false;
-//        }
-
         public override string ToString()
         {
             return $"{Side}, {Type}, [{Column},{Row}]";
@@ -149,10 +119,6 @@ namespace RussianCheckers.Game
             }
         }
 
-//        public CheckerElementViewModel Clone()
-//        {
-//            return new CheckerElementViewModel(_checkerModel.Clone());
-//        }
         public void ReSetPossibleMovements(List<CheckerElementViewModel> emptyItems)
         {
             PossibleMovementElements = emptyItems.Where(x => _checkerModel.PossibleMovementElements.Any(y => x.Column == y.Column && x.Row == y.Row)).ToList();

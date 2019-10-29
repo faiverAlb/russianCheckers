@@ -27,20 +27,11 @@ namespace RussianCheckers.Core
 
         }
 
-        public void ReCalculateWithRespectToOrder(bool isMainPlayerMove)
+        public void ReCalculateWithRespectToOrder()
         {
             EmptyCellsAsPlayer.CalculateNeighbors();
-
-            if (isMainPlayerMove)
-            {
-                MainPlayer.CalculateNeighbors();
-                RobotPlayer.CalculateNeighbors();
-            }
-            else
-            {
-                RobotPlayer.CalculateNeighbors();
-                MainPlayer.CalculateNeighbors();
-            }
+            MainPlayer.CalculateNeighbors();
+            RobotPlayer.CalculateNeighbors();
 
             MainPlayer.CalculateAvailablePaths();
             RobotPlayer.CalculateAvailablePaths();
@@ -85,7 +76,7 @@ namespace RussianCheckers.Core
             return _winnerSide;
         }
 
-        public void ChangeTurn()
+        private void ChangeTurn()
         {
             NextMoveSide = NextMoveSide == Side.White ? Side.Black : Side.White;
         }
@@ -98,7 +89,7 @@ namespace RussianCheckers.Core
             EmptyUserPlayer  newEmptyCellsPlayer = EmptyCellsAsPlayer.Clone(newDataProvider);
             var newGameModel = new Game(newPlayerOne, newViewPlayerTwo, newEmptyCellsPlayer, newDataProvider);
             newGameModel.NextMoveSide = NextMoveSide;
-            newGameModel.ReCalculateWithRespectToOrder(newGameModel.NextMovePlayer.IsMainPlayer);
+            newGameModel.ReCalculateWithRespectToOrder();
             return newGameModel;
         }
 
@@ -116,7 +107,7 @@ namespace RussianCheckers.Core
             int nextCol = toPosition.Column;
             int nextRow = toPosition.Row;
             NextMovePlayer.MoveCheckerToNewPlace(currentCol, currentRow, nextCol, nextRow);
-            ReCalculateWithRespectToOrder(NextMovePlayer.IsMainPlayer);
+            ReCalculateWithRespectToOrder();
             bool isFinished = CheckGameStatus();
             if (!isFinished)
             {

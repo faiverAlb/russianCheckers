@@ -108,43 +108,48 @@ namespace RussianCheckers.Core.Strategy
             {
                 foreach (var checkerElement in currentPlayer.PlayerPositions)
                 {
-                    strength -= CalculatePieceStrength(checkerElement);
+                    strength -= CalculatePieceStrength(checkerElement,currentPlayer.IsMainPlayer);
                 }
             }
             else
             {
                 foreach (var checkerElement in currentPlayer.PlayerPositions)
                 {
-                    strength += CalculatePieceStrength(checkerElement);
+                    strength += CalculatePieceStrength(checkerElement, currentPlayer.IsMainPlayer);
                 }
 
             }
             return strength;
         }
 
-        int CalculatePieceStrength(CheckerModel piece)
+        int CalculatePieceStrength(CheckerModel piece, bool isMainPlayer)
         {
             int strength = 0;
 
             // Heuristic: Stronger simply because another piece is present
             strength += 1;
 
-            // Rank-specific heuristics
             if (piece.Type == PieceType.Checker)
             {
-//                if (piece.IsAtInitialPosition)
-//                {
-//                    strength += 1;
-//                }
+                if (piece.IsAtInitialPosition && (piece.Row == 7 || piece.Row == 0))
+                {
+                    strength += 2;
+                }
 
-//                if (piece.Neighbors.Any(x => x.Side == piece.Side))
-//                {
-//                    strength += 1;
-//                }
+                if (piece.Neighbors.Any(x => x.Side == piece.Side))
+                {
+                    strength += 1;
+                }
+
+                // It good to become queen
+                if (piece.PossibleMovementElements.Any(x => (isMainPlayer && x.Row == 7) || (!isMainPlayer && x.Row == 0)))
+                {
+                    strength += 15;
+                }
             }
             else
             {
-                // Heuristic: Stronger if king is on board
+                //  Stronger if queen is on board
                 strength += 19;
             }
 

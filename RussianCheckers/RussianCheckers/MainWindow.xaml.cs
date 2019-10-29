@@ -43,7 +43,7 @@ namespace RussianCheckers
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
 
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
-            game.ReCalculateWithRespectToOrder(true);
+            game.ReCalculateWithRespectToOrder();
 
             this.DataContext = new GameViewModel(game, notificationDialogService, true);
         }

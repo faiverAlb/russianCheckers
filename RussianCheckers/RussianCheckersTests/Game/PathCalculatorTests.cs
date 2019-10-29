@@ -34,7 +34,7 @@ namespace RussianCheckers.Game.Tests
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
-            game.ReCalculateWithRespectToOrder(true);
+            game.ReCalculateWithRespectToOrder();
             var availablePathsForWhite = mainPlayer.CalculateAvailablePaths();
 
             //  Assert
@@ -66,7 +66,7 @@ namespace RussianCheckers.Game.Tests
 
             //  Act
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
-            game.ReCalculateWithRespectToOrder(true);
+            game.ReCalculateWithRespectToOrder();
             var availablePathsForWhite = mainPlayer.CalculateAvailablePaths();
 
             //  Assert
@@ -301,7 +301,7 @@ namespace RussianCheckers.Game.Tests
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
-            game.ReCalculateWithRespectToOrder(true);
+            game.ReCalculateWithRespectToOrder();
 
             //  Assert
 
@@ -325,7 +325,7 @@ namespace RussianCheckers.Game.Tests
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
-            game.ReCalculateWithRespectToOrder(true);
+            game.ReCalculateWithRespectToOrder();
 
             //  Assert
             var availablePaths = mainPlayer.CalculateAvailablePaths();
@@ -350,7 +350,7 @@ namespace RussianCheckers.Game.Tests
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
-            game.ReCalculateWithRespectToOrder(true);
+            game.ReCalculateWithRespectToOrder();
 
             //  Assert
             var availablePaths = mainPlayer.CalculateAvailablePaths();
@@ -379,7 +379,7 @@ namespace RussianCheckers.Game.Tests
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
-            game.ReCalculateWithRespectToOrder(true);
+            game.ReCalculateWithRespectToOrder();
 
             //  Assert
             var availablePaths = mainPlayer.CalculateAvailablePaths();
@@ -408,7 +408,7 @@ namespace RussianCheckers.Game.Tests
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
-            game.ReCalculateWithRespectToOrder(true);
+            game.ReCalculateWithRespectToOrder();
 
             //  Assert
             var availablePaths = mainPlayer.CalculateAvailablePaths();
@@ -441,7 +441,7 @@ namespace RussianCheckers.Game.Tests
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
-            game.ReCalculateWithRespectToOrder(true);
+            game.ReCalculateWithRespectToOrder();
 
             //  Assert
             var availablePaths = mainPlayer.CalculateAvailablePaths();
@@ -472,7 +472,7 @@ namespace RussianCheckers.Game.Tests
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
-            game.ReCalculateWithRespectToOrder(true);
+            game.ReCalculateWithRespectToOrder();
 
             //  Assert
             var availablePaths = mainPlayer.CalculateAvailablePaths();
@@ -503,7 +503,7 @@ namespace RussianCheckers.Game.Tests
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
-            game.ReCalculateWithRespectToOrder(true);
+            game.ReCalculateWithRespectToOrder();
 
             //  Assert
             var availablePaths = mainPlayer.CalculateAvailablePaths();
@@ -530,7 +530,7 @@ namespace RussianCheckers.Game.Tests
             var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
-            game.ReCalculateWithRespectToOrder(true);
+            game.ReCalculateWithRespectToOrder();
 
             //  Assert
             var availablePaths = mainPlayer.CalculateAvailablePaths();

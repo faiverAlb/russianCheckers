@@ -58,11 +58,8 @@ namespace RussianCheckers.Game
                 }
             }
         }
-        public void MoveCheckerToNewPlace(CheckerElementViewModel checker, int nextCol, int nextRow)
+        public void MoveCheckerToNewPlace(CheckerElementViewModel checker)
         {
-            int currentCol = checker.Column;
-            int currentRow = checker.Row;
-            _player.MoveCheckerToNewPlace(currentCol, currentRow, nextCol, nextRow);
             CheckerElementViewModel existingPlayerChecker = PlayerPositions.Single(x => x == checker);
             existingPlayerChecker.DeSelectPossibleMovement();
         }

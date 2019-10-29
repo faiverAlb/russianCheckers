@@ -66,7 +66,7 @@ namespace RussianCheckers.Core
             return NextMovePlayer.GetLegalMovements();
         }
 
-        public bool CheckGameStatus()
+        private bool CheckGameStatus()
         {
 
             var gameStatusChecker = new GameStatusChecker(_dataProvider, MainPlayer, RobotPlayer);
@@ -98,37 +98,14 @@ namespace RussianCheckers.Core
             EmptyUserPlayer  newEmptyCellsPlayer = EmptyCellsAsPlayer.Clone(newDataProvider);
             var newGameModel = new Game(newPlayerOne, newViewPlayerTwo, newEmptyCellsPlayer, newDataProvider);
             newGameModel.NextMoveSide = NextMoveSide;
+            newGameModel.ReCalculateWithRespectToOrder(newGameModel.NextMovePlayer.IsMainPlayer);
             return newGameModel;
         }
 
-        //        public GameViewModel CreateGame()
-        //        {
-        //            DataProvider newDataProvider = _dataProvider.Clone();
-        //            PlayerViewModel newPlayerOne = _playerOne.Clone(newDataProvider);
-        //            RobotViewPlayer newViewPlayerTwo = (RobotViewPlayer) _playerTwo.Clone(newDataProvider);
-        //            EmptyCellsPlayer  newEmptyCellsPlayer = (EmptyCellsPlayer) _emptyCellsPlayer.Clone(newDataProvider);
-        //            var gameViewModel = new GameViewModel(newPlayerOne, newViewPlayerTwo, newEmptyCellsPlayer, newDataProvider, null, false);
-        //            gameViewModel.NextMoveSide = NextMoveSide;
-        //            return gameViewModel;
-        //        }
-
-
-        //        public void MoveChecker(CheckerElementViewModel fromPlace, CheckerElementViewModel toPlace)
-        //        {
-        //            CheckerElementViewModel foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
-        //            _selectedChecker = foundChecker;
-        //            CheckerElementViewModel toPosition = _emptyCellsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
-        //            if (toPlace.Side == fromPlace.Side)
-        //            {
-        //                toPosition = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
-        //            }
-        //            MoveChecker(toPosition);
-        //        }
 
         public void MoveChecker(CheckerModel fromPlace, CheckerModel toPlace)
         {
             CheckerModel foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
-//            _selectedChecker = foundChecker;
             CheckerModel toPosition = EmptyCellsAsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
             if (toPlace.Side == fromPlace.Side)
             {
@@ -140,6 +117,11 @@ namespace RussianCheckers.Core
             int nextRow = toPosition.Row;
             NextMovePlayer.MoveCheckerToNewPlace(currentCol, currentRow, nextCol, nextRow);
             ReCalculateWithRespectToOrder(NextMovePlayer.IsMainPlayer);
+            bool isFinished = CheckGameStatus();
+            if (!isFinished)
+            {
+                ChangeTurn();
+            }
         }
 
 

@@ -132,15 +132,15 @@ namespace RussianCheckers.Core.Strategy
             // Rank-specific heuristics
             if (piece.Type == PieceType.Checker)
             {
-                if (piece.IsAtInitialPosition)
-                {
-                    strength += 1;
-                }
+//                if (piece.IsAtInitialPosition)
+//                {
+//                    strength += 1;
+//                }
 
-                if (piece.Neighbors.Any(x => x.Side == piece.Side))
-                {
-                    strength += 1;
-                }
+//                if (piece.Neighbors.Any(x => x.Side == piece.Side))
+//                {
+//                    strength += 1;
+//                }
             }
             else
             {

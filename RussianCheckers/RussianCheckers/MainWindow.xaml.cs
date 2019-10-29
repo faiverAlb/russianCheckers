@@ -22,17 +22,20 @@ namespace RussianCheckers
 
             var mainPlayCheckers = new List<CheckerModel>()
             {
-                new CheckerModel(5, 5, PieceType.Checker, Side.White),
+                new CheckerModel(4, 2, PieceType.Checker, Side.White),
             };
             var secondPlayerCheckers = new List<CheckerModel>()
             {
-                new CheckerModel(4, 6, PieceType.Checker, Side.Black),
+                new CheckerModel(3, 3, PieceType.Checker, Side.Black),
+                new CheckerModel(5, 3, PieceType.Checker, Side.Black),
+                new CheckerModel(3, 5, PieceType.Checker, Side.Black),
+                new CheckerModel(5, 5, PieceType.Checker, Side.Black),
                 new CheckerModel(1, 5, PieceType.Checker, Side.Black),
             };
-//            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-//            var mainPlayer = new MainPlayer(dataProvider, Side.White);
-//            var robotPlayer = new RobotPlayer(dataProvider, Side.Black, new MinMaxStrategy());
-//            var emptyPlayer = new EmptyUserPlayer(dataProvider);
+            //            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
+            //            var mainPlayer = new MainPlayer(dataProvider, Side.White);
+            //            var robotPlayer = new RobotPlayer(dataProvider, Side.Black, new MinMaxStrategy());
+            //            var emptyPlayer = new EmptyUserPlayer(dataProvider);
 
             var dataProvider = new DataProvider(Side.White);
             var mainPlayer = new MainPlayer(dataProvider, Side.White);

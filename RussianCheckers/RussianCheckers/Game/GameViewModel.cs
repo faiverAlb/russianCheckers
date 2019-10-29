@@ -160,10 +160,8 @@ namespace RussianCheckers.Game
                 return;
             }
 
-            bool isGameFinished = _game.CheckGameStatus();
-            if (!isGameFinished)
+            if (!_game.IsGameFinished)
             {
-                _game.ChangeTurn();
                 NextMoveSide = _game.NextMoveSide;
                 
                 WaitMove();
@@ -219,9 +217,8 @@ namespace RussianCheckers.Game
 
         private void MoveCheckerToNewPlace(CheckerElementViewModel currentPositionElementViewModel, CheckerElementViewModel emptyPosition, PlayerViewModel playerViewModel)
         {
-            playerViewModel.MoveCheckerToNewPlace(currentPositionElementViewModel, emptyPosition.Column, emptyPosition.Row);
-            _game.ReCalculateWithRespectToOrder(playerViewModel.IsMainPlayer);
-            
+            playerViewModel.MoveCheckerToNewPlace(currentPositionElementViewModel);
+            _game.MoveChecker(currentPositionElementViewModel.CheckerModel, emptyPosition.CheckerModel);
             _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
             _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
         }

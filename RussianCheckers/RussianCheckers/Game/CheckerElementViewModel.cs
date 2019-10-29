@@ -92,7 +92,12 @@ namespace RussianCheckers.Game
             }
         }
 
-        
+        public CheckerModel CheckerModel
+        {
+            get { return _checkerModel; }
+        }
+
+
         public override string ToString()
         {
             return $"{Side}, {Type}, [{Column},{Row}]";

@@ -45,7 +45,7 @@ namespace RussianCheckers.Game
             _positions.Add(emptyCollectionContainer);
 
             NextMoveSide = _game.NextMoveSide;
-
+            WaitMove();
         }
 
         private void WaitMove()

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RussianCheckers.Core.Strategy
 {
@@ -9,7 +11,7 @@ namespace RussianCheckers.Core.Strategy
 
         public MinMaxStrategy()
         {
-            _searchDepth = 6;
+            _searchDepth = 8;
         }
 
         public override KeyValuePair<CheckerModel, CheckerModel> GetSuggestedMove(Game initialGame)
@@ -20,23 +22,30 @@ namespace RussianCheckers.Core.Strategy
             int maxValue = int.MinValue;
             IEnumerable<KeyValuePair<CheckerModel, CheckerModel>> allAvailableMoves =
                 initialGame.GetAllAvailableMoves().ToList();
-            
-            var historyOfPossibleMoves = new Dictionary<int, KeyValuePair<CheckerModel, CheckerModel>>();
-            foreach (KeyValuePair<CheckerModel, CheckerModel> availableMove in allAvailableMoves)
+            var dict = new ConcurrentDictionary<int, KeyValuePair<CheckerModel, CheckerModel>>();
+            if (allAvailableMoves.Count() == 1)
             {
-                Game newGameModel = initialGame.CreateGame();
-                newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
-                int curValue =  MinMove(initialGame, newGameModel, 1, maxValue, minValue);
-                if ((curValue > maxValue) || (resultMove.Value == null))
-                {
-                    maxValue = curValue;
-                    resultMove = availableMove;
-                    historyOfPossibleMoves.Add(maxValue, resultMove);
-                }
+                return allAvailableMoves.Single();
             }
+//            foreach (KeyValuePair<CheckerModel, CheckerModel> availableMove in allAvailableMoves)
+            Parallel.ForEach(allAvailableMoves, (availableMove) =>
+            {
+                {
+                    Game newGameModel = initialGame.CreateGame();
+                    newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
+                    int curValue = MinMove(initialGame, newGameModel, 1, maxValue, minValue);
+
+                    dict.AddOrUpdate(curValue, availableMove,(i, pair) => availableMove);
+//                    if ((curValue > maxValue) || (resultMove.Value == null))
+//                    {
+//                        maxValue = curValue;
+//                        resultMove = availableMove;
+//                    }
+                }
+            });
+            resultMove = dict.OrderByDescending(x => x.Key).First().Value;
             return resultMove;
         }
-//
         private int MinMove(Game initialGameViewModel, Game curGameModel, int depth, int alpha, int beta)
         {
             if (DoCutOff(initialGameViewModel, curGameModel, depth))

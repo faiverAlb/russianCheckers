@@ -11,7 +11,6 @@ namespace RussianCheckers.Core
         private readonly NeighborsCalculator _neighborsCalculator;
         private readonly PathCalculator _pathCalculator;
         public List<CheckerModel> PlayerPositions { get; private set; }
-        //        public IEnumerable<LinkedList<CheckerModel>> AvailablePaths { get; private set; }
         public Action<List<CheckerModel>, List<CheckerModel>, List<CheckerModel>> NotificationAction;
 
         public bool IsMainPlayer { get; private set; }
@@ -23,7 +22,7 @@ namespace RussianCheckers.Core
             _dataProvider.NotificationAction += NotificationFromDataAdapter;
             Side = side;
             IsMainPlayer = isMainPlayer;
-            PlayerPositions = dataProvider.GetMySideCheckers(side);
+            PlayerPositions = dataProvider.GetSideCheckers(side);
             _neighborsCalculator = new NeighborsCalculator(dataProvider, PlayerPositions);
             _pathCalculator = new PathCalculator(_dataProvider, PlayerPositions, IsMainPlayer);
             

@@ -156,7 +156,7 @@ namespace RussianCheckers.Core
         }
 
 
-        public List<CheckerModel> GetMySideCheckers(Side side)
+        public List<CheckerModel> GetSideCheckers(Side side)
         {
             var resultList = new List<CheckerModel>();
             foreach (CheckerModel checkerElement in _data)

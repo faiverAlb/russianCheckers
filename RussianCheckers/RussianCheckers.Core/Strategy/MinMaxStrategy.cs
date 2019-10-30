@@ -30,7 +30,7 @@ namespace RussianCheckers.Core.Strategy
 //            foreach (KeyValuePair<CheckerModel, CheckerModel> availableMove in allAvailableMoves)
             Parallel.ForEach(allAvailableMoves, (availableMove) =>
             {
-                {
+                { 
                     Game newGameModel = initialGame.CreateGame();
                     newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
                     int curValue = MinMove(initialGame, newGameModel, 1, maxValue, minValue);

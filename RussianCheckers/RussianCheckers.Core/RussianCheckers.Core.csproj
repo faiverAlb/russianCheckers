@@ -52,7 +52,6 @@
     <Compile Include="PathCalculator.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Strategy\DummyStrategy.cs" />
     <Compile Include="Strategy\MinMaxStrategy.cs" />
     <Compile Include="Strategy\RobotStrategy.cs" />
   </ItemGroup>

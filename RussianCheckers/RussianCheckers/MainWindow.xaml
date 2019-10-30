@@ -170,8 +170,8 @@
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1">
-            <Button  Width="100"  Height="40">Undo</Button>
-            <Button  Width="100" Margin="5"  Height="40">Redo</Button>
+            <Button  Width="100"  Height="40" IsEnabled="{Binding IsUndoEnabled}" Command="{Binding UndoCommand}">Undo</Button>
+            <Button  Width="100" Margin="5"  Height="40" IsEnabled="{Binding IsRedoEnabled}" Command="{Binding RedoCommand}">Redo</Button>
         </StackPanel>
      
     </Grid>

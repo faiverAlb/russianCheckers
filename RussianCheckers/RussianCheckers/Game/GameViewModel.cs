@@ -23,6 +23,8 @@ namespace RussianCheckers.Game
         private readonly bool _isPlayingAutomatically;
         private readonly CompositeCollection _positions = new CompositeCollection();
         public Side WinnerSide { get; set; }
+        public ActionCommand UndoCommand { get; private set; }
+        public ActionCommand RedoCommand { get; private set; }
 
         public GameViewModel(Core.Game game,
             IDialogService notificationDialog,
@@ -30,9 +32,9 @@ namespace RussianCheckers.Game
         {
             _game = game;
             _notificationDialog = notificationDialog;
+            UndoCommand = new ActionCommand(DoUndo,CanUndo);
+            RedoCommand = new ActionCommand(DoRedo,CanRedo);
             _isPlayingAutomatically = isPlayingAutomatically;
-            
-
             _emptyCellsPlayerViewModel = new EmptyCellsPlayerViewModel(_game.EmptyCellsAsPlayer);
             _playerOne = new HumanPlayerViewModel(_game.MainPlayer, _emptyCellsPlayerViewModel.PlayerPositions.ToList());
             _playerTwo = new RobotPlayerViewModel(_game.RobotPlayer, _emptyCellsPlayerViewModel.PlayerPositions.ToList());
@@ -47,6 +49,28 @@ namespace RussianCheckers.Game
             NextMoveSide = _game.NextMoveSide;
             WaitMove();
         }
+
+        private void DoRedo(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DoUndo(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        private bool CanRedo()
+        {
+            return true;
+        }
+
+        private bool CanUndo()
+        {
+            return false;
+        }
+
 
         private void WaitMove()
         {
@@ -102,15 +126,8 @@ namespace RussianCheckers.Game
                 RaisePropertyChangedEvent(nameof(NextMoveSide));
             }
         }
-        public PlayerViewModel NextMovePlayer
-        {
-            get { return _nextMovePlayer; }
-            private set
-            {
-                _nextMovePlayer = value;
-            }
-        }
 
+        private PlayerViewModel NextMovePlayer { get; set; }
 
         public ICommand SelectCheckerCommand { get { return new ActionCommand(OnTryMakeMove); } }
 
@@ -119,7 +136,6 @@ namespace RussianCheckers.Game
         private readonly PlayerViewModel _playerOne;
         private readonly EmptyCellsPlayerViewModel _emptyCellsPlayerViewModel;
         private readonly RobotPlayerViewModel _playerTwo;
-        private PlayerViewModel _nextMovePlayer;
         private CancellationTokenSource _cancellationToken;
         private bool _isCalculatingMove;
 

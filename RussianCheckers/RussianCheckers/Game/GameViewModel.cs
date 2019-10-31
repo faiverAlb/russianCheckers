@@ -276,6 +276,7 @@ namespace RussianCheckers.Game
 
         private void MoveCheckerToNewPlace(CheckerElementViewModel currentPositionElementViewModel, CheckerElementViewModel emptyPosition, PlayerViewModel playerViewModel)
         {
+            ResetHistoryIfNeeded();
             CurrentHistoryPosition++;
 
             playerViewModel.MoveCheckerToNewPlace(currentPositionElementViewModel);
@@ -284,6 +285,17 @@ namespace RussianCheckers.Game
 
             _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
             _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
+        }
+
+        private void ResetHistoryIfNeeded()
+        {
+            if (CurrentHistoryPosition < _actionsHistory.Count)
+            {
+                while (CurrentHistoryPosition != _actionsHistory.Count)
+                {
+                    _actionsHistory.Pop();
+                }
+            }
         }
 
 

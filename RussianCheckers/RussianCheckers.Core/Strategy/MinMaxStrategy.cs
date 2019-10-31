@@ -17,7 +17,7 @@ namespace RussianCheckers.Core.Strategy
 
         public override KeyValuePair<CheckerModel, CheckerModel> GetSuggestedMove(Game initialGame, CancellationToken token)
         {
-            _searchDepth = 8;
+            _searchDepth = 10;
             if (token == CancellationToken.None)
             {
                 _searchDepth = 0;

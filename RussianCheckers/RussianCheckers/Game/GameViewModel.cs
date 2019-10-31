@@ -28,6 +28,19 @@ namespace RussianCheckers.Game
 
         private readonly Stack<HistoryMove> _actionsHistory;
 
+        public string RobotThinkingTime
+        {
+            get
+            {
+                return _robotThinkingTime;
+            }
+            set
+            {
+                _robotThinkingTime = value;
+                RaisePropertyChangedEvent(nameof(RobotThinkingTime));
+            }
+        }
+
         private int CurrentHistoryPosition
         {
             get
@@ -199,6 +212,7 @@ namespace RussianCheckers.Game
         private CancellationTokenSource _cancellationToken;
         private bool _isCalculatingMove;
         private int _currentHistoryPosition;
+        private string _robotThinkingTime;
 
         private void OnTryMakeMove(object obj)
         {

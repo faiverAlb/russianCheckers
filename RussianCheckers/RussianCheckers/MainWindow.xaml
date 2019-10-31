@@ -172,7 +172,9 @@
         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1">
             <Button  Width="100"  Height="40" IsEnabled="{Binding IsUndoEnabled}" Command="{Binding UndoCommand}">Undo</Button>
             <Button  Width="100" Margin="5"  Height="40" IsEnabled="{Binding IsRedoEnabled}" Command="{Binding RedoCommand}">Redo</Button>
+            <Label VerticalAlignment="Center">Robot thinking time (sec):</Label>
+            <TextBox Margin="5" Width="100"   Height="40"  TextAlignment="Justify" VerticalAlignment = "Center" Padding="5" FontSize="18" Text="{Binding RobotThinkingTime,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </StackPanel>
-     
+
     </Grid>
 </Window>

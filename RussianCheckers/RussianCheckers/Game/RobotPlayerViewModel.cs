@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using RussianCheckers.Core;
 
 namespace RussianCheckers.Game
@@ -11,9 +12,9 @@ namespace RussianCheckers.Game
             _robotPlayer = robotPlayer;
         }
 
-        public KeyValuePair<CheckerModel, CheckerModel> GetOptimalMove(GameViewModel gameViewModel)
+        public KeyValuePair<CheckerModel, CheckerModel> GetOptimalMove(GameViewModel gameViewModel, CancellationToken token)
         {
-            KeyValuePair<CheckerModel, CheckerModel> result = _robotPlayer.GetOptimalMove(gameViewModel.Game);
+            KeyValuePair<CheckerModel, CheckerModel> result = _robotPlayer.GetOptimalMove(gameViewModel.Game, token);
             return result;
         }
     }

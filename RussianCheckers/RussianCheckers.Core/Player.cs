@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using RussianCheckers.Core.Strategy;
 using RussianCheckers.Game;
 
@@ -228,9 +229,9 @@ namespace RussianCheckers.Core
             _robotStrategy = robotStrategy;
         }
 
-        public KeyValuePair<CheckerModel, CheckerModel> GetOptimalMove(Game game)
+        public KeyValuePair<CheckerModel, CheckerModel> GetOptimalMove(Game game, CancellationToken token)
         {
-            var result = _robotStrategy.GetSuggestedMove(game);
+            var result = _robotStrategy.GetSuggestedMove(game, token);
             return result;
         }
 

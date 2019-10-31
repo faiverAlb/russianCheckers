@@ -55,9 +55,7 @@ namespace RussianCheckers.Game
             }
         }
 
-        public GameViewModel(Core.Game game,
-            IDialogService notificationDialog,
-            bool isPlayingAutomatically)
+        public GameViewModel(Core.Game game, IDialogService notificationDialog, bool isPlayingAutomatically)
         {
             _game = game;
             _notificationDialog = notificationDialog;
@@ -116,6 +114,7 @@ namespace RussianCheckers.Game
 
         private void DoUndo()
         {
+//            _cancellationTokenSource.Cancel();
             int count = _actionsHistory.Count - 1;
             CurrentHistoryPosition--;
             if (CurrentHistoryPosition < 0)
@@ -157,13 +156,31 @@ namespace RussianCheckers.Game
                 IsCalculatingMove = false;
                 return;
             }
-            _cancellationToken = new CancellationTokenSource();
-            Task.Run(() => { MakeMoveBySecondUser(); }, _cancellationToken.Token);
+
+            int timeToThink = 1;
+
+            int.TryParse(RobotThinkingTime, out timeToThink);
+
+            var timeSpan = new TimeSpan(0,0,0,timeToThink);
+            _cancellationTokenSource = new CancellationTokenSource(timeSpan);
+            var cancellationToken = _cancellationTokenSource.Token;
+            if (timeToThink == 0)
+            {
+                cancellationToken = CancellationToken.None;
+            }
+
+            Task.Run(() =>
+            {
+                Thread.Sleep(timeSpan);
+                _cancellationTokenSource.Cancel();
+            });
+            Task.Run(() => { MakeMoveBySecondUser(cancellationToken); }, cancellationToken);
+
         }
 
-        private void MakeMoveBySecondUser()
+        private void MakeMoveBySecondUser(CancellationToken token)
         {
-            var move = _playerTwo.GetOptimalMove(this);
+            var move = _playerTwo.GetOptimalMove(this, token);
             IsCalculatingMove = true;
             if (move.Value != null)
             {
@@ -209,7 +226,7 @@ namespace RussianCheckers.Game
         private readonly PlayerViewModel _playerOne;
         private readonly EmptyCellsPlayerViewModel _emptyCellsPlayerViewModel;
         private readonly RobotPlayerViewModel _playerTwo;
-        private CancellationTokenSource _cancellationToken;
+        private CancellationTokenSource _cancellationTokenSource;
         private bool _isCalculatingMove;
         private int _currentHistoryPosition;
         private string _robotThinkingTime;

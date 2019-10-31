@@ -1,21 +1,26 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RussianCheckers.Core.Strategy
 {
     public class MinMaxStrategy:RobotStrategy
     {
-        readonly int _searchDepth;
+        int _searchDepth;
 
         public MinMaxStrategy()
         {
-            _searchDepth = 4;
         }
 
-        public override KeyValuePair<CheckerModel, CheckerModel> GetSuggestedMove(Game initialGame)
+        public override KeyValuePair<CheckerModel, CheckerModel> GetSuggestedMove(Game initialGame, CancellationToken token)
         {
+            _searchDepth = 8;
+            if (token == CancellationToken.None)
+            {
+                _searchDepth = 0;
+            }
             var resultMove =  new KeyValuePair<CheckerModel, CheckerModel>();
             
             const int minValue = int.MaxValue;
@@ -28,27 +33,22 @@ namespace RussianCheckers.Core.Strategy
                 return allAvailableMoves.Single();
             }
 //            foreach (KeyValuePair<CheckerModel, CheckerModel> availableMove in allAvailableMoves)
-            Parallel.ForEach(allAvailableMoves, (availableMove) =>
+            Parallel.ForEach(allAvailableMoves,new ParallelOptions(), (availableMove,state) =>
             {
                 { 
                     Game newGameModel = initialGame.CreateGame();
                     newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
-                    int curValue = MinMove(initialGame, newGameModel, 1, maxValue, minValue);
+                    int curValue = MinMove(initialGame, newGameModel, 1, maxValue, minValue, token);
 
                     dict.AddOrUpdate(curValue, availableMove,(i, pair) => availableMove);
-//                    if ((curValue > maxValue) || (resultMove.Value == null))
-//                    {
-//                        maxValue = curValue;
-//                        resultMove = availableMove;
-//                    }
                 }
             });
             resultMove = dict.OrderByDescending(x => x.Key).First().Value;
             return resultMove;
         }
-        private int MinMove(Game initialGameViewModel, Game curGameModel, int depth, int alpha, int beta)
+        private int MinMove(Game initialGameViewModel, Game curGameModel, int depth, int alpha, int beta, CancellationToken token)
         {
-            if (DoCutOff(initialGameViewModel, curGameModel, depth))
+            if (DoCutOff(initialGameViewModel, curGameModel, depth) || token.IsCancellationRequested)
             {
                 var minMoveStrength = -DoCalculateStrength(initialGameViewModel, curGameModel);
                 return minMoveStrength;
@@ -59,7 +59,7 @@ namespace RussianCheckers.Core.Strategy
             {
                 Game newGameModel = curGameModel.CreateGame();
                 newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
-                int value = MaxMove(initialGameViewModel, newGameModel, depth + 1, alpha, beta);
+                int value = MaxMove(initialGameViewModel, newGameModel, depth + 1, alpha, beta, token);
                 if (value < beta)
                 {
                     // Get new min value
@@ -190,10 +190,11 @@ namespace RussianCheckers.Core.Strategy
         }
 
 
-        private int MaxMove(Game initialGameViewModel, Game curGameModel, int depth, int alpha, int beta)
+        private int MaxMove(Game initialGameViewModel, Game curGameModel, int depth, int alpha, int beta,
+            CancellationToken token)
         {
             // Check algorithm limits..end prematurely, but with an educated approximation
-            if (DoCutOff(initialGameViewModel, curGameModel, depth))
+            if (DoCutOff(initialGameViewModel, curGameModel, depth) || token.IsCancellationRequested)
             {
                 return DoCalculateStrength(initialGameViewModel, curGameModel);
             }
@@ -203,7 +204,7 @@ namespace RussianCheckers.Core.Strategy
             {
                 Game newGameModel = curGameModel.CreateGame();
                 newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
-                int value = MinMove(initialGameViewModel, newGameModel, depth + 1, alpha, beta);
+                int value = MinMove(initialGameViewModel, newGameModel, depth + 1, alpha, beta, token);
                 if (value > alpha)
                 {
                     // Get new max value

@@ -195,5 +195,10 @@ namespace RussianCheckers.Core
             Player player = GetPlayer(isForMainPlayer);
             return player.GetQueensCount();
         }
+
+        public int GetRemainingCount()
+        {
+            return MainPlayer.PlayerPositions.Count + RobotPlayer.PlayerPositions.Count;
+        }
     }
 }

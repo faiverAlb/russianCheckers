@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -175,11 +176,10 @@ namespace RussianCheckers.Core.Strategy
             int curSearchDepth = _searchDepth;
             //            if (increasingSearchDepth)
             //            {
-            //                int totalPieces = CheckersGame.PiecesPerPlayer * CheckersGame.PlayerCount;
-            //                //int removed = (CheckersGame.PiecesPerPlayer*CheckersGame.PlayerCount) - curGame.GetRemainingCount();
-            //                //int factor = (int)Math.Log(removed, 3);
-            //                int factor = (int)Math.Log(curGame.GetRemainingCount(), 3), mfactor = (int)Math.Log(totalPieces, 3);
-            //                curSearchDepth += (mfactor - factor);
+            int totalPieces = 24;
+            int factor = (int) Math.Log(curGameModel.GetRemainingCount(), 3);
+            int mfactor = (int)Math.Log(totalPieces, 3);
+            curSearchDepth += (mfactor - factor);
             //            }
             if ((depth >= 0) && (depth >= curSearchDepth))
                 return true;

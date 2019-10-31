@@ -71,19 +71,37 @@ namespace RussianCheckers.Game
 
         private void DoRedo(object obj)
         {
-            throw new NotImplementedException();
+            DoRedo();
+            DoRedo();
+
+            _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
+            _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
+        }
+        private void DoRedo()
+        {
+            int count = _actionsHistory.Count - 1;
+            foreach (HistoryMove historyMove in _actionsHistory)
+            {
+                if (count == CurrentHistoryPosition)
+                {
+                    _game.MoveChecker(historyMove.MovedFromTo.Key, historyMove.MovedFromTo.Value);
+                    break;
+                }
+                count--;
+            }
+            CurrentHistoryPosition++;
         }
 
         private void DoUndo(object obj)
         {
-            Undo();
-            Undo();
+            DoUndo();
+            DoUndo();
 
             _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
             _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
         }
 
-        private void Undo()
+        private void DoUndo()
         {
             int count = _actionsHistory.Count - 1;
             CurrentHistoryPosition--;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RussianCheckers.Core.Strategy;
+using RussianCheckers.Game;
 
 namespace RussianCheckers.Core
 {
@@ -40,8 +41,9 @@ namespace RussianCheckers.Core
             var deletedFromForPlayer = new List<CheckerModel>();
             foreach (var deletedModel in deleted.Where(x => x.Side == Side))
             {
-                PlayerPositions.Remove(deletedModel);
-                deletedFromForPlayer.Add(deletedModel);
+                CheckerModel toRemove = PlayerPositions.Single(x => x.Column == deletedModel.Column && x.Row == deletedModel.Row);
+                PlayerPositions.Remove(toRemove);
+                deletedFromForPlayer.Add(toRemove);
             }
 
             modified = modified.Where(x => x.Side == Side).ToList();
@@ -65,7 +67,7 @@ namespace RussianCheckers.Core
             return _pathCalculator.CalculateAvailablePaths();
         }
 
-        public void MoveCheckerToNewPlace(int currentCol, int currentRow, int nextCol, int nextRow)
+        public HistoryMove MoveCheckerToNewPlace(int currentCol, int currentRow, int nextCol, int nextRow)
         {
             CheckerModel checker = this.PlayerPositions.Single(x => x.Column == currentCol && x.Row == currentRow);
             var availablePaths = CalculateAvailablePaths();
@@ -82,13 +84,19 @@ namespace RussianCheckers.Core
             }
             _dataProvider.StartTrackChanges();
             List<CheckerModel> itemsToTake = GetToTakeCheckers(availablePaths, nextCol, nextRow, checker);
+            var historyMove = new HistoryMove();
+            
             foreach (CheckerModel checkerElement in itemsToTake)
             {
                 var element = new CheckerModel(checkerElement.Column, checkerElement.Row, PieceType.Checker, Side.Empty);
+                historyMove.DeletedList.Add(new KeyValuePair<CheckerModel,CheckerModel>(checkerElement.Clone(), element.Clone()));
                 _dataProvider.MoveCheckerToNewPosition(element, checkerElement.Column, checkerElement.Row);
             }
+            historyMove.MovedFromTo = new KeyValuePair<CheckerModel,CheckerModel>(oldPositionedChecker.Clone(), newPosition.Clone());
             _dataProvider.MoveCheckerToNewPosition(oldPositionedChecker, nextCol, nextRow);
             _dataProvider.StopTrackChanges();
+
+            return historyMove;
         }
 
         private List<CheckerModel> GetToTakeCheckers(IEnumerable<LinkedList<CheckerModel>> availablePaths, int column, int row, CheckerModel checker)

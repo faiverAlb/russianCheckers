@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RussianCheckers.Game;
 
@@ -94,7 +95,7 @@ namespace RussianCheckers.Core
         }
 
 
-        public void MoveChecker(CheckerModel fromPlace, CheckerModel toPlace)
+        public HistoryMove MoveChecker(CheckerModel fromPlace, CheckerModel toPlace)
         {
             CheckerModel foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
             CheckerModel toPosition = EmptyCellsAsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
@@ -106,13 +107,54 @@ namespace RussianCheckers.Core
             int currentRow = foundChecker.Row;
             int nextCol = toPosition.Column;
             int nextRow = toPosition.Row;
-            NextMovePlayer.MoveCheckerToNewPlace(currentCol, currentRow, nextCol, nextRow);
+            HistoryMove historyMove = NextMovePlayer.MoveCheckerToNewPlace(currentCol, currentRow, nextCol, nextRow);
             ReCalculateWithRespectToOrder();
             bool isFinished = CheckGameStatus();
             if (!isFinished)
             {
                 ChangeTurn();
             }
+
+            return historyMove;
+        }
+        public void RevertMove(HistoryMove historyMove)
+        {
+            var fromPlacePair = FindChecker(historyMove.MovedFromTo.Value);
+            var toPlace = FindChecker(historyMove.MovedFromTo.Key);
+     
+            int currentCol = fromPlacePair.Value.Column;
+            int currentRow = fromPlacePair.Value.Row;
+            int nextCol = toPlace.Value.Column;
+            int nextRow = toPlace.Value.Row;
+            fromPlacePair.Key.MoveCheckerToNewPlace(currentCol, currentRow, nextCol, nextRow);
+            ReCalculateWithRespectToOrder();
+            bool isFinished = CheckGameStatus();
+            if (!isFinished)
+            {
+                ChangeTurn();
+            }
+
+        }
+
+
+        private KeyValuePair<Player, CheckerModel> FindChecker(CheckerModel fromPlace)
+        {
+            int column = fromPlace.Column;
+            int row = fromPlace.Row;
+            var findChecker = MainPlayer.PlayerPositions.SingleOrDefault(x => x.Column == column && x.Row == row);
+            if (findChecker != null)
+                return new KeyValuePair<Player, CheckerModel>(MainPlayer, findChecker);
+            findChecker = RobotPlayer.PlayerPositions.SingleOrDefault(x => x.Column == column && x.Row == row);
+            if (findChecker != null)
+                return new KeyValuePair<Player, CheckerModel>(RobotPlayer, findChecker);
+            findChecker = EmptyCellsAsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == column && x.Row == row);
+            if (findChecker == null)
+            {
+                throw new Exception($"Can't find checker at position ({column},{row}) in game view model: ");
+            }
+
+            return new KeyValuePair<Player, CheckerModel>(EmptyCellsAsPlayer, findChecker);
+
         }
 
 

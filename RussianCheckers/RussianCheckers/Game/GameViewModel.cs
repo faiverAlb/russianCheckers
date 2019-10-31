@@ -18,13 +18,29 @@ namespace RussianCheckers.Game
 {
     public class GameViewModel : ObservableObject
     {
-        public readonly Core.Game _game;
+        private readonly Core.Game _game;
         private readonly IDialogService _notificationDialog;
         private readonly bool _isPlayingAutomatically;
         private readonly CompositeCollection _positions = new CompositeCollection();
         public Side WinnerSide { get; set; }
         public ActionCommand UndoCommand { get; private set; }
         public ActionCommand RedoCommand { get; private set; }
+
+        private readonly Stack<HistoryMove> _actionsHistory;
+
+        private int CurrentHistoryPosition
+        {
+            get
+            {
+                return _currentHistoryPosition;
+            }
+            set
+            {
+                _currentHistoryPosition = value;
+                UndoCommand.RaiseCanExecuteChanged();
+                RedoCommand.RaiseCanExecuteChanged();
+            }
+        }
 
         public GameViewModel(Core.Game game,
             IDialogService notificationDialog,
@@ -34,6 +50,9 @@ namespace RussianCheckers.Game
             _notificationDialog = notificationDialog;
             UndoCommand = new ActionCommand(DoUndo,CanUndo);
             RedoCommand = new ActionCommand(DoRedo,CanRedo);
+            _actionsHistory = new Stack<HistoryMove>();
+            CurrentHistoryPosition = 0;
+
             _isPlayingAutomatically = isPlayingAutomatically;
             _emptyCellsPlayerViewModel = new EmptyCellsPlayerViewModel(_game.EmptyCellsAsPlayer);
             _playerOne = new HumanPlayerViewModel(_game.MainPlayer, _emptyCellsPlayerViewModel.PlayerPositions.ToList());
@@ -57,18 +76,41 @@ namespace RussianCheckers.Game
 
         private void DoUndo(object obj)
         {
-            throw new NotImplementedException();
+            Undo();
+            Undo();
+
+            _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
+            _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
+        }
+
+        private void Undo()
+        {
+            int count = _actionsHistory.Count - 1;
+            CurrentHistoryPosition--;
+            if (CurrentHistoryPosition < 0)
+            {
+                return;
+            }
+            foreach (var previousAction in _actionsHistory)
+            {
+                if (count == CurrentHistoryPosition)
+                {
+                    _game.RevertMove(previousAction);
+                    break;
+                }
+                count--;
+            }
         }
 
 
-        private bool CanRedo()
+        public bool CanRedo()
         {
-            return true;
+            return CurrentHistoryPosition < _actionsHistory.Count;
         }
 
-        private bool CanUndo()
+        public bool CanUndo()
         {
-            return false;
+            return CurrentHistoryPosition > 0;
         }
 
 
@@ -138,6 +180,7 @@ namespace RussianCheckers.Game
         private readonly RobotPlayerViewModel _playerTwo;
         private CancellationTokenSource _cancellationToken;
         private bool _isCalculatingMove;
+        private int _currentHistoryPosition;
 
         private void OnTryMakeMove(object obj)
         {
@@ -233,8 +276,12 @@ namespace RussianCheckers.Game
 
         private void MoveCheckerToNewPlace(CheckerElementViewModel currentPositionElementViewModel, CheckerElementViewModel emptyPosition, PlayerViewModel playerViewModel)
         {
+            CurrentHistoryPosition++;
+
             playerViewModel.MoveCheckerToNewPlace(currentPositionElementViewModel);
-            _game.MoveChecker(currentPositionElementViewModel.CheckerModel, emptyPosition.CheckerModel);
+            HistoryMove historyMove = _game.MoveChecker(currentPositionElementViewModel.CheckerModel, emptyPosition.CheckerModel);
+            _actionsHistory.Push(historyMove);
+
             _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
             _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
         }
@@ -291,5 +338,4 @@ namespace RussianCheckers.Game
             return findChecker;
         }
     }
-
 }

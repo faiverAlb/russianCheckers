@@ -48,6 +48,7 @@
     <Compile Include="GameEnums.cs" />
     <Compile Include="GameStatus.cs" />
     <Compile Include="GameStatusChecker.cs" />
+    <Compile Include="HistoryMove.cs" />
     <Compile Include="NeighborsCalculator.cs" />
     <Compile Include="PathCalculator.cs" />
     <Compile Include="Player.cs" />

@@ -191,10 +191,10 @@ namespace RussianCheckers.Core
             }
 
             _data[newPositionColumn, newPositionRow] = checkerToMove;
-            checkerToMove.SetNewPosition2(newPositionColumn, newPositionRow);
+            checkerToMove.SetNewPosition(newPositionColumn, newPositionRow);
             
             _data[fromColumn, fromRow] = oldPositionedItem;
-            oldPositionedItem.SetNewPosition2(fromColumn, fromRow);
+            oldPositionedItem.SetNewPosition(fromColumn, fromRow);
 
             _modified.Add(oldPositionedItem);
             _modified.Add(checkerToMove);
@@ -227,5 +227,23 @@ namespace RussianCheckers.Core
             _isStartTrackChanging = false;
             NotificationAction?.Invoke(_added, _deleted, _modified);
         }
+
+//        public void RestoreData(DataProvider fromDataProvider)
+//        {
+//            CheckerModel[,] fromData = fromDataProvider._data;
+//            for (int i = 0; i < 8; i++)
+//            {
+//                for (int j = 0; j < 8; j++)
+//                {
+//                    if (_data[j,i].Side == fromData[j,i].Side && _data[j, i].Type == fromData[j, i].Type)
+//                    {
+//                        continue;
+//                    }
+//
+//                    
+//                }
+//            }
+//
+//        }
     }
 }

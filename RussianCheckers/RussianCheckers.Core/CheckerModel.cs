@@ -64,12 +64,11 @@ namespace RussianCheckers.Core
             Type = PieceType.Queen;
         }
 
-        public void SetNewPosition2(int column, int row)
+        public void SetNewPosition(int column, int row)
         {
             Column = column;
             Row = row;
             IsAtInitialPosition = false;
-//            _pos.ChangePosition(column, row);
             PositionChangedAction?.Invoke(column, row);
         }
 

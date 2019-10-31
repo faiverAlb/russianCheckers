@@ -11,7 +11,7 @@ namespace RussianCheckers.Core.Strategy
 
         public MinMaxStrategy()
         {
-            _searchDepth = 8;
+            _searchDepth = 4;
         }
 
         public override KeyValuePair<CheckerModel, CheckerModel> GetSuggestedMove(Game initialGame)

@@ -25,15 +25,14 @@ namespace RussianCheckers.Core
             _dataProvider = dataProvider;
 
             NextMoveSide = Side.White;
-
         }
 
-        public void ReCalculateWithRespectToOrder()
+        public void ReCalculateNeighborsAndPaths()
         {
             EmptyCellsAsPlayer.CalculateNeighbors();
             MainPlayer.CalculateNeighbors();
             RobotPlayer.CalculateNeighbors();
-
+            
             MainPlayer.CalculateAvailablePaths();
             RobotPlayer.CalculateAvailablePaths();
         }
@@ -90,7 +89,7 @@ namespace RussianCheckers.Core
             EmptyUserPlayer  newEmptyCellsPlayer = EmptyCellsAsPlayer.Clone(newDataProvider);
             var newGameModel = new Game(newPlayerOne, newViewPlayerTwo, newEmptyCellsPlayer, newDataProvider);
             newGameModel.NextMoveSide = NextMoveSide;
-            newGameModel.ReCalculateWithRespectToOrder();
+            newGameModel.ReCalculateNeighborsAndPaths();
             return newGameModel;
         }
 
@@ -108,7 +107,7 @@ namespace RussianCheckers.Core
             int nextCol = toPosition.Column;
             int nextRow = toPosition.Row;
             HistoryMove historyMove = NextMovePlayer.MoveCheckerToNewPlace(currentCol, currentRow, nextCol, nextRow);
-            ReCalculateWithRespectToOrder();
+            ReCalculateNeighborsAndPaths();
             bool isFinished = CheckGameStatus();
             if (!isFinished)
             {
@@ -119,21 +118,37 @@ namespace RussianCheckers.Core
         }
         public void RevertMove(HistoryMove historyMove)
         {
-            var fromPlacePair = FindChecker(historyMove.MovedFromTo.Value);
-            var toPlace = FindChecker(historyMove.MovedFromTo.Key);
-     
-            int currentCol = fromPlacePair.Value.Column;
-            int currentRow = fromPlacePair.Value.Row;
-            int nextCol = toPlace.Value.Column;
-            int nextRow = toPlace.Value.Row;
-            fromPlacePair.Key.MoveCheckerToNewPlace(currentCol, currentRow, nextCol, nextRow);
-            ReCalculateWithRespectToOrder();
+            RevertMove(historyMove.MovedFromTo.Value, historyMove.MovedFromTo.Key, historyMove.IsConvertedToQueen);
+            foreach (KeyValuePair<CheckerModel, CheckerModel> deletedInfoPair in historyMove.DeletedList)
+            {
+                CheckerModel recurrectedChecker = deletedInfoPair.Key;
+                Player playerToAddChecker = GetPlayerByCheckerSide(recurrectedChecker.Side);
+                playerToAddChecker.AddNewChecker(recurrectedChecker, deletedInfoPair.Key.Column, deletedInfoPair.Key.Row);
+            }
+
+            ReCalculateNeighborsAndPaths();
             bool isFinished = CheckGameStatus();
             if (!isFinished)
             {
                 ChangeTurn();
             }
 
+        }
+
+        private Player GetPlayerByCheckerSide(Side checkerSide)
+        {
+            return MainPlayer.Side == checkerSide ? (Player) MainPlayer : RobotPlayer;
+        }
+
+        private void RevertMove(CheckerModel @from, CheckerModel to, bool historyMoveIsConvertedToQueen)
+        {
+            KeyValuePair<Player, CheckerModel> fromPlacePair = FindChecker(from);
+            KeyValuePair<Player, CheckerModel> toPlace = FindChecker(to);
+            int currentCol = fromPlacePair.Value.Column;
+            int currentRow = fromPlacePair.Value.Row;
+            int nextCol = toPlace.Value.Column;
+            int nextRow = toPlace.Value.Row;
+            fromPlacePair.Key.MoveCheckerToNewPlace(currentCol, currentRow, nextCol, nextRow, historyMoveIsConvertedToQueen);
         }
 
 

@@ -64,6 +64,12 @@ namespace RussianCheckers.Core
             Type = PieceType.Queen;
         }
 
+        public void DowngradeToChecker()
+        {
+            Type = PieceType.Checker;
+        }
+
+
         public void SetNewPosition(int column, int row)
         {
             Column = column;

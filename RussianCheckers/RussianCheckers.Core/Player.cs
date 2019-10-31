@@ -67,24 +67,35 @@ namespace RussianCheckers.Core
             return _pathCalculator.CalculateAvailablePaths();
         }
 
-        public HistoryMove MoveCheckerToNewPlace(int currentCol, int currentRow, int nextCol, int nextRow)
+        public HistoryMove MoveCheckerToNewPlace(int currentCol
+            , int currentRow
+            , int nextCol
+            , int nextRow
+            , bool convertBackToChecker = false)
         {
             CheckerModel checker = this.PlayerPositions.Single(x => x.Column == currentCol && x.Row == currentRow);
             var availablePaths = CalculateAvailablePaths();
-            var path = availablePaths.Where(x => x.Last.Value.Column == nextCol && x.Last.Value.Row == nextRow).OrderByDescending(x => x.Count).FirstOrDefault();
+            LinkedList<CheckerModel> path = availablePaths.Where(x => x.Last.Value.Column == nextCol && x.Last.Value.Row == nextRow).OrderByDescending(x => x.Count).FirstOrDefault();
+            bool isConvertedToQueen = false;
             if (ShouldConvertToQueenByPathDuringTaking(path))
             {
                 checker.BecomeAQueen();
+                isConvertedToQueen = true;
             }
             CheckerModel newPosition = _dataProvider.GetElementAtPosition(nextCol, nextRow);
             CheckerModel oldPositionedChecker = _dataProvider.GetElementAtPosition(currentCol, currentRow);
+            if (convertBackToChecker)
+            {
+                oldPositionedChecker.DowngradeToChecker();
+            }
             if (_pathCalculator.IsMoveToucheBoard(newPosition))
             {
                 oldPositionedChecker.BecomeAQueen();
+                isConvertedToQueen = true;
             }
             _dataProvider.StartTrackChanges();
             List<CheckerModel> itemsToTake = GetToTakeCheckers(availablePaths, nextCol, nextRow, checker);
-            var historyMove = new HistoryMove();
+            var historyMove = new HistoryMove(isConvertedToQueen);
             
             foreach (CheckerModel checkerElement in itemsToTake)
             {
@@ -167,6 +178,16 @@ namespace RussianCheckers.Core
         {
             int counter = PlayerPositions.Count(playerPosition => playerPosition.Type == PieceType.Queen);
             return counter;
+
+        }
+
+        public void AddNewChecker(CheckerModel recurrectedChecker
+                                            , int currentEmptyColumn
+                                            , int currentEmptyRow)
+        {
+            _dataProvider.StartTrackChanges();
+            _dataProvider.AddNewChecker(recurrectedChecker, currentEmptyColumn,currentEmptyRow);
+            _dataProvider.StopTrackChanges();
 
         }
     }

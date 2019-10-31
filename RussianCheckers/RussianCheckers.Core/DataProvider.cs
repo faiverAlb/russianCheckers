@@ -170,6 +170,13 @@ namespace RussianCheckers.Core
             return resultList;
         }
 
+        public void AddNewChecker(CheckerModel checkerToAdd, int currentEmptyColumn, int currentEmptyRow)
+        {
+            CheckerModel emptyCheckerToDelete = _data[currentEmptyColumn, currentEmptyRow];
+            _data[currentEmptyColumn, currentEmptyRow] = checkerToAdd;
+            _added.Add(checkerToAdd);
+            _deleted.Add(emptyCheckerToDelete);
+        }
 
         public void MoveCheckerToNewPosition(CheckerModel checkerToMove, int newPositionColumn, int newPositionRow)
         {

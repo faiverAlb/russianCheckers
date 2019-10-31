@@ -33,7 +33,6 @@ namespace RussianCheckers.Core.Strategy
             {
                 return allAvailableMoves.Single();
             }
-//            foreach (KeyValuePair<CheckerModel, CheckerModel> availableMove in allAvailableMoves)
             Parallel.ForEach(allAvailableMoves,new ParallelOptions(), (availableMove,state) =>
             {
                 { 

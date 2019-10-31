@@ -63,7 +63,7 @@ namespace RussianCheckers.Game
             RedoCommand = new ActionCommand(DoRedo,CanRedo);
             _actionsHistory = new Stack<HistoryMove>();
             CurrentHistoryPosition = 0;
-
+            RobotThinkingTime = 4.ToString();
             _isPlayingAutomatically = isPlayingAutomatically;
             _emptyCellsPlayerViewModel = new EmptyCellsPlayerViewModel(_game.EmptyCellsAsPlayer);
             _playerOne = new HumanPlayerViewModel(_game.MainPlayer, _emptyCellsPlayerViewModel.PlayerPositions.ToList());

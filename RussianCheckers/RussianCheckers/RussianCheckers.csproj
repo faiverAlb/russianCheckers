@@ -55,7 +55,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ChooseSideDialog.xaml.cs">
+      <DependentUpon>ChooseSideDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game\CheckerElementViewModel.cs" />
+    <Compile Include="Game\ChooseDialogViewModel.cs" />
     <Compile Include="Game\EmptyCellsPlayerViewModel.cs" />
     <Compile Include="Game\GameViewModel.cs" />
     <Compile Include="Game\HumanPlayerViewModel.cs" />
@@ -75,6 +79,10 @@
       <DependentUpon>NotificationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextConverter.cs" />
+    <Page Include="ChooseSideDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

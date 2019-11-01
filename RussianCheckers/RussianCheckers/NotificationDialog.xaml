@@ -11,7 +11,7 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" FontSize="17" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding NotificationMessage}"></TextBlock>
-        <Button Grid.Row="1" FontSize="17" Height="50" Width="100" HorizontalAlignment="Right" Margin="10" Command="{Binding OkCommand}">Ok</Button>
+        <TextBlock Grid.Row="0" FontSize="16" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding NotificationMessage}"></TextBlock>
+        <Button Grid.Row="1" FontSize="16" Height="50" Width="100" HorizontalAlignment="Right" Margin="10" Command="{Binding OkCommand}">Ok</Button>
     </Grid>
 </Window>

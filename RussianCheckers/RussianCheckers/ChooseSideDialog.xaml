@@ -1,0 +1,24 @@
+﻿<Window x:Class="RussianCheckers.ChooseSideDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:core="clr-namespace:RussianCheckers.Core;assembly=RussianCheckers.Core"
+        xmlns:local="clr-namespace:RussianCheckers"
+        mc:Ignorable="d"
+        Title="Choose side" Height="180" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="16" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Choose side:"></TextBlock>
+        <Button Grid.Row="1" Grid.Column="0" FontSize="16" Height="50" Width="100" HorizontalAlignment="Right" Margin="10" Command="{Binding ChooseSideCommand}" CommandParameter="{x:Static core:Side.White}" >White</Button>
+        <Button Grid.Row="1" Grid.Column="1" FontSize="16" Height="50" Width="100" HorizontalAlignment="Right" Margin="10" Command="{Binding ChooseSideCommand}" CommandParameter="{x:Static core:Side.Black}">Black</Button>
+
+    </Grid>
+</Window>

@@ -19,7 +19,7 @@ namespace RussianCheckers.Game
     public class GameViewModel : ObservableObject
     {
         private readonly Core.Game _game;
-        private readonly IDialogService _notificationDialog;
+        private readonly IDialogService _dialogService;
         private readonly bool _isPlayingAutomatically;
         private readonly CompositeCollection _positions = new CompositeCollection();
         public Side WinnerSide { get; set; }
@@ -55,10 +55,10 @@ namespace RussianCheckers.Game
             }
         }
 
-        public GameViewModel(Core.Game game, IDialogService notificationDialog, bool isPlayingAutomatically)
+        public GameViewModel(Core.Game game, IDialogService dialogService, bool isPlayingAutomatically)
         {
             _game = game;
-            _notificationDialog = notificationDialog;
+            _dialogService = dialogService;
             UndoCommand = new ActionCommand(DoUndo,CanUndo);
             RedoCommand = new ActionCommand(DoRedo,CanRedo);
             _actionsHistory = new Stack<HistoryMove>();
@@ -350,12 +350,12 @@ namespace RussianCheckers.Game
 
         private void ShowNotificationMessage(string message)
         {
-            if (_notificationDialog == null)
+            if (_dialogService == null)
             {
                 return;
             }
             var notificationDialogViewModel = new NotificationDialogViewModel(message);
-            bool? result = _notificationDialog.ShowDialog(notificationDialogViewModel);
+            bool? result = _dialogService.ShowDialog(notificationDialogViewModel);
 
             //            if (result.HasValue)
             //            {

@@ -34,7 +34,6 @@ namespace RussianCheckers
 //                };
 //                var secondPlayerCheckers = new List<CheckerModel>()
 //                {
-//                    new CheckerModel(1, 1, PieceType.Checker, Side.Black),
 //                    new CheckerModel(5, 3, PieceType.Checker, Side.Black),
 //                    new CheckerModel(3, 5, PieceType.Checker, Side.Black),
 //                    new CheckerModel(5, 5, PieceType.Checker, Side.Black),

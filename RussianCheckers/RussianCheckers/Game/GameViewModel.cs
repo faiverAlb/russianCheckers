@@ -48,7 +48,7 @@ namespace RussianCheckers.Game
             {
                 if (_game.IsGameFinished)
                 {
-                    return _game.GetWinnerSide() + "won";
+                    return _game.GetWinnerSide() + " won";
                 }
                 if (NextMovePlayer.IsMainPlayer)
                 {
@@ -61,7 +61,10 @@ namespace RussianCheckers.Game
 
         public bool IsCheckersMovable
         {
-            get { return NextMovePlayer.IsMainPlayer; }
+            get
+            {
+                return NextMovePlayer.IsMainPlayer && !_game.IsGameFinished;
+            }
             
         }
 
@@ -305,7 +308,9 @@ namespace RussianCheckers.Game
             }
 
             WinnerSide = _game.GetWinnerSide();
-            string pleaseSelectCheckerFirst = WinnerSide == Side.Black ? "Black win!" : "White win!";
+            RaisePropertyChangedEvent(nameof(CurrentGameStatus));
+            RaisePropertyChangedEvent(nameof(IsCheckersMovable));
+            string pleaseSelectCheckerFirst = WinnerSide == Side.Black ? "Black won!" : "White won!";
             ShowNotificationMessage(pleaseSelectCheckerFirst);
         }
 

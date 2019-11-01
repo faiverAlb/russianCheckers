@@ -41,6 +41,30 @@ namespace RussianCheckers.Game
             }
         }
 
+
+        public string CurrentGameStatus
+        {
+            get
+            {
+                if (_game.IsGameFinished)
+                {
+                    return _game.GetWinnerSide() + "won";
+                }
+                if (NextMovePlayer.IsMainPlayer)
+                {
+                    return "Your turn to move checker";
+                }
+
+                return $"{NextMovePlayer.Side} is moving. Please wait for his decision";
+            }
+        }
+
+        public bool IsCheckersMovable
+        {
+            get { return NextMovePlayer.IsMainPlayer; }
+            
+        }
+
         private int CurrentHistoryPosition
         {
             get
@@ -214,6 +238,8 @@ namespace RussianCheckers.Game
                 _nextMoveSide = value;
                 NextMovePlayer = _playerOne.Side == _nextMoveSide ? _playerOne : _playerTwo;
                 RaisePropertyChangedEvent(nameof(NextMoveSide));
+                RaisePropertyChangedEvent(nameof(IsCheckersMovable));
+                RaisePropertyChangedEvent(nameof(CurrentGameStatus));
             }
         }
 
@@ -230,6 +256,8 @@ namespace RussianCheckers.Game
         private bool _isCalculatingMove;
         private int _currentHistoryPosition;
         private string _robotThinkingTime;
+        private bool _isCheckersMovable;
+        private string _currentGameStatus;
 
         private void OnTryMakeMove(object obj)
         {
@@ -355,19 +383,7 @@ namespace RussianCheckers.Game
                 return;
             }
             var notificationDialogViewModel = new NotificationDialogViewModel(message);
-            bool? result = _dialogService.ShowDialog(notificationDialogViewModel);
-
-            //            if (result.HasValue)
-            //            {
-            //                if (result.Value)
-            //                {
-            //                    // Accepted
-            //                }
-            //                else
-            //                {
-            //                    // Cancelled
-            //                }
-            //            }
+            _dialogService.ShowDialog(notificationDialogViewModel);
         }
 
         public CompositeCollection Positions

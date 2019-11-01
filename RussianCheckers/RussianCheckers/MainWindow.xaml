@@ -118,9 +118,8 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid>
+    <Grid IsEnabled="{Binding Path=IsCheckersMovable}">
         <Grid.RowDefinitions>
-            <RowDefinition ></RowDefinition>
             <RowDefinition ></RowDefinition>
             <RowDefinition Height="480"></RowDefinition>
             <RowDefinition ></RowDefinition>
@@ -131,13 +130,9 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="1" FontSize="20" >
-            Next move:
-            <TextBlock Text="{Binding NextMoveSide}"></TextBlock>
+           <TextBlock Text="{Binding CurrentGameStatus}"></TextBlock>
         </TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="20">
-            Calculating...
-        </TextBlock>
-        <ItemsControl Grid.Row="2" Grid.Column="1" x:Name="ChessBoard" ItemsSource="{Binding Positions}" >
+        <ItemsControl Grid.Row="1" Grid.Column="1" x:Name="ChessBoard" ItemsSource="{Binding Positions}" >
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas>
@@ -169,9 +164,9 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1">
-            <Button  Width="100"  Height="40" IsEnabled="{Binding IsUndoEnabled}" Command="{Binding UndoCommand}">Undo</Button>
-            <Button  Width="100" Margin="5"  Height="40" IsEnabled="{Binding IsRedoEnabled}" Command="{Binding RedoCommand}">Redo</Button>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
+            <Button  Width="100"  Height="40"  Command="{Binding UndoCommand}">Undo</Button>
+            <Button  Width="100" Margin="5"  Height="40"  Command="{Binding RedoCommand}">Redo</Button>
             <Label VerticalAlignment="Center">Robot thinking time (sec):</Label>
             <TextBox Margin="5" Width="100"   Height="40"  TextAlignment="Justify" VerticalAlignment = "Center" Padding="5" FontSize="18" Text="{Binding RobotThinkingTime,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </StackPanel>

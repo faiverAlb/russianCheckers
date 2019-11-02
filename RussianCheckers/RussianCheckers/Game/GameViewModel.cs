@@ -44,7 +44,8 @@ namespace RussianCheckers.Game
             {
                 if (_game.IsGameFinished)
                 {
-                    return _game.GetWinnerSide() + " won";
+                    Side winnerSide = _game.GetWinnerSide();
+                    return winnerSide != Side.Draw? winnerSide + " won" : "No one won. Draw.";
                 }
                 if (NextMovePlayer.IsMainPlayer)
                 {

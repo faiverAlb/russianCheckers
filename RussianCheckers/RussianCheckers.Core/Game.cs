@@ -62,7 +62,7 @@ namespace RussianCheckers.Core
         private bool CheckGameStatus()
         {
 
-            var gameStatusChecker = new GameStatusChecker(_dataProvider, MainPlayer, RobotPlayer);
+            var gameStatusChecker = new GameStatusChecker(_dataProvider, MainPlayer, RobotPlayer, _actionsHistory);
             Side winnerSide = gameStatusChecker.GetGameStatus();
             if (winnerSide != Side.None)
             {

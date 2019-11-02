@@ -1,4 +1,5 @@
-﻿using RussianCheckers.Core;
+﻿using System.Collections.Generic;
+using RussianCheckers.Core;
 
 namespace RussianCheckers.Game
 {
@@ -8,7 +9,10 @@ namespace RussianCheckers.Game
         private readonly Player _playerOne;
         private readonly Player _playerTwo;
 
-        public GameStatusChecker(DataProvider dataProvider, Player playerOne, Player playerTwo)
+        public GameStatusChecker(DataProvider dataProvider
+            , Player playerOne
+            , Player playerTwo,
+            Stack<HistoryMove> actionsHistory)
         {
             _dataProvider = dataProvider;
             _playerOne = playerOne;
@@ -38,7 +42,9 @@ namespace RussianCheckers.Game
                 return Side.White;
             }
 
-            if (_playerOne.GetPossibleMovementsCount() == 0)
+            int playerOnePossibleMoves = _playerOne.GetPossibleMovementsCount();
+            int playerTwoPossibleMoves = _playerTwo.GetPossibleMovementsCount();
+            if (playerOnePossibleMoves == 0 && playerTwoPossibleMoves > 0)
             {
                 if (_playerOne.Side == Side.White)
                 {
@@ -47,7 +53,7 @@ namespace RussianCheckers.Game
 
                 return Side.White;
             }
-            if (_playerTwo.GetPossibleMovementsCount() == 0)
+            if (playerTwoPossibleMoves == 0 && playerOnePossibleMoves > 0)
             {
                 if (_playerTwo.Side == Side.White)
                 {
@@ -56,8 +62,14 @@ namespace RussianCheckers.Game
 
                 return Side.White;
             }
+            if (playerTwoPossibleMoves == 0 && playerOnePossibleMoves == 0)
+            {
+                return Side.Draw;
+            }
 
-            return Side.None;
+
+
+                return Side.None;
         }
     }
 }

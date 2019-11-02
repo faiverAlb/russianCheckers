@@ -5,7 +5,8 @@
         Empty,
         White,
         Black, 
-        None
+        None,
+        Draw
     }
 
     public enum PieceType

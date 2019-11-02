@@ -13,12 +13,14 @@ namespace RussianCheckers.Core
         private readonly DataProvider _dataProvider;
         private  Side _winnerSide = Side.None;
         private Side _nextMoveSide;
+        private readonly Stack<HistoryMove> _actionsHistory;
 
         public Game(MainPlayer mainPlayer
             , RobotPlayer robotPlayer
             , EmptyUserPlayer emptyCellsAsPlayer
             , DataProvider dataProvider)
         {
+            _actionsHistory = new Stack<HistoryMove>();
             MainPlayer = mainPlayer;
             RobotPlayer = robotPlayer;
             EmptyCellsAsPlayer = emptyCellsAsPlayer;
@@ -94,7 +96,7 @@ namespace RussianCheckers.Core
         }
 
 
-        public HistoryMove MoveChecker(CheckerModel fromPlace, CheckerModel toPlace)
+        public HistoryMove MoveChecker(CheckerModel fromPlace, CheckerModel toPlace, bool addToHistory = true)
         {
             CheckerModel foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
             CheckerModel toPosition = EmptyCellsAsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
@@ -114,8 +116,25 @@ namespace RussianCheckers.Core
                 ChangeTurn();
             }
 
+            if (addToHistory)
+            {
+                _actionsHistory.Push(historyMove);
+            }
             return historyMove;
         }
+
+        public void ResetHistoryIfNeeded(int currentHistoryPosition)
+        {
+            if (currentHistoryPosition < _actionsHistory.Count)
+            {
+                while (currentHistoryPosition != _actionsHistory.Count)
+                {
+                    _actionsHistory.Pop();
+                }
+            }
+        }
+
+
         public void RevertMove(HistoryMove historyMove)
         {
             RevertMove(historyMove.MovedFromTo.Value, historyMove.MovedFromTo.Key, historyMove.IsConvertedToQueen);
@@ -199,6 +218,39 @@ namespace RussianCheckers.Core
         public int GetRemainingCount()
         {
             return MainPlayer.PlayerPositions.Count + RobotPlayer.PlayerPositions.Count;
+        }
+
+        public void MoveCheckerToHistoryPosition(int currentHistoryPosition)
+        {
+            int count = _actionsHistory.Count - 1;
+            foreach (HistoryMove historyMove in _actionsHistory)
+            {
+                if (count == currentHistoryPosition)
+                {
+                    MoveChecker(historyMove.MovedFromTo.Key, historyMove.MovedFromTo.Value, false);
+                    break;
+                }
+                count--;
+            }
+        }
+
+        public void RevertCheckerToHistoryPosition(int currentHistoryPosition)
+        {
+            int count = _actionsHistory.Count - 1;
+            foreach (var previousAction in _actionsHistory)
+            {
+                if (count == currentHistoryPosition)
+                {
+                    RevertMove(previousAction);
+                    break;
+                }
+                count--;
+            }
+        }
+
+        public int GetHistoryCount()
+        {
+            return _actionsHistory.Count;
         }
     }
 }

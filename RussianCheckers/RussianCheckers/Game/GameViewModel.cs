@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,7 +22,7 @@ namespace RussianCheckers.Game
         public ActionCommand UndoCommand { get; private set; }
         public ActionCommand RedoCommand { get; private set; }
 
-        private readonly Stack<HistoryMove> _actionsHistory;
+//        private readonly Stack<HistoryMove> _actionsHistory;
 
         public string RobotThinkingTime
         {
@@ -88,7 +84,7 @@ namespace RussianCheckers.Game
             _dialogService = dialogService;
             UndoCommand = new ActionCommand(DoUndo,CanUndo);
             RedoCommand = new ActionCommand(DoRedo,CanRedo);
-            _actionsHistory = new Stack<HistoryMove>();
+//            _actionsHistory = new Stack<HistoryMove>();
             CurrentHistoryPosition = 0;
             RobotThinkingTime = 4.ToString();
             _isPlayingAutomatically = isPlayingAutomatically;
@@ -117,16 +113,7 @@ namespace RussianCheckers.Game
         }
         private void DoRedo()
         {
-            int count = _actionsHistory.Count - 1;
-            foreach (HistoryMove historyMove in _actionsHistory)
-            {
-                if (count == CurrentHistoryPosition)
-                {
-                    _game.MoveChecker(historyMove.MovedFromTo.Key, historyMove.MovedFromTo.Value);
-                    break;
-                }
-                count--;
-            }
+            _game.MoveCheckerToHistoryPosition(CurrentHistoryPosition);
             CurrentHistoryPosition++;
         }
 
@@ -142,27 +129,20 @@ namespace RussianCheckers.Game
         private void DoUndo()
         {
 //            _cancellationTokenSource.Cancel();
-            int count = _actionsHistory.Count - 1;
             CurrentHistoryPosition--;
             if (CurrentHistoryPosition < 0)
             {
                 return;
             }
-            foreach (var previousAction in _actionsHistory)
-            {
-                if (count == CurrentHistoryPosition)
-                {
-                    _game.RevertMove(previousAction);
-                    break;
-                }
-                count--;
-            }
+
+            _game.RevertCheckerToHistoryPosition(CurrentHistoryPosition);
+            
         }
 
 
         public bool CanRedo()
         {
-            return CurrentHistoryPosition < _actionsHistory.Count;
+            return CurrentHistoryPosition < _game.GetHistoryCount();
         }
 
         public bool CanUndo()
@@ -358,28 +338,15 @@ namespace RussianCheckers.Game
 
         private void MoveCheckerToNewPlace(CheckerElementViewModel currentPositionElementViewModel, CheckerElementViewModel emptyPosition, PlayerViewModel playerViewModel)
         {
-            ResetHistoryIfNeeded();
+            _game.ResetHistoryIfNeeded(CurrentHistoryPosition);
             CurrentHistoryPosition++;
 
             playerViewModel.MoveCheckerToNewPlace(currentPositionElementViewModel);
             HistoryMove historyMove = _game.MoveChecker(currentPositionElementViewModel.CheckerModel, emptyPosition.CheckerModel);
-            _actionsHistory.Push(historyMove);
 
             _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
             _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
         }
-
-        private void ResetHistoryIfNeeded()
-        {
-            if (CurrentHistoryPosition < _actionsHistory.Count)
-            {
-                while (CurrentHistoryPosition != _actionsHistory.Count)
-                {
-                    _actionsHistory.Pop();
-                }
-            }
-        }
-
 
         private void ShowNotificationMessage(string message)
         {

@@ -291,8 +291,7 @@ namespace RussianCheckers.Game
             WinnerSide = _game.GetWinnerSide();
             RaisePropertyChangedEvent(nameof(CurrentGameStatus));
             RaisePropertyChangedEvent(nameof(IsCheckersMovable));
-            string pleaseSelectCheckerFirst = WinnerSide == Side.Black ? "Black won!" : "White won!";
-            ShowNotificationMessage(pleaseSelectCheckerFirst);
+            ShowNotificationMessage(CurrentGameStatus);
         }
 
         private bool IsCheckerMoved(CheckerElementViewModel newSelectedChecker, PlayerViewModel player)

@@ -22,8 +22,7 @@ namespace RussianCheckers.Core.Strategy
             {
                 _searchDepth = 0;
             }
-            var resultMove =  new KeyValuePair<CheckerModel, CheckerModel>();
-            
+
             int beta = int.MaxValue;
             int alpha = int.MinValue;
             IEnumerable<KeyValuePair<CheckerModel, CheckerModel>> allAvailableMoves = initialGame.GetAllAvailableMoves().ToList();
@@ -45,7 +44,7 @@ namespace RussianCheckers.Core.Strategy
                     }
                 }
             );
-            resultMove = dict.OrderByDescending(x => x.Key).First().Value;
+            KeyValuePair<CheckerModel, CheckerModel> resultMove = dict.OrderByDescending(x => x.Key).First().Value;
             return resultMove;
         }
         private int MinMove(Game initialGameViewModel, Game curGameModel, int depth, int alpha, int beta, CancellationToken token)
@@ -69,8 +68,6 @@ namespace RussianCheckers.Core.Strategy
                 if (alpha >= beta)
                 {
                     break;
-                    // Return min value with pruning
-//                    return alpha;
                 }
             }
             return best;
@@ -86,7 +83,7 @@ namespace RussianCheckers.Core.Strategy
 
             IEnumerable<KeyValuePair<CheckerModel, CheckerModel>> allAvailableMoves = curGameModel.GetAllAvailableMoves();
             int best = int.MinValue;
-            foreach (var availableMove in allAvailableMoves)
+            foreach (KeyValuePair<CheckerModel, CheckerModel> availableMove in allAvailableMoves)
             {
                 Game newGameModel = curGameModel.CreateGame();
                 newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
@@ -96,7 +93,6 @@ namespace RussianCheckers.Core.Strategy
                 if (alpha >= beta)
                 {
                     break;
-//                    return beta;
                 }
             }
 
@@ -123,24 +119,18 @@ namespace RussianCheckers.Core.Strategy
         {
             int strength = 0;
 
-            strength += 3 * curGame.GetSimpleCheckersCount(false);
+            strength += curGame.GetSimpleCheckersCount(false);
             strength += 10 * curGame.GetQueensCount(false);
 
-            // Heuristic: Stronger if opponent was jumped
-            int checkersToBeTakenFromMainPlayer = ((initGame.GetSimpleCheckersCount(true) - curGame.GetSimpleCheckersCount(true)));
+            int checkersToBeTakenFromMainPlayer = initGame.GetSimpleCheckersCount(true) - curGame.GetSimpleCheckersCount(true);
             strength += 2 * checkersToBeTakenFromMainPlayer;
             int queensToBeTakenFromMainPlayer = Math.Abs(initGame.GetQueensCount(true) - curGame.GetQueensCount(true));
             strength += 5 * queensToBeTakenFromMainPlayer;
 
-            // Weakness Heuristics
-            // --------------------
-
-            // Heuristic: Weaker for each opponent pawn and king the player still has on the board
-            strength -= 3 * curGame.GetSimpleCheckersCount(true);
+            strength -=  curGame.GetSimpleCheckersCount(true);
             strength -= 10 * curGame.GetQueensCount(true);
 
-            // Heuristic: Weaker if player was jumped
-            int checkersToBeTakenFromRobotPlayer = ((initGame.GetSimpleCheckersCount(false) - curGame.GetSimpleCheckersCount(false)));
+            int checkersToBeTakenFromRobotPlayer = initGame.GetSimpleCheckersCount(false) - curGame.GetSimpleCheckersCount(false);
             strength -= 2 * checkersToBeTakenFromRobotPlayer;
             int queensToBeTakenFromRobotPlayer = Math.Abs(initGame.GetQueensCount(false) - curGame.GetQueensCount(false));
             strength -= 5 * queensToBeTakenFromRobotPlayer;
@@ -167,10 +157,7 @@ namespace RussianCheckers.Core.Strategy
 
         int CalculatePieceStrength(CheckerModel piece, bool isMainPlayer)
         {
-            int strength = 0;
-
-            // Heuristic: Stronger simply because another piece is present
-            strength += 1;
+            int strength = 1;
 
             if (piece.Type == PieceType.Checker)
             {
@@ -183,8 +170,17 @@ namespace RussianCheckers.Core.Strategy
                 {
                     strength += 1;
                 }
+                // Central positions are good
+                if (piece.PossibleMovementElements.Any(x => (x.Column == 2 && x.Row == 4) 
+                                                            || (x.Column == 3 && x.Row == 3) 
+                                                            || (x.Column == 4 && x.Row == 4)
+                                                            || (x.Column == 5 && x.Row == 3)))
+                {
+                    strength += 3;
+                }
 
-                // It good to become queen
+
+                // It's good to become a queen
                 if (piece.PossibleMovementElements.Any(x => (isMainPlayer && x.Row == 7) || (!isMainPlayer && x.Row == 0)))
                 {
                     strength += 15;
@@ -196,6 +192,12 @@ namespace RussianCheckers.Core.Strategy
                 strength += 19;
             }
 
+            bool isGoldCheckerForMainPlayer = isMainPlayer && piece.IsAtInitialPosition && piece.Column == 4 && piece.Row == 0;
+            bool isGoldCheckerForSecondPlayer = !isMainPlayer && piece.IsAtInitialPosition && piece.Column == 3 && piece.Row == 7;
+            if (isGoldCheckerForMainPlayer || isGoldCheckerForSecondPlayer)
+            {
+                strength += 5;
+            }
             return strength;
         }
 

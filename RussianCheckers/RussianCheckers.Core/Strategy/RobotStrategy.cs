@@ -5,7 +5,6 @@ namespace RussianCheckers.Core.Strategy
 {
     public abstract class RobotStrategy
     {
-        public abstract KeyValuePair<CheckerModel, CheckerModel> GetSuggestedMove(Game initialGameViewModel,
-            CancellationToken token);
+        public abstract KeyValuePair<CheckerModel, CheckerModel> GetSuggestedMove(Game initialGameViewModel, int searchDepth, CancellationToken token);
     }
 }

@@ -11,18 +11,9 @@ namespace RussianCheckers.Core.Strategy
     {
         int _searchDepth;
 
-        public MinMaxStrategy()
+        public override KeyValuePair<CheckerModel, CheckerModel> GetSuggestedMove(Game initialGame, int searchDepth, CancellationToken token)
         {
-        }
-
-        public override KeyValuePair<CheckerModel, CheckerModel> GetSuggestedMove(Game initialGame, CancellationToken token)
-        {
-            _searchDepth = 10;
-            if (token == CancellationToken.None)
-            {
-                _searchDepth = 0;
-            }
-
+            _searchDepth = searchDepth;
             int beta = int.MaxValue;
             int alpha = int.MinValue;
             IEnumerable<KeyValuePair<CheckerModel, CheckerModel>> allAvailableMoves = initialGame.GetAllAvailableMoves().ToList();
@@ -33,7 +24,6 @@ namespace RussianCheckers.Core.Strategy
             }
 
             Parallel.ForEach(allAvailableMoves, new ParallelOptions(), (availableMove, state) =>
-//            foreach (var availableMove in allAvailableMoves)
                 {
                     {
                         Game newGameModel = initialGame.CreateGame();
@@ -51,7 +41,7 @@ namespace RussianCheckers.Core.Strategy
         {
             if (ShouldStopTheProcess(initialGameViewModel, curGameModel, depth) || token.IsCancellationRequested)
             {
-                var minMoveStrength = DoCalculateStrength(initialGameViewModel, curGameModel);
+                int minMoveStrength = DoCalculateStrength(initialGameViewModel, curGameModel);
                 return minMoveStrength;
             }
 
@@ -208,16 +198,10 @@ namespace RussianCheckers.Core.Strategy
             {
                 return true;
             }
-            int curSearchDepth = _searchDepth;
-            //            if (increasingSearchDepth)
-            //            {
-            int totalPieces = 24;
-            int factor = (int) Math.Log(curGameModel.GetRemainingCount(), 3);
-            int mfactor = (int)Math.Log(totalPieces, 3);
-            curSearchDepth += (mfactor - factor);
-            //            }
-            if ((depth >= 0) && (depth >= curSearchDepth))
+            if (depth >= _searchDepth)
+            {
                 return true;
+            }
 
             return false;
 

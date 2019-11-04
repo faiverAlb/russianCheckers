@@ -229,9 +229,9 @@ namespace RussianCheckers.Core
             _robotStrategy = robotStrategy;
         }
 
-        public KeyValuePair<CheckerModel, CheckerModel> GetOptimalMove(Game game, CancellationToken token)
+        public KeyValuePair<CheckerModel, CheckerModel> GetOptimalMove(Game game, int searchDepth, CancellationToken token)
         {
-            var result = _robotStrategy.GetSuggestedMove(game, token);
+            var result = _robotStrategy.GetSuggestedMove(game, searchDepth,token);
             return result;
         }
 

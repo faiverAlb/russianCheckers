@@ -12,9 +12,9 @@ namespace RussianCheckers.Game
             _robotPlayer = robotPlayer;
         }
 
-        public KeyValuePair<CheckerModel, CheckerModel> GetOptimalMove(GameViewModel gameViewModel, CancellationToken token)
+        public KeyValuePair<CheckerModel, CheckerModel> GetOptimalMove(GameViewModel gameViewModel, int searchDepth,CancellationToken token)
         {
-            KeyValuePair<CheckerModel, CheckerModel> result = _robotPlayer.GetOptimalMove(gameViewModel.Game, token);
+            KeyValuePair<CheckerModel, CheckerModel> result = _robotPlayer.GetOptimalMove(gameViewModel.Game, searchDepth, token);
             return result;
         }
     }

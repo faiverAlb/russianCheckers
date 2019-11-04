@@ -188,7 +188,13 @@ namespace RussianCheckers.Game
 
         private void MakeMoveBySecondUser(CancellationToken token)
         {
-            var move = _playerTwo.GetOptimalMove(this, token);
+            var searchDepth = 15;
+            if (string.IsNullOrEmpty(RobotThinkingTime) || RobotThinkingTime == "0")
+            {
+                searchDepth = 1;
+            }
+
+            var move = _playerTwo.GetOptimalMove(this, searchDepth, token);
             IsCalculatingMove = true;
             if (move.Value != null)
             {

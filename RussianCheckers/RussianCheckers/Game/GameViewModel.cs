@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -87,7 +88,7 @@ namespace RussianCheckers.Game
             RedoCommand = new ActionCommand(DoRedo,CanRedo);
 //            _actionsHistory = new Stack<HistoryMove>();
             CurrentHistoryPosition = 0;
-            RobotThinkingTime = 20.ToString();
+            RobotThinkingTime = 2.ToString();
             _isPlayingAutomatically = isPlayingAutomatically;
             _emptyCellsPlayerViewModel = new EmptyCellsPlayerViewModel(_game.EmptyCellsAsPlayer);
             _playerOne = new HumanPlayerViewModel(_game.MainPlayer, _emptyCellsPlayerViewModel.PlayerPositions.ToList());
@@ -129,12 +130,13 @@ namespace RussianCheckers.Game
 
         private void DoUndo()
         {
-//            _cancellationTokenSource.Cancel();
-            CurrentHistoryPosition--;
-            if (CurrentHistoryPosition < 0)
+            //            _cancellationTokenSource.Cancel();
+            if (CurrentHistoryPosition - 1 < 0)
             {
                 return;
             }
+
+            CurrentHistoryPosition--;
 
             _game.RevertCheckerToHistoryPosition(CurrentHistoryPosition);
             
@@ -188,13 +190,7 @@ namespace RussianCheckers.Game
 
         private void MakeMoveBySecondUser(CancellationToken token)
         {
-            var searchDepth = 15;
-            if (string.IsNullOrEmpty(RobotThinkingTime) || RobotThinkingTime == "0")
-            {
-                searchDepth = 1;
-            }
-
-            var move = _playerTwo.GetOptimalMove(this, searchDepth, token);
+            KeyValuePair<CheckerModel, CheckerModel> move = _playerTwo.GetOptimalMove(this, token);
             IsCalculatingMove = true;
             if (move.Value != null)
             {

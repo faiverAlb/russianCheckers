@@ -11,9 +11,9 @@ namespace RussianCheckers.Core.Strategy
     {
         int _searchDepth;
 
-        public override KeyValuePair<CheckerModel, CheckerModel> GetSuggestedMove(Game initialGame, int searchDepth, CancellationToken token)
+        public override KeyValuePair<CheckerModel, CheckerModel> GetSuggestedMove(Game initialGame, CancellationToken token)
         {
-            _searchDepth = searchDepth;
+            _searchDepth = 1;
             int beta = int.MaxValue;
             int alpha = int.MinValue;
             IEnumerable<KeyValuePair<CheckerModel, CheckerModel>> allAvailableMoves = initialGame.GetAllAvailableMoves().ToList();
@@ -22,32 +22,43 @@ namespace RussianCheckers.Core.Strategy
             {
                 return allAvailableMoves.Single();
             }
-
-            Parallel.ForEach(allAvailableMoves, new ParallelOptions(), (availableMove, state) =>
+            while (true)
+            {
+                if (token.IsCancellationRequested)
                 {
-                    {
-                        Game newGameModel = initialGame.CreateGame();
-                        newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
-                        int curValue = MinMove(initialGame, newGameModel, 1, alpha, beta, token);
-
-                        dict.AddOrUpdate(curValue, availableMove, (i, pair) => availableMove);
-                    }
+                    break;
                 }
-            );
+
+                Parallel.ForEach(allAvailableMoves, new ParallelOptions(), (availableMove, state) =>
+//                foreach (var availableMove in allAvailableMoves)
+                    {
+                        {
+                            Game newGameModel = initialGame.CreateGame();
+                            newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
+                            int curValue = MinMove(initialGame, newGameModel, 1, alpha, beta, token);
+
+                            dict.AddOrUpdate(curValue, availableMove, (i, pair) => availableMove);
+                        }
+                    }
+                );
+
+                _searchDepth++;
+            }
+            //            );
             KeyValuePair<CheckerModel, CheckerModel> resultMove = dict.OrderByDescending(x => x.Key).First().Value;
             return resultMove;
         }
         private int MinMove(Game initialGameViewModel, Game curGameModel, int depth, int alpha, int beta, CancellationToken token)
         {
+            int calculatedStrength = DoCalculateStrength(initialGameViewModel, curGameModel);
             if (ShouldStopTheProcess(initialGameViewModel, curGameModel, depth) || token.IsCancellationRequested)
             {
-                int minMoveStrength = DoCalculateStrength(initialGameViewModel, curGameModel);
-                return minMoveStrength;
+                return calculatedStrength;
             }
 
             int best = int.MaxValue;
             IEnumerable<KeyValuePair<CheckerModel, CheckerModel>> allAvailableMoves = curGameModel.GetAllAvailableMoves();
-            foreach (var availableMove in allAvailableMoves)
+            foreach (KeyValuePair<CheckerModel, CheckerModel> availableMove in allAvailableMoves)
             {
                 Game newGameModel = curGameModel.CreateGame();
                 newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
@@ -66,13 +77,15 @@ namespace RussianCheckers.Core.Strategy
         private int MaxMove(Game initialGameViewModel, Game curGameModel, int depth, int alpha, int beta,
             CancellationToken token)
         {
+            int calculatedStrength = DoCalculateStrength(initialGameViewModel, curGameModel);
             if (ShouldStopTheProcess(initialGameViewModel, curGameModel, depth) || token.IsCancellationRequested)
             {
-                return DoCalculateStrength(initialGameViewModel, curGameModel);
+                return calculatedStrength;
             }
 
             IEnumerable<KeyValuePair<CheckerModel, CheckerModel>> allAvailableMoves = curGameModel.GetAllAvailableMoves();
             int best = int.MinValue;
+            
             foreach (KeyValuePair<CheckerModel, CheckerModel> availableMove in allAvailableMoves)
             {
                 Game newGameModel = curGameModel.CreateGame();
@@ -91,22 +104,16 @@ namespace RussianCheckers.Core.Strategy
         }
 
 
-        private int DoCalculateStrength(Game initialGameViewModel, Game curGameModel)
+        private int DoCalculateStrength(Game initGame, Game curGame)
         {
-            if (curGameModel.IsGameFinished  && curGameModel.NextMovePlayer.IsMainPlayer)
+            if (curGame.IsGameFinished  && curGame.NextMovePlayer.IsMainPlayer)
             {
                 return int.MinValue;
             }
-            if (curGameModel.IsGameFinished  && !curGameModel.NextMovePlayer.IsMainPlayer)
+            if (curGame.IsGameFinished  && !curGame.NextMovePlayer.IsMainPlayer)
             {
                 return int.MaxValue;
             }
-         
-            return CalculateStrength(initialGameViewModel, curGameModel);
-        }
-
-        private int CalculateStrength(Game initGame, Game curGame)
-        {
             int strength = 0;
 
             strength += curGame.GetSimpleCheckersCount(false);
@@ -117,7 +124,7 @@ namespace RussianCheckers.Core.Strategy
             int queensToBeTakenFromMainPlayer = Math.Abs(initGame.GetQueensCount(true) - curGame.GetQueensCount(true));
             strength += 5 * queensToBeTakenFromMainPlayer;
 
-            strength -=  curGame.GetSimpleCheckersCount(true);
+            strength -= curGame.GetSimpleCheckersCount(true);
             strength -= 10 * curGame.GetQueensCount(true);
 
             int checkersToBeTakenFromRobotPlayer = initGame.GetSimpleCheckersCount(false) - curGame.GetSimpleCheckersCount(false);
@@ -131,7 +138,7 @@ namespace RussianCheckers.Core.Strategy
             {
                 foreach (var checkerElement in currentPlayer.PlayerPositions)
                 {
-                    strength -= CalculatePieceStrength(checkerElement,currentPlayer.IsMainPlayer);
+                    strength -= CalculatePieceStrength(checkerElement, currentPlayer.IsMainPlayer);
                 }
             }
             else

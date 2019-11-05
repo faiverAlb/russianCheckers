@@ -215,11 +215,6 @@ namespace RussianCheckers.Core
             return player.GetQueensCount();
         }
 
-        public int GetRemainingCount()
-        {
-            return MainPlayer.PlayerPositions.Count + RobotPlayer.PlayerPositions.Count;
-        }
-
         public void MoveCheckerToHistoryPosition(int currentHistoryPosition)
         {
             int count = _actionsHistory.Count - 1;

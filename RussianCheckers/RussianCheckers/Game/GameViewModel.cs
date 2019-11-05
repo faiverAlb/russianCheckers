@@ -102,7 +102,6 @@ namespace RussianCheckers.Game
             _positions.Add(playerTwoCollectionContainer);
             _positions.Add(emptyCollectionContainer);
 
-            NextMoveSide = _game.NextMoveSide;
             WaitMove();
         }
 
@@ -113,6 +112,7 @@ namespace RussianCheckers.Game
 
             _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
             _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
+            WaitMove();
         }
         private void DoRedo()
         {
@@ -127,6 +127,7 @@ namespace RussianCheckers.Game
 
             _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
             _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
+            WaitMove();
         }
 
         private void DoUndo()
@@ -139,7 +140,6 @@ namespace RussianCheckers.Game
             CurrentHistoryPosition--;
 
             _game.RevertCheckerToHistoryPosition(CurrentHistoryPosition);
-            
         }
 
 
@@ -156,6 +156,7 @@ namespace RussianCheckers.Game
 
         private void WaitMove()
         {
+            NextMoveSide = _game.NextMoveSide;
             if (!_isPlayingAutomatically)
             {
                 return;
@@ -281,7 +282,6 @@ namespace RussianCheckers.Game
 
             if (!_game.IsGameFinished)
             {
-                NextMoveSide = _game.NextMoveSide;
                 
                 WaitMove();
                 return;

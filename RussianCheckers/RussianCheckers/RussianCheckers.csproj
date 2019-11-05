@@ -75,6 +75,7 @@
     <Compile Include="Infrastructure\IDialogRequestClose.cs" />
     <Compile Include="Infrastructure\IDialogService.cs" />
     <Compile Include="Infrastructure\DialogService.cs" />
+    <Compile Include="Infrastructure\IntToStringConverter.cs" />
     <Compile Include="NotificationDialog.xaml.cs">
       <DependentUpon>NotificationDialog.xaml</DependentUpon>
     </Compile>

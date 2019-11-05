@@ -24,27 +24,44 @@ namespace RussianCheckers.Core.Strategy
             }
             while (true)
             {
-                if (token.IsCancellationRequested)
-                {
-                    break;
-                }
 
-                Parallel.ForEach(allAvailableMoves, new ParallelOptions(), (availableMove, state) =>
-//                foreach (var availableMove in allAvailableMoves)
+                if (_searchDepth <=5)
+                {
+                    foreach (var availableMove in allAvailableMoves)
                     {
+                        Game newGameModel = initialGame.CreateGame();
+                        newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
+                        int curValue = MinMove(initialGame, newGameModel, 1, alpha, beta, token);
+                        dict.AddOrUpdate(curValue, availableMove, (i, pair) => availableMove);
+                    }
+
+                }
+                else
+                {
+                    Parallel.ForEach(allAvailableMoves, new ParallelOptions(), (availableMove, state) =>
                         {
                             Game newGameModel = initialGame.CreateGame();
                             newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
                             int curValue = MinMove(initialGame, newGameModel, 1, alpha, beta, token);
 
                             dict.AddOrUpdate(curValue, availableMove, (i, pair) => availableMove);
+                            if (token.IsCancellationRequested)
+                            {
+                                state.Break();
+                            }
+
                         }
-                    }
-                );
+                    );
+
+                }
 
                 _searchDepth++;
+                if (token.IsCancellationRequested)
+                {
+                    break;
+                }
+
             }
-            //            );
             KeyValuePair<CheckerModel, CheckerModel> resultMove = dict.OrderByDescending(x => x.Key).First().Value;
             return resultMove;
         }

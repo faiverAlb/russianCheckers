@@ -23,9 +23,7 @@ namespace RussianCheckers.Game
         public ActionCommand UndoCommand { get; private set; }
         public ActionCommand RedoCommand { get; private set; }
 
-//        private readonly Stack<HistoryMove> _actionsHistory;
-
-        public string RobotThinkingTime
+        public int RobotThinkingTime
         {
             get
             {
@@ -33,6 +31,10 @@ namespace RussianCheckers.Game
             }
             set
             {
+                if (value < 0)
+                {
+                    return;
+                }
                 _robotThinkingTime = value;
                 RaisePropertyChangedEvent(nameof(RobotThinkingTime));
             }
@@ -86,9 +88,8 @@ namespace RussianCheckers.Game
             _dialogService = dialogService;
             UndoCommand = new ActionCommand(DoUndo,CanUndo);
             RedoCommand = new ActionCommand(DoRedo,CanRedo);
-//            _actionsHistory = new Stack<HistoryMove>();
             CurrentHistoryPosition = 0;
-            RobotThinkingTime = 2.ToString();
+            RobotThinkingTime = 5;
             _isPlayingAutomatically = isPlayingAutomatically;
             _emptyCellsPlayerViewModel = new EmptyCellsPlayerViewModel(_game.EmptyCellsAsPlayer);
             _playerOne = new HumanPlayerViewModel(_game.MainPlayer, _emptyCellsPlayerViewModel.PlayerPositions.ToList());
@@ -130,7 +131,6 @@ namespace RussianCheckers.Game
 
         private void DoUndo()
         {
-            //            _cancellationTokenSource.Cancel();
             if (CurrentHistoryPosition - 1 < 0)
             {
                 return;
@@ -167,24 +167,23 @@ namespace RussianCheckers.Game
                 return;
             }
 
-            int timeToThink = 1;
-
-            int.TryParse(RobotThinkingTime, out timeToThink);
-
-            var timeSpan = new TimeSpan(0,0,0,timeToThink);
+            var timeSpan = new TimeSpan(0,0,0, RobotThinkingTime);
             _cancellationTokenSource = new CancellationTokenSource(timeSpan);
-            var cancellationToken = _cancellationTokenSource.Token;
-            if (timeToThink == 0)
+            if (RobotThinkingTime == 0)
             {
-                cancellationToken = CancellationToken.None;
+                _cancellationTokenSource = new CancellationTokenSource();
+                _cancellationTokenSource.Cancel();
+                timeSpan = new TimeSpan(0, 0, 0, 0, 0);
             }
+            var cancellationToken = _cancellationTokenSource.Token;
+
 
             Task.Run(() =>
             {
                 Thread.Sleep(timeSpan);
                 _cancellationTokenSource.Cancel();
             });
-            Task.Run(() => { MakeMoveBySecondUser(cancellationToken); }, cancellationToken);
+            Task.Run(() => { MakeMoveBySecondUser(cancellationToken); });
 
         }
 
@@ -241,9 +240,7 @@ namespace RussianCheckers.Game
         private CancellationTokenSource _cancellationTokenSource;
         private bool _isCalculatingMove;
         private int _currentHistoryPosition;
-        private string _robotThinkingTime;
-        private bool _isCheckersMovable;
-        private string _currentGameStatus;
+        private int _robotThinkingTime;
 
         private void OnTryMakeMove(object obj)
         {

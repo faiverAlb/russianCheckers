@@ -6,11 +6,12 @@
         xmlns:local="clr-namespace:RussianCheckers"
         xmlns:game="clr-namespace:RussianCheckers.Game"
         xmlns:core="clr-namespace:RussianCheckers.Core;assembly=RussianCheckers.Core"
+        xmlns:infrastructure="clr-namespace:RussianCheckers.Infrastructure"
         mc:Ignorable="d"
         
         Title="Russian checkers" Height="700" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
         <Window.Resources>
-
+        <infrastructure:IntToStringConverter x:Key="IntToStringConverter" />
         <Style x:Key="ChessPieceStyle" TargetType="{x:Type Image}">
             <Style.Triggers>
                 <MultiDataTrigger>
@@ -168,7 +169,7 @@
             <Button  Width="100"  Height="40"  Command="{Binding UndoCommand}">Undo</Button>
             <Button  Width="100" Margin="5"  Height="40"  Command="{Binding RedoCommand}">Redo</Button>
             <Label VerticalAlignment="Center">Robot thinking time (sec):</Label>
-            <TextBox Margin="5" Width="100"   Height="40"  TextAlignment="Justify" VerticalAlignment = "Center" Padding="5" FontSize="18" Text="{Binding RobotThinkingTime,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Margin="5" Width="100"   Height="40"  TextAlignment="Justify" VerticalAlignment = "Center" Padding="5" FontSize="18" Text="{Binding RobotThinkingTime,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource IntToStringConverter}}"></TextBox>
         </StackPanel>
 
     </Grid>

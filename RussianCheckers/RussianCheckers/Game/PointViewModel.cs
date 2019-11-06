@@ -1,4 +1,5 @@
 ﻿using System;
+using RussianCheckers.Infrastructure;
 
 namespace RussianCheckers.Game
 {

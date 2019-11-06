@@ -22,9 +22,7 @@ namespace RussianCheckers
         
         public bool CanExecute(object parameter)
         {
-            if (_canExecuteFunc != null)
-                return _canExecuteFunc();
-            return true;
+            return _canExecuteFunc == null || _canExecuteFunc();
         }
         public void Execute(object parameter)
         {

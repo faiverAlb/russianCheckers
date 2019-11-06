@@ -79,7 +79,6 @@
     <Compile Include="NotificationDialog.xaml.cs">
       <DependentUpon>NotificationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TextConverter.cs" />
     <Page Include="ChooseSideDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -103,7 +102,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ObservableObject.cs" />
+    <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

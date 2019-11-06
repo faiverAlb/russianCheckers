@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace RussianCheckers
+namespace RussianCheckers.Infrastructure
 {
     public abstract class ObservableObject : INotifyPropertyChanged
     {

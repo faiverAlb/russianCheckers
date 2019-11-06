@@ -19,16 +19,7 @@ namespace RussianCheckers.Core
             foreach (CheckerModel playerChecker in _playerPositions)
             {
                 CheckerModel checkerModel = _dataProvider.GetElementAtPosition(playerChecker.Column, playerChecker.Row);
-                List<CheckerModel> neighbors;
-                if (checkerModel.Type == PieceType.Checker)
-                {
-                    neighbors = GetNeighborsForChecker(checkerModel);
-                }
-                else
-                {
-                    neighbors = GetNeighborsForQueen(checkerModel).Select(x => x.Value).ToList();
-                }
-
+                List<CheckerModel> neighbors = checkerModel.Type == PieceType.Checker ? GetNeighborsForChecker(checkerModel) : GetNeighborsForQueen(checkerModel).Select(x => x.Value).ToList();
                 dictionary.Add(playerChecker, neighbors);
             }
 

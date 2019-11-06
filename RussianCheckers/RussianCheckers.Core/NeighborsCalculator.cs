@@ -36,15 +36,15 @@ namespace RussianCheckers.Core
         }
 
 
-        public List<KeyValuePair<Diagonal, CheckerModel>> GetNeighborsForQueen(CheckerModel checkerModel)
+        public List<KeyValuePair<Diagonal, CheckerModel>> GetNeighborsForQueen(CheckerModel checkerAsQueen)
         {
             var neighbors = new List<KeyValuePair<Diagonal, CheckerModel>>();
 
-            int checkerRowUp = checkerModel.Row;
-            int checkerRowDown = checkerModel.Row;
+            int checkerRowUp = checkerAsQueen.Row;
+            int checkerRowDown = checkerAsQueen.Row;
             bool skipUpDiagonal = false;
             bool skipDownDiagonal = false;
-            for (int col = checkerModel.Column - 1; col >= 0; col--)
+            for (int col = checkerAsQueen.Column - 1; col >= 0; col--)
             {
                 if (checkerRowUp + 1 < 8 && !skipUpDiagonal)
                 {
@@ -72,11 +72,11 @@ namespace RussianCheckers.Core
                 }
             }
 
-            checkerRowUp = checkerModel.Row;
-            checkerRowDown = checkerModel.Row;
+            checkerRowUp = checkerAsQueen.Row;
+            checkerRowDown = checkerAsQueen.Row;
             skipUpDiagonal = false;
             skipDownDiagonal = false;
-            for (int col = checkerModel.Column + 1; col < 8; col++)
+            for (int col = checkerAsQueen.Column + 1; col < 8; col++)
             {
                 if (checkerRowUp + 1 < 8 && !skipUpDiagonal)
                 {

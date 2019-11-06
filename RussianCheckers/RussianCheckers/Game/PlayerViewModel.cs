@@ -9,7 +9,7 @@ namespace RussianCheckers.Game
     public abstract class PlayerViewModel: ObservableObject
     {
         private readonly Player _player;
-        public bool IsMainPlayer { get; private set; }
+        public bool IsMainPlayer { get; }
         public readonly Side Side;
         public  ObservableCollection<CheckerElementViewModel> PlayerPositions { get; protected set; }
 
@@ -66,7 +66,7 @@ namespace RussianCheckers.Game
 
         public IEnumerable<LinkedList<CheckerModel>> GetAvailablePaths()
         {
-            var playerAvailablePaths = _player.CalculateAvailablePaths();
+            IEnumerable<LinkedList<CheckerModel>> playerAvailablePaths = _player.CalculateAvailablePaths();
             return playerAvailablePaths;
         }
     }

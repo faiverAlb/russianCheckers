@@ -59,7 +59,7 @@ namespace RussianCheckers.Game
         private Side _side;
         private bool _isSelected;
         private bool _selfAsPossible;
-        private CheckerModel _checkerModel;
+        private readonly CheckerModel _checkerModel;
 
         public Side Side
         {

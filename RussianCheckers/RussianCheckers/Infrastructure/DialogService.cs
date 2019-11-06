@@ -27,7 +27,7 @@ namespace RussianCheckers.Infrastructure
             Mappings.Add(typeof(TViewModel), typeof(TView));
         }
 
-        public bool? ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogRequestClose
+        public void ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogRequestClose
         {
             Type viewType = Mappings[typeof(TViewModel)];
 
@@ -54,7 +54,7 @@ namespace RussianCheckers.Infrastructure
             dialog.DataContext = viewModel;
             dialog.Owner = _owner;
 
-            return dialog.ShowDialog();
+            dialog.ShowDialog();
         }
     }
 }

@@ -9,7 +9,7 @@
         xmlns:infrastructure="clr-namespace:RussianCheckers.Infrastructure"
         mc:Ignorable="d"
         
-        Title="Russian checkers" Height="700" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Russian Checkers Game" Height="650" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
         <Window.Resources>
         <infrastructure:IntToStringConverter x:Key="IntToStringConverter" />
         <Style x:Key="ChessPieceStyle" TargetType="{x:Type Image}">
@@ -130,8 +130,7 @@
             <ColumnDefinition Width="480"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="20" >
-           <TextBlock Text="{Binding CurrentGameStatus}"></TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding CurrentGameStatus}" TextDecorations="Underline">
         </TextBlock>
         <ItemsControl Grid.Row="1" Grid.Column="1" x:Name="ChessBoard" ItemsSource="{Binding Positions}" >
             <ItemsControl.ItemsPanel>

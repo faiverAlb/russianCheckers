@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using RussianCheckers.Core;
 
-namespace RussianCheckers.Game
+namespace RussianCheckers.Core
 {
     internal class GameStatusChecker
     {

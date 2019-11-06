@@ -5,14 +5,13 @@ namespace RussianCheckers.Core
 {
     public class CheckerModel
     {
-        private readonly Side _side;
 
         public CheckerModel(int column, int row, PieceType type, Side side, Action<int,int> onChangePositionFunc = null)
         {
             Column = column;
             Row = row;
             Type = type;
-            _side = side;
+            Side = side;
             PossibleMovementElements = new List<CheckerModel>();
             Neighbors = new List<CheckerModel>();
             IsAtInitialPosition = true;
@@ -22,25 +21,22 @@ namespace RussianCheckers.Core
 
         public Action<int, int> PositionChangedAction { get; set; }
 
-        public bool IsAtInitialPosition { get; set; }
+        public bool IsAtInitialPosition { get; private set; }
 
-        public List<CheckerModel> Neighbors { get; set; }
+        public List<CheckerModel> Neighbors { get; private set; }
 
-        public List<CheckerModel> PossibleMovementElements { get; set; }
+        public List<CheckerModel> PossibleMovementElements { get; private set; }
 
         public int Row { get; private set; }
 
         public int Column { get; private set; }
-        public Side Side
-        {
-            get { return _side; }
-        }
+        public Side Side { get; }
 
         public PieceType Type { get; private set; }
 
         public CheckerModel Clone()
         {
-            return new CheckerModel(Column, Row, Type, _side);
+            return new CheckerModel(Column, Row, Type, Side);
 
         }
 

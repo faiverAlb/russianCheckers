@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using RussianCheckers.Core;
 
-namespace RussianCheckers.Game
+namespace RussianCheckers.Core
 {
     public class HistoryMove
     {

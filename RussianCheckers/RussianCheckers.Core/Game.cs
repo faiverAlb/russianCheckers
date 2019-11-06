@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using RussianCheckers.Game;
 
 namespace RussianCheckers.Core
 {
@@ -59,7 +58,7 @@ namespace RussianCheckers.Core
             return NextMovePlayer.GetLegalMovements();
         }
 
-        private bool CheckGameStatus()
+        private bool GetIsGameEnded()
         {
 
             var gameStatusChecker = new GameStatusChecker(_dataProvider, MainPlayer, RobotPlayer, _actionsHistory);
@@ -89,8 +88,10 @@ namespace RussianCheckers.Core
             MainPlayer newPlayerOne = MainPlayer.Clone(newDataProvider);
             RobotPlayer newViewPlayerTwo = RobotPlayer.Clone(newDataProvider);
             EmptyUserPlayer  newEmptyCellsPlayer = EmptyCellsAsPlayer.Clone(newDataProvider);
-            var newGameModel = new Game(newPlayerOne, newViewPlayerTwo, newEmptyCellsPlayer, newDataProvider);
-            newGameModel.NextMoveSide = NextMoveSide;
+            var newGameModel = new Game(newPlayerOne, newViewPlayerTwo, newEmptyCellsPlayer, newDataProvider)
+            {
+                NextMoveSide = NextMoveSide
+            };
             newGameModel.ReCalculateNeighborsAndPaths();
             return newGameModel;
         }
@@ -110,8 +111,8 @@ namespace RussianCheckers.Core
             int nextRow = toPosition.Row;
             HistoryMove historyMove = NextMovePlayer.MoveCheckerToNewPlace(currentCol, currentRow, nextCol, nextRow);
             ReCalculateNeighborsAndPaths();
-            bool isFinished = CheckGameStatus();
-            if (!isFinished)
+            bool isGameEnded = GetIsGameEnded();
+            if (!isGameEnded)
             {
                 ChangeTurn();
             }
@@ -134,18 +135,18 @@ namespace RussianCheckers.Core
         }
 
 
-        public void RevertMove(HistoryMove historyMove)
+        private void RevertMove(HistoryMove historyMove)
         {
             RevertMove(historyMove.MovedFromTo.Value, historyMove.MovedFromTo.Key, historyMove.IsConvertedToQueen);
             foreach (KeyValuePair<CheckerModel, CheckerModel> deletedInfoPair in historyMove.DeletedList)
             {
-                CheckerModel recurrectedChecker = deletedInfoPair.Key;
-                Player playerToAddChecker = GetPlayerByCheckerSide(recurrectedChecker.Side);
-                playerToAddChecker.AddNewChecker(recurrectedChecker, deletedInfoPair.Key.Column, deletedInfoPair.Key.Row);
+                CheckerModel resurrectedChecker = deletedInfoPair.Key;
+                Player playerToAddChecker = GetPlayerByCheckerSide(resurrectedChecker.Side);
+                playerToAddChecker.AddNewChecker(resurrectedChecker, deletedInfoPair.Key.Column, deletedInfoPair.Key.Row);
             }
 
             ReCalculateNeighborsAndPaths();
-            bool isFinished = CheckGameStatus();
+            bool isFinished = GetIsGameEnded();
             if (!isFinished)
             {
                 ChangeTurn();

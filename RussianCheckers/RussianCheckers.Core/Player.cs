@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using RussianCheckers.Core.Strategy;
-using RussianCheckers.Game;
 
 namespace RussianCheckers.Core
 {

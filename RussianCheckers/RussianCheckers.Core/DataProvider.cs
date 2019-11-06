@@ -12,7 +12,7 @@ namespace RussianCheckers.Core
         private List<CheckerModel> _deleted;
         private List<CheckerModel> _modified;
 
-        public DataProvider(CheckerModel[,] data)
+        private DataProvider(CheckerModel[,] data)
         {
             _data = data;
             _added = new List<CheckerModel>();
@@ -43,7 +43,7 @@ namespace RussianCheckers.Core
             List<CheckerModel> emptyCheckers = GetEmptyCheckersPositions(mainPlayerCheckers, secondPlayerCheckers);
 
             _data = GetCurrentGamePositions(mainPlayerCheckers, secondPlayerCheckers, emptyCheckers);
-
+            
         }
 
 

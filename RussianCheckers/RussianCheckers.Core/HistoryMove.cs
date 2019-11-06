@@ -13,7 +13,7 @@ namespace RussianCheckers.Core
             MovedFromTo = new KeyValuePair<CheckerModel, CheckerModel>();
         }
 
-        public List<KeyValuePair<CheckerModel,CheckerModel>> DeletedList { get; private set; }
+        public List<KeyValuePair<CheckerModel,CheckerModel>> DeletedList { get; }
         public KeyValuePair<CheckerModel, CheckerModel> MovedFromTo { get; set; }
     }
 }

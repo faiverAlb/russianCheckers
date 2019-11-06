@@ -59,7 +59,11 @@ namespace RussianCheckers.Core
 
         public void CalculateNeighbors()
         {
-            _neighborsCalculator.CalculateNeighbors();
+            Dictionary<CheckerModel, List<CheckerModel>> playerDictionary = _neighborsCalculator.CalculateNeighbors();
+            foreach (KeyValuePair<CheckerModel, List<CheckerModel>> playerCheckerNeighbors in playerDictionary)
+            {
+                playerCheckerNeighbors.Key.SetNeighbors(playerCheckerNeighbors.Value);
+            }
         }
 
         public IEnumerable<LinkedList<CheckerModel>> CalculateAvailablePaths()

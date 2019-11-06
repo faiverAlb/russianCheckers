@@ -96,7 +96,7 @@ namespace RussianCheckers.Core
         }
 
 
-        public HistoryMove MoveChecker(CheckerModel fromPlace, CheckerModel toPlace, bool addToHistory = true)
+        public void MoveChecker(CheckerModel fromPlace, CheckerModel toPlace, bool addToHistory = true)
         {
             CheckerModel foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
             CheckerModel toPosition = EmptyCellsAsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
@@ -120,7 +120,6 @@ namespace RussianCheckers.Core
             {
                 _actionsHistory.Push(historyMove);
             }
-            return historyMove;
         }
 
         public void ResetHistoryIfNeeded(int currentHistoryPosition)

@@ -4,6 +4,7 @@ using System.Windows;
 using RussianCheckers.Core;
 using RussianCheckers.Core.Strategy;
 using RussianCheckers.Game;
+using RussianCheckers.Game.DialogsViewModels;
 using RussianCheckers.Infrastructure;
 
 namespace RussianCheckers

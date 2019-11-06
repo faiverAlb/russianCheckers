@@ -59,15 +59,14 @@
       <DependentUpon>ChooseSideDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Game\CheckerElementViewModel.cs" />
-    <Compile Include="Game\ChooseDialogViewModel.cs" />
+    <Compile Include="Game\DialogsViewModels\ChooseDialogViewModel.cs" />
     <Compile Include="Game\EmptyCellsPlayerViewModel.cs" />
     <Compile Include="Game\GameViewModel.cs" />
     <Compile Include="Game\HumanPlayerViewModel.cs" />
-    <Compile Include="Game\NotificationDialogViewModel.cs" />
+    <Compile Include="Game\DialogsViewModels\NotificationDialogViewModel.cs" />
     <Compile Include="Game\PlayerViewModel.cs" />
     <Compile Include="Game\MoveValidationManager.cs" />
-    <Compile Include="Game\GameInfrastructure\MoveValidationResult.cs" />
-    <Compile Include="Game\GameInfrastructure\MoveValidationStatus.cs" />
+    <Compile Include="Game\MoveValidationResult.cs" />
     <Compile Include="Game\PointViewModel.cs" />
     <Compile Include="Game\RobotPlayerViewModel.cs" />
     <Compile Include="Infrastructure\DialogCloseRequestedEventArgs.cs" />
@@ -91,7 +90,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ActionCommand.cs" />
+    <Compile Include="Infrastructure\ActionCommand.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

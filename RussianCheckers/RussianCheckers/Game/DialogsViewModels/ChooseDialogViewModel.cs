@@ -3,7 +3,7 @@ using System.Windows.Input;
 using RussianCheckers.Core;
 using RussianCheckers.Infrastructure;
 
-namespace RussianCheckers.Game
+namespace RussianCheckers.Game.DialogsViewModels
 {
     public class ChooseDialogViewModel : ObservableObject, IDialogRequestClose
     {

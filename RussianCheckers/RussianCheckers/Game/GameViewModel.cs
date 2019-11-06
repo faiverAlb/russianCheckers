@@ -8,7 +8,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using RussianCheckers.Core;
-using RussianCheckers.Game.GameInfrastructure;
+using RussianCheckers.Game.DialogsViewModels;
 using RussianCheckers.Infrastructure;
 
 namespace RussianCheckers.Game
@@ -341,7 +341,7 @@ namespace RussianCheckers.Game
             CurrentHistoryPosition++;
 
             playerViewModel.MoveCheckerToNewPlace(currentPositionElementViewModel);
-            HistoryMove historyMove = _game.MoveChecker(currentPositionElementViewModel.CheckerModel, emptyPosition.CheckerModel);
+            _game.MoveChecker(currentPositionElementViewModel.CheckerModel, emptyPosition.CheckerModel);
 
             _playerOne.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());
             _playerTwo.ReSetPossibleMovements(_emptyCellsPlayerViewModel.PlayerPositions.ToList());

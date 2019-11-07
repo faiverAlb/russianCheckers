@@ -14,4 +14,15 @@
         Checker,
         Queen
     }
+
+
+    public enum Diagonal
+    {
+        LeftDown,
+        LeftUp,
+        RightUp,
+        RightDown,
+        Initial
+    }
+
 }

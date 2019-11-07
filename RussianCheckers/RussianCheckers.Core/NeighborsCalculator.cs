@@ -13,36 +13,29 @@ namespace RussianCheckers.Core
             _dataProvider = dataProvider;
             _playerPositions = playerPositions;
         }
-        public void CalculateNeighbors()
+        public Dictionary<CheckerModel, List<CheckerModel>> CalculateNeighbors()
         {
+            var dictionary = new Dictionary<CheckerModel, List<CheckerModel>>();
             foreach (CheckerModel playerChecker in _playerPositions)
             {
                 CheckerModel checkerModel = _dataProvider.GetElementAtPosition(playerChecker.Column, playerChecker.Row);
-                List<CheckerModel> neighbors;
-                if (checkerModel.Type == PieceType.Checker)
-                {
-                    neighbors = GetNeighborsForChecker(checkerModel);
-                }
-                else
-                {
-                    neighbors = GetNeighborsForQueen(checkerModel).Select(x => x.Value).ToList();
-                }
-
-                playerChecker.SetNeighbors(neighbors);
+                List<CheckerModel> neighbors = checkerModel.Type == PieceType.Checker ? GetNeighborsForChecker(checkerModel) : GetNeighborsForQueen(checkerModel).Select(x => x.Value).ToList();
+                dictionary.Add(playerChecker, neighbors);
             }
 
+            return dictionary;
         }
 
 
-        public List<KeyValuePair<Diagonal, CheckerModel>> GetNeighborsForQueen(CheckerModel сheckerModel)
+        public List<KeyValuePair<Diagonal, CheckerModel>> GetNeighborsForQueen(CheckerModel checkerAsQueen)
         {
             var neighbors = new List<KeyValuePair<Diagonal, CheckerModel>>();
 
-            int checkerRowUp = сheckerModel.Row;
-            int checkerRowDown = сheckerModel.Row;
+            int checkerRowUp = checkerAsQueen.Row;
+            int checkerRowDown = checkerAsQueen.Row;
             bool skipUpDiagonal = false;
             bool skipDownDiagonal = false;
-            for (int col = сheckerModel.Column - 1; col >= 0; col--)
+            for (int col = checkerAsQueen.Column - 1; col >= 0; col--)
             {
                 if (checkerRowUp + 1 < 8 && !skipUpDiagonal)
                 {
@@ -70,11 +63,11 @@ namespace RussianCheckers.Core
                 }
             }
 
-            checkerRowUp = сheckerModel.Row;
-            checkerRowDown = сheckerModel.Row;
+            checkerRowUp = checkerAsQueen.Row;
+            checkerRowDown = checkerAsQueen.Row;
             skipUpDiagonal = false;
             skipDownDiagonal = false;
-            for (int col = сheckerModel.Column + 1; col < 8; col++)
+            for (int col = checkerAsQueen.Column + 1; col < 8; col++)
             {
                 if (checkerRowUp + 1 < 8 && !skipUpDiagonal)
                 {

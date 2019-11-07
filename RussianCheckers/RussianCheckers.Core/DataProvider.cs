@@ -8,15 +8,13 @@ namespace RussianCheckers.Core
     {
         public  Action<List<CheckerModel>, List<CheckerModel>, List<CheckerModel>> NotificationAction;
         private readonly CheckerModel[,] _data;
-        private bool _isStartTrackChanging;
         private List<CheckerModel> _added;
         private List<CheckerModel> _deleted;
         private List<CheckerModel> _modified;
 
-        public DataProvider(CheckerModel[,] data)
+        private DataProvider(CheckerModel[,] data)
         {
             _data = data;
-            _isStartTrackChanging = false;
             _added = new List<CheckerModel>();
             _deleted = new List<CheckerModel>();
             _modified = new List<CheckerModel>();
@@ -27,7 +25,6 @@ namespace RussianCheckers.Core
             List<CheckerModel> emptyCheckers = GetEmptyCheckersPositions(mainPlayerCheckers, secondPlayerCheckers);
             _data = GetCurrentGamePositions(mainPlayerCheckers, secondPlayerCheckers, emptyCheckers);
 
-            _isStartTrackChanging = false;
             _added = new List<CheckerModel>();
             _deleted = new List<CheckerModel>();
             _modified = new List<CheckerModel>();
@@ -35,7 +32,6 @@ namespace RussianCheckers.Core
 
         public DataProvider(Side mainPlayerSide)
         {
-            _isStartTrackChanging = false;
             _added = new List<CheckerModel>();
             _deleted = new List<CheckerModel>();
             _modified = new List<CheckerModel>();
@@ -47,7 +43,7 @@ namespace RussianCheckers.Core
             List<CheckerModel> emptyCheckers = GetEmptyCheckersPositions(mainPlayerCheckers, secondPlayerCheckers);
 
             _data = GetCurrentGamePositions(mainPlayerCheckers, secondPlayerCheckers, emptyCheckers);
-
+            
         }
 
 
@@ -146,7 +142,6 @@ namespace RussianCheckers.Core
                     if (row % 2 == 0 && col % 2 == 0)
                     {
                         positions.Add(new CheckerModel(col, row, PieceType.Checker, side));
-                        continue;
                     }
 
                 }
@@ -154,7 +149,6 @@ namespace RussianCheckers.Core
             return positions;
 
         }
-
 
         public List<CheckerModel> GetSideCheckers(Side side)
         {
@@ -223,7 +217,6 @@ namespace RussianCheckers.Core
 
         public void StartTrackChanges()
         {
-            _isStartTrackChanging = true;
             _added = new List<CheckerModel>();
             _deleted = new List<CheckerModel>();
             _modified = new List<CheckerModel>();
@@ -231,26 +224,7 @@ namespace RussianCheckers.Core
 
         public void StopTrackChanges()
         {
-            _isStartTrackChanging = false;
             NotificationAction?.Invoke(_added, _deleted, _modified);
         }
-
-//        public void RestoreData(DataProvider fromDataProvider)
-//        {
-//            CheckerModel[,] fromData = fromDataProvider._data;
-//            for (int i = 0; i < 8; i++)
-//            {
-//                for (int j = 0; j < 8; j++)
-//                {
-//                    if (_data[j,i].Side == fromData[j,i].Side && _data[j, i].Type == fromData[j, i].Type)
-//                    {
-//                        continue;
-//                    }
-//
-//                    
-//                }
-//            }
-//
-//        }
     }
 }

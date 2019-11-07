@@ -1,4 +1,4 @@
-﻿namespace RussianCheckers.Game.GameInfrastructure
+﻿namespace RussianCheckers.Game
 {
     public class MoveValidationResult
     {
@@ -11,4 +11,13 @@
             ErrorMessage = errorMessage;
         }
     }
+    public enum MoveValidationStatus
+    {
+        Ok,
+        Error,
+        NewItemSelected,
+        DeselectChecker,
+        NothingSelected
+    }
+
 }

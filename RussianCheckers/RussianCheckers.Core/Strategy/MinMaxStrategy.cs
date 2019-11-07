@@ -25,7 +25,7 @@ namespace RussianCheckers.Core.Strategy
             while (true)
             {
 
-                if (_searchDepth <=5)
+                if (_searchDepth <= 5)
                 {
                     foreach (var availableMove in allAvailableMoves)
                     {
@@ -43,13 +43,11 @@ namespace RussianCheckers.Core.Strategy
                             Game newGameModel = initialGame.CreateGame();
                             newGameModel.MoveChecker(availableMove.Key, availableMove.Value);
                             int curValue = MinMove(initialGame, newGameModel, 1, alpha, beta, token);
-
                             dict.AddOrUpdate(curValue, availableMove, (i, pair) => availableMove);
                             if (token.IsCancellationRequested)
                             {
                                 state.Break();
                             }
-
                         }
                     );
 
@@ -67,7 +65,7 @@ namespace RussianCheckers.Core.Strategy
         }
         private int MinMove(Game initialGameViewModel, Game curGameModel, int depth, int alpha, int beta, CancellationToken token)
         {
-            int calculatedStrength = DoCalculateStrength(initialGameViewModel, curGameModel);
+            int calculatedStrength = GetBoardScore(initialGameViewModel, curGameModel);
             if (ShouldStopTheProcess(initialGameViewModel, curGameModel, depth) || token.IsCancellationRequested)
             {
                 return calculatedStrength;
@@ -94,7 +92,7 @@ namespace RussianCheckers.Core.Strategy
         private int MaxMove(Game initialGameViewModel, Game curGameModel, int depth, int alpha, int beta,
             CancellationToken token)
         {
-            int calculatedStrength = DoCalculateStrength(initialGameViewModel, curGameModel);
+            int calculatedStrength = GetBoardScore(initialGameViewModel, curGameModel);
             if (ShouldStopTheProcess(initialGameViewModel, curGameModel, depth) || token.IsCancellationRequested)
             {
                 return calculatedStrength;
@@ -119,9 +117,7 @@ namespace RussianCheckers.Core.Strategy
             return best;
 
         }
-
-
-        private int DoCalculateStrength(Game initGame, Game curGame)
+        private int GetBoardScore(Game initGame, Game curGame)
         {
             if (curGame.IsGameFinished  && curGame.NextMovePlayer.IsMainPlayer)
             {
@@ -172,7 +168,6 @@ namespace RussianCheckers.Core.Strategy
         int CalculatePieceStrength(CheckerModel piece, bool isMainPlayer)
         {
             int strength = 1;
-
             if (piece.Type == PieceType.Checker)
             {
                 if (piece.IsAtInitialPosition && (piece.Row == 7 || piece.Row == 0))
@@ -185,10 +180,10 @@ namespace RussianCheckers.Core.Strategy
                     strength += 1;
                 }
                 // Central positions are good
-                if (piece.PossibleMovementElements.Any(x => (x.Column == 2 && x.Row == 4) 
-                                                            || (x.Column == 3 && x.Row == 3) 
-                                                            || (x.Column == 4 && x.Row == 4)
-                                                            || (x.Column == 5 && x.Row == 3)))
+                if (piece.PossibleMovementElements.Any(x =>    x.Column == 2 && x.Row == 4 
+                                                            || x.Column == 3 && x.Row == 3 
+                                                            || x.Column == 4 && x.Row == 4
+                                                            || x.Column == 5 && x.Row == 3))
                 {
                     strength += 3;
                 }
@@ -226,10 +221,7 @@ namespace RussianCheckers.Core.Strategy
             {
                 return true;
             }
-
             return false;
-
-
         }
 
 

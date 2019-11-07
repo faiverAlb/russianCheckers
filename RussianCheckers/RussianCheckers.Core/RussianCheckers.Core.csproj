@@ -43,10 +43,8 @@
   <ItemGroup>
     <Compile Include="CheckerModel.cs" />
     <Compile Include="DataProvider.cs" />
-    <Compile Include="Diagonal.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameEnums.cs" />
-    <Compile Include="GameStatus.cs" />
     <Compile Include="GameStatusChecker.cs" />
     <Compile Include="HistoryMove.cs" />
     <Compile Include="NeighborsCalculator.cs" />

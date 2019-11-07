@@ -14,21 +14,16 @@ namespace RussianCheckers.Game.Tests
             //  Arrange
             var mainPlayCheckers = new List<CheckerModel>()
             {
-                new CheckerModel(4, 6, PieceType.Queen, Side.White),
+                new CheckerModel(4, 6, PieceType.Queen, Side.White)
             };
-            var secondPlayerCheckers = new List<CheckerModel>()
-            {
-                
-            };
-            DataProvider dataProvider = new DataProvider(mainPlayCheckers, secondPlayerCheckers);
-            var mainPlayer = new MainPlayer(dataProvider, Side.White);
-            var neighborsCalculator = new NeighborsCalculator(dataProvider, mainPlayer.PlayerPositions);
+            DataProvider dataProvider = new DataProvider(mainPlayCheckers, new List<CheckerModel>());
+            var neighborsCalculator = new NeighborsCalculator(dataProvider, mainPlayCheckers);
+
             //  Act
-            neighborsCalculator.CalculateNeighbors();
+            Dictionary<CheckerModel, List<CheckerModel>> neighbors = neighborsCalculator.CalculateNeighbors();
         
             //  Assert
-            var neighbors = mainPlayer.PlayerPositions.Single().Neighbors;
-            Assert.AreEqual(9,neighbors.Count );
+            Assert.AreEqual(9, neighbors.Single().Value.Count);
         }
 
 

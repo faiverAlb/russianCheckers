@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RussianCheckers.Core;
 
-namespace RussianCheckers.Game.Tests
+namespace RussianCheckersTests.Game
 {
     [TestClass()]
     public class PathCalculatorTests
@@ -31,7 +31,7 @@ namespace RussianCheckers.Game.Tests
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
             var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
-            var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+            var game = new RussianCheckers.Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
             game.ReCalculateNeighborsAndPaths();
@@ -65,7 +65,7 @@ namespace RussianCheckers.Game.Tests
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
 
             //  Act
-            var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+            var game = new RussianCheckers.Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
             game.ReCalculateNeighborsAndPaths();
             var availablePathsForWhite = mainPlayer.CalculateAvailablePaths();
 
@@ -298,7 +298,7 @@ namespace RussianCheckers.Game.Tests
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
             var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
-            var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+            var game = new RussianCheckers.Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
             game.ReCalculateNeighborsAndPaths();
@@ -322,7 +322,7 @@ namespace RussianCheckers.Game.Tests
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
             var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
-            var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+            var game = new RussianCheckers.Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
             game.ReCalculateNeighborsAndPaths();
@@ -347,7 +347,7 @@ namespace RussianCheckers.Game.Tests
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
             var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
-            var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+            var game = new RussianCheckers.Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
             game.ReCalculateNeighborsAndPaths();
@@ -376,7 +376,7 @@ namespace RussianCheckers.Game.Tests
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
             var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
-            var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+            var game = new RussianCheckers.Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
             game.ReCalculateNeighborsAndPaths();
@@ -405,7 +405,7 @@ namespace RussianCheckers.Game.Tests
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
             var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
-            var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+            var game = new RussianCheckers.Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
             game.ReCalculateNeighborsAndPaths();
@@ -438,7 +438,7 @@ namespace RussianCheckers.Game.Tests
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
             var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
-            var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+            var game = new RussianCheckers.Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
             game.ReCalculateNeighborsAndPaths();
@@ -469,7 +469,7 @@ namespace RussianCheckers.Game.Tests
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
             var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
-            var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+            var game = new RussianCheckers.Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
             game.ReCalculateNeighborsAndPaths();
@@ -500,7 +500,7 @@ namespace RussianCheckers.Game.Tests
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
             var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
-            var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+            var game = new RussianCheckers.Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
             game.ReCalculateNeighborsAndPaths();
@@ -527,7 +527,7 @@ namespace RussianCheckers.Game.Tests
             var mainPlayer = new MainPlayer(dataProvider, Side.White);
             var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
             var emptyPlayer = new EmptyUserPlayer(dataProvider);
-            var game = new Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
+            var game = new RussianCheckers.Core.Game(mainPlayer, robotPlayer, emptyPlayer, dataProvider);
 
             //  Act
             game.ReCalculateNeighborsAndPaths();

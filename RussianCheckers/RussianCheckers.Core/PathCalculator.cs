@@ -11,7 +11,7 @@ namespace RussianCheckers.Core
         private readonly NeighborsCalculator _neighborsCalculator;
         private readonly bool _isMainPlayer;
 
-        public PathCalculator(DataProvider dataProvider,List<CheckerModel> playerPositions, bool isMainPlayer)
+        public PathCalculator(DataProvider dataProvider, List<CheckerModel> playerPositions, bool isMainPlayer)
         {
             _dataProvider = dataProvider;
             _playerPositions = playerPositions;
@@ -82,7 +82,8 @@ namespace RussianCheckers.Core
         {
             return queen.Neighbors.Where(x => x.Side == Side.Empty);
         }
-        public List<LinkedList<CheckerModel>> GetPossiblePaths(CheckerModel playerPosition)
+
+        private List<LinkedList<CheckerModel>> GetPossiblePaths(CheckerModel playerPosition)
         {
             var paths = new List<LinkedList<CheckerModel>>();
             if (playerPosition.Type == PieceType.Checker)

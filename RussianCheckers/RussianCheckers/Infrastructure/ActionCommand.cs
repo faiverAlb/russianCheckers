@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace RussianCheckers
+namespace RussianCheckers.Infrastructure
 {
 
     public class ActionCommand : ICommand

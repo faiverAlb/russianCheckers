@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using RussianCheckers.Core;
 
-namespace RussianCheckers.Game
+namespace RussianCheckers.Core
 {
     public class HistoryMove
     {
@@ -14,7 +13,7 @@ namespace RussianCheckers.Game
             MovedFromTo = new KeyValuePair<CheckerModel, CheckerModel>();
         }
 
-        public List<KeyValuePair<CheckerModel,CheckerModel>> DeletedList { get; private set; }
+        public List<KeyValuePair<CheckerModel,CheckerModel>> DeletedList { get; }
         public KeyValuePair<CheckerModel, CheckerModel> MovedFromTo { get; set; }
     }
 }

@@ -20,44 +20,23 @@ namespace RussianCheckers.Core
         {
             if (_playerOne.PlayerPositions.Count == 0)
             {
-                if (_playerOne.Side == Side.White)
-                {
-                    
-                    return Side.Black;
-                }
-
-                return Side.White;
+                return _playerOne.Side == Side.White ? Side.Black : Side.White;
             }
 
             if (_playerTwo.PlayerPositions.Count == 0)
             {
-                if (_playerTwo.Side == Side.White)
-                {
-                    return Side.Black;
-                }
-
-                return Side.White;
+                return _playerTwo.Side == Side.White ? Side.Black : Side.White;
             }
 
             int playerOnePossibleMoves = _playerOne.GetPossibleMovementsCount();
             int playerTwoPossibleMoves = _playerTwo.GetPossibleMovementsCount();
             if (playerOnePossibleMoves == 0 && playerTwoPossibleMoves > 0)
             {
-                if (_playerOne.Side == Side.White)
-                {
-                    return Side.Black;
-                }
-
-                return Side.White;
+                return _playerOne.Side == Side.White ? Side.Black : Side.White;
             }
             if (playerTwoPossibleMoves == 0 && playerOnePossibleMoves > 0)
             {
-                if (_playerTwo.Side == Side.White)
-                {
-                    return Side.Black;
-                }
-
-                return Side.White;
+                return _playerTwo.Side == Side.White ? Side.Black : Side.White;
             }
             if (playerTwoPossibleMoves == 0 && playerOnePossibleMoves == 0)
             {
@@ -65,11 +44,7 @@ namespace RussianCheckers.Core
             }
 
             bool isDrawCondition = IsMovedOnlyQueensFor15Steps();
-            if (isDrawCondition)
-            {
-                return Side.Draw;
-            }
-            return Side.None;
+            return isDrawCondition ? Side.Draw : Side.None;
         }
 
         private bool IsMovedOnlyQueensFor15Steps()

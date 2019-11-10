@@ -27,6 +27,47 @@ namespace RussianCheckersTests
         }
 
         [TestMethod()]
+        public void GetWinnerSide_PlayersHasPlayableCheckers_NoVictory()
+        {
+            //  Arrange
+            var playerCheckersFirstPlayer = new List<CheckerModel>{new CheckerModel(1, 1, PieceType.Checker, Side.White)};
+            var playerCheckersSecondPlayer = new List<CheckerModel>{new CheckerModel(7, 7, PieceType.Checker, Side.Black)};
+            DataProvider dataProvider = new DataProvider( playerCheckersFirstPlayer, playerCheckersSecondPlayer);
+            var mainPlayer = new MainPlayer(dataProvider, Side.White);
+            var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
+
+            //  Act
+            mainPlayer.CalculateNeighbors();
+            robotPlayer.CalculateNeighbors();
+            mainPlayer.CalculateAvailablePaths();
+            robotPlayer.CalculateAvailablePaths();
+            var gameStatusChecker = new GameStatusChecker(mainPlayer, robotPlayer, new Stack<HistoryMove>());
+            Side winnerSide = gameStatusChecker.GetWinnerSide();
+            
+            //  Assert
+            Assert.AreEqual(Side.None, winnerSide);
+        }
+
+        [TestMethod()]
+        public void GetWinnerSide_PlayersHasNotPlayablePaths_Draw()
+        {
+            //  Arrange
+            var playerCheckersFirstPlayer = new List<CheckerModel>{new CheckerModel(1, 1, PieceType.Checker, Side.White)};
+            var playerCheckersSecondPlayer = new List<CheckerModel>{new CheckerModel(7, 7, PieceType.Checker, Side.Black)};
+            DataProvider dataProvider = new DataProvider( playerCheckersFirstPlayer, playerCheckersSecondPlayer);
+            var mainPlayer = new MainPlayer(dataProvider, Side.White);
+            var robotPlayer = new RobotPlayer(dataProvider, Side.Black);
+
+            //  Act
+            var gameStatusChecker = new GameStatusChecker(mainPlayer, robotPlayer, new Stack<HistoryMove>());
+            Side winnerSide = gameStatusChecker.GetWinnerSide();
+            
+            //  Assert
+            Assert.AreEqual(Side.Draw, winnerSide);
+        }
+
+        
+        [TestMethod()]
         public void GetWinnerSide_NoBlackCheckers_WhiteVictory()
         {
             //  Arrange

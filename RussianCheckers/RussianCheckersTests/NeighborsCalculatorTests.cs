@@ -12,7 +12,7 @@ namespace RussianCheckersTests.Game
         public void CalculateNeighbors_ForQueen_NoOtherCheckers_ShouldCountAllEmpty()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerModel>()
+            var mainPlayCheckers = new List<CheckerModel>
             {
                 new CheckerModel(4, 6, PieceType.Queen, Side.White)
             };

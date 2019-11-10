@@ -56,8 +56,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Game\NeighborsCalculatorTests.cs" />
-    <Compile Include="Game\PathCalculatorTests.cs" />
+    <Compile Include="GameStatusCheckerTests.cs" />
+    <Compile Include="NeighborsCalculatorTests.cs" />
+    <Compile Include="PathCalculatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +74,7 @@
       <Name>RussianCheckers</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

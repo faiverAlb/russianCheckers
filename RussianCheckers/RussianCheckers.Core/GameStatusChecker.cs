@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace RussianCheckers.Core
 {
-    internal class GameStatusChecker
+    public class GameStatusChecker
     {
         private readonly Player _playerOne;
         private readonly Player _playerTwo;
@@ -16,7 +16,7 @@ namespace RussianCheckers.Core
             _actionsHistory = actionsHistory;
         }
 
-        public Side GetGameStatus()
+        public Side GetWinnerSide()
         {
             if (_playerOne.PlayerPositions.Count == 0)
             {

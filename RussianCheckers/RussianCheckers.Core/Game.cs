@@ -62,7 +62,7 @@ namespace RussianCheckers.Core
         {
 
             var gameStatusChecker = new GameStatusChecker(MainPlayer, RobotPlayer, _actionsHistory);
-            Side winnerSide = gameStatusChecker.GetGameStatus();
+            Side winnerSide = gameStatusChecker.GetWinnerSide();
             if (winnerSide != Side.None)
             {
                 _winnerSide = winnerSide;

@@ -24,7 +24,6 @@ namespace RussianCheckers.Core.Strategy
             }
             while (true)
             {
-
                 if (_searchDepth <= 5)
                 {
                     foreach (var availableMove in allAvailableMoves)
@@ -63,11 +62,12 @@ namespace RussianCheckers.Core.Strategy
             KeyValuePair<CheckerModel, CheckerModel> resultMove = dict.OrderByDescending(x => x.Key).First().Value;
             return resultMove;
         }
+
         private int MinMove(Game initialGameViewModel, Game curGameModel, int depth, int alpha, int beta, CancellationToken token)
         {
-            int calculatedStrength = GetBoardScore(initialGameViewModel, curGameModel);
             if (ShouldStopTheProcess(initialGameViewModel, curGameModel, depth) || token.IsCancellationRequested)
             {
+                int calculatedStrength = GetBoardScore(initialGameViewModel, curGameModel);
                 return calculatedStrength;
             }
 
@@ -92,9 +92,9 @@ namespace RussianCheckers.Core.Strategy
         private int MaxMove(Game initialGameViewModel, Game curGameModel, int depth, int alpha, int beta,
             CancellationToken token)
         {
-            int calculatedStrength = GetBoardScore(initialGameViewModel, curGameModel);
             if (ShouldStopTheProcess(initialGameViewModel, curGameModel, depth) || token.IsCancellationRequested)
             {
+                int calculatedStrength = GetBoardScore(initialGameViewModel, curGameModel);
                 return calculatedStrength;
             }
 
@@ -127,8 +127,8 @@ namespace RussianCheckers.Core.Strategy
             {
                 return int.MaxValue;
             }
+            
             int strength = 0;
-
             strength += curGame.GetSimpleCheckersCount(false);
             strength += 10 * curGame.GetQueensCount(false);
 
@@ -165,7 +165,7 @@ namespace RussianCheckers.Core.Strategy
             return strength;
         }
 
-        int CalculatePieceStrength(CheckerModel piece, bool isMainPlayer)
+        private int CalculatePieceStrength(CheckerModel piece, bool isMainPlayer)
         {
             int strength = 1;
             if (piece.Type == PieceType.Checker)
@@ -217,11 +217,7 @@ namespace RussianCheckers.Core.Strategy
             {
                 return true;
             }
-            if (depth >= _searchDepth)
-            {
-                return true;
-            }
-            return false;
+            return depth >= _searchDepth;
         }
 
 

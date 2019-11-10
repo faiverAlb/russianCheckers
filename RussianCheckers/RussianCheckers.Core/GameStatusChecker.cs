@@ -5,17 +5,12 @@ namespace RussianCheckers.Core
 {
     internal class GameStatusChecker
     {
-        private readonly DataProvider _dataProvider;
         private readonly Player _playerOne;
         private readonly Player _playerTwo;
         private readonly Stack<HistoryMove> _actionsHistory;
 
-        public GameStatusChecker(DataProvider dataProvider
-            , Player playerOne
-            , Player playerTwo,
-            Stack<HistoryMove> actionsHistory)
+        public GameStatusChecker(Player playerOne, Player playerTwo, Stack<HistoryMove> actionsHistory)
         {
-            _dataProvider = dataProvider;
             _playerOne = playerOne;
             _playerTwo = playerTwo;
             _actionsHistory = actionsHistory;

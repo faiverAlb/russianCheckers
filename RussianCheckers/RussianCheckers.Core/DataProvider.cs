@@ -77,7 +77,6 @@ namespace RussianCheckers.Core
                     if (row % 2 == 0 && col % 2 == 0)
                     {
                         positions.Add(new CheckerModel(col, row, PieceType.Checker, Side.Empty));
-                        continue;
                     }
                 }
             }

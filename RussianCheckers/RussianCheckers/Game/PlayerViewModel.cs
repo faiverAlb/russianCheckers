@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using RussianCheckers.Core;
@@ -12,7 +11,7 @@ namespace RussianCheckers.Game
         private readonly Player _player;
         public bool IsMainPlayer { get; }
         public readonly Side Side;
-        public  ObservableCollection<CheckerElementViewModel> PlayerPositions { get; protected set; }
+        public  ObservableCollection<CheckerElementViewModel> PlayerPositions { get; }
 
 
 

@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RussianCheckers.Core;
 
-namespace RussianCheckers.Game.Tests
+namespace RussianCheckersTests.Game
 {
     [TestClass()]
     public class NeighborsCalculatorTests

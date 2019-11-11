@@ -69,10 +69,6 @@
       <Project>{473FF9A6-DC16-4959-85DB-BB2B879210E3}</Project>
       <Name>RussianCheckers.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RussianCheckers\RussianCheckers.csproj">
-      <Project>{15B9C66D-15E0-4231-8431-8EC7B50AD74D}</Project>
-      <Name>RussianCheckers</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Choose>

@@ -185,12 +185,12 @@ namespace RussianCheckers.Core
 
         }
 
-        public void AddNewChecker(CheckerModel recurrectedChecker
+        public void AddNewChecker(CheckerModel resurrectedChecker
                                             , int currentEmptyColumn
                                             , int currentEmptyRow)
         {
             _dataProvider.StartTrackChanges();
-            _dataProvider.AddNewChecker(recurrectedChecker, currentEmptyColumn,currentEmptyRow);
+            _dataProvider.AddNewChecker(resurrectedChecker, currentEmptyColumn,currentEmptyRow);
             _dataProvider.StopTrackChanges();
 
         }

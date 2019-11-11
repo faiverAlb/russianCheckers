@@ -65,7 +65,7 @@ namespace RussianCheckers.Game
         public Side Side
         {
             get { return _side; }
-            set { _side = value; RaisePropertyChangedEvent(nameof(Side)); ; }
+            set { _side = value; RaisePropertyChangedEvent(nameof(Side)); }
         }
 
         public bool IsSelected

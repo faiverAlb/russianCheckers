@@ -11,11 +11,11 @@ namespace RussianCheckers.Core
         private readonly DataProvider _dataProvider;
         private readonly NeighborsCalculator _neighborsCalculator;
         private readonly PathCalculator _pathCalculator;
-        public List<CheckerModel> PlayerPositions { get; private set; }
+        public List<CheckerModel> PlayerPositions { get; }
         public Action<List<CheckerModel>, List<CheckerModel>, List<CheckerModel>> NotificationAction;
 
-        public bool IsMainPlayer { get; private set; }
-        public Side Side { get; private set; }
+        public bool IsMainPlayer { get; }
+        public Side Side { get; }
 
         public Player(DataProvider dataProvider, Side side, bool isMainPlayer)
         {
@@ -53,7 +53,7 @@ namespace RussianCheckers.Core
 
         public int GetPossibleMovementsCount()
         {
-            return PlayerPositions.Sum(position => position.PossibleMovementElements.Count());
+            return PlayerPositions.Sum(position => position.PossibleMovementElements.Count);
         }
 
 
@@ -77,8 +77,8 @@ namespace RussianCheckers.Core
             , int nextRow
             , bool convertBackToChecker = false)
         {
-            CheckerModel checker = this.PlayerPositions.Single(x => x.Column == currentCol && x.Row == currentRow);
-            var availablePaths = CalculateAvailablePaths();
+            CheckerModel checker = PlayerPositions.Single(x => x.Column == currentCol && x.Row == currentRow);
+            IEnumerable<LinkedList<CheckerModel>> availablePaths = CalculateAvailablePaths();
             LinkedList<CheckerModel> path = availablePaths.Where(x => x.Last.Value.Column == nextCol && x.Last.Value.Row == nextRow).OrderByDescending(x => x.Count).FirstOrDefault();
             bool isConvertedToQueen = false;
             if (ShouldConvertToQueenByPathDuringTaking(path))
@@ -185,12 +185,12 @@ namespace RussianCheckers.Core
 
         }
 
-        public void AddNewChecker(CheckerModel recurrectedChecker
+        public void AddNewChecker(CheckerModel resurrectedChecker
                                             , int currentEmptyColumn
                                             , int currentEmptyRow)
         {
             _dataProvider.StartTrackChanges();
-            _dataProvider.AddNewChecker(recurrectedChecker, currentEmptyColumn,currentEmptyRow);
+            _dataProvider.AddNewChecker(resurrectedChecker, currentEmptyColumn,currentEmptyRow);
             _dataProvider.StopTrackChanges();
 
         }

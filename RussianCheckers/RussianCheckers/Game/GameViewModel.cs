@@ -20,8 +20,8 @@ namespace RussianCheckers.Game
         private readonly bool _isPlayingAutomatically;
         private readonly CompositeCollection _positions = new CompositeCollection();
         public Side WinnerSide { get; set; }
-        public ActionCommand UndoCommand { get; private set; }
-        public ActionCommand RedoCommand { get; private set; }
+        public ActionCommand UndoCommand { get; }
+        public ActionCommand RedoCommand { get; }
 
         public int RobotThinkingTime
         {

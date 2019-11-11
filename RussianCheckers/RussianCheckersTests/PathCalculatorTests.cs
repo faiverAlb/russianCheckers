@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RussianCheckers.Core;
 
-namespace RussianCheckersTests.Game
+namespace RussianCheckersTests
 {
     [TestClass()]
     public class PathCalculatorTests

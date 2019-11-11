@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RussianCheckers.Core;
 
-namespace RussianCheckers.Game.Tests
+namespace RussianCheckersTests
 {
     [TestClass()]
     public class NeighborsCalculatorTests
@@ -12,7 +12,7 @@ namespace RussianCheckers.Game.Tests
         public void CalculateNeighbors_ForQueen_NoOtherCheckers_ShouldCountAllEmpty()
         {
             //  Arrange
-            var mainPlayCheckers = new List<CheckerModel>()
+            var mainPlayCheckers = new List<CheckerModel>
             {
                 new CheckerModel(4, 6, PieceType.Queen, Side.White)
             };

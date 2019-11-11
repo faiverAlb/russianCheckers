@@ -1,4 +1,4 @@
-# russian Checkers
+# Russian Checkers
 Russian Checkers game implementation: Player vs Simple MinMax Robot with Alpha-Beta pruning 
 
 # Features:

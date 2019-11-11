@@ -99,11 +99,11 @@ namespace RussianCheckers.Core
 
         public void MoveChecker(CheckerModel fromPlace, CheckerModel toPlace, bool addToHistory = true)
         {
-            CheckerModel foundChecker = NextMovePlayer.PlayerPositions.Single(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
-            CheckerModel toPosition = EmptyCellsAsPlayer.PlayerPositions.Single(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+            CheckerModel foundChecker = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == fromPlace.Column && x.Row == fromPlace.Row);
+            CheckerModel toPosition = EmptyCellsAsPlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
             if (toPlace.Side == fromPlace.Side)
             {
-                toPosition = NextMovePlayer.PlayerPositions.Single(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
+                toPosition = NextMovePlayer.PlayerPositions.SingleOrDefault(x => x.Column == toPlace.Column && x.Row == toPlace.Row);
             }
             int currentCol = foundChecker.Column;
             int currentRow = foundChecker.Row;
